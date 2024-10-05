@@ -12,7 +12,7 @@ const filePath404Page = path.resolve(__dirname, '../../client/404.html');
 //   res.send('Goodbye!');
 // });
 router.all('*', (req, res) => {
-	res.status(404).sendFile(filePath404Page);
+  res.status(404).sendFile(filePath404Page);
 });
 
 module.exports = router;
