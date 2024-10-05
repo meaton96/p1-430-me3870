@@ -27,13 +27,7 @@
     "FlavourText": "You have been attacked! Get everyone on the same page.",
     "Description": "Draw 2 cards.",
     "imgLocation": "images/QuickMeeting.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "326479fc-f27f-430b-8407-70fcb7e35be4"
   },
   {
@@ -64,13 +58,7 @@
     "FlavourText": "Lets meet to talk about this.",
     "Description": "Draw 3 cards and discard 1 of them.",
     "imgLocation": "images/VirtualMeeting.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "8f1ff9f6-8c50-4d12-bc86-3b021c1de610"
   },
   {
@@ -101,13 +89,7 @@
     "FlavourText": "Lets talk about it during our weekly meeting.",
     "Description": "Shuffle 1 card from your hand into the deck. Draw 2 cards.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "5b6dc25c-b3a1-4b50-8a54-060c8f29d270"
   },
   {
@@ -138,13 +120,7 @@
     "FlavourText": "They are breaching our system!",
     "Description": "Add your hand to the deck and shuffle it. Then draw 5 cards.",
     "imgLocation": "images/EmergencyMeeting(temp).png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "13a62c34-460c-4eaa-8ffa-16491474aeb5"
   },
   {
@@ -175,13 +151,7 @@
     "FlavourText": "Basic training lets your workers go over the fundamentals and new techniques.",
     "Description": "Use any 2 meeples to target 3 cards in your hand and decrease their meeple cost of a color of your choosing by 1. ",
     "imgLocation": "images/Training.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "2f8e9078-5c55-464a-8aaa-6098440212b4"
   },
   {
@@ -365,6 +335,11 @@
         "EffectType": "ModifyPoints",
         "EffectTarget": "Financial",
         "EffectMagnitude": "1"
+      },
+      {
+        "EffectType": "ModifyPoints",
+        "EffectTarget": "Network",
+        "EffectMagnitude": "1"
       }
     ],
     "GUID": "1f5d7b67-94bc-4902-a221-3a83b97876c2"
@@ -401,6 +376,11 @@
       {
         "EffectType": "ModifyPoints",
         "EffectTarget": "Physical",
+        "EffectMagnitude": "1"
+      },
+      {
+        "EffectType": "ModifyPoints",
+        "EffectTarget": "Network",
         "EffectMagnitude": "1"
       }
     ],
@@ -515,7 +495,7 @@
     "imgLocation": "images/ThreatHunting.png",
     "Effects": [
       {
-        "EffectType": "Backdoor",
+        "EffectType": "Remove",
         "EffectTarget": "None",
         "EffectMagnitude": "None"
       }
@@ -626,7 +606,7 @@
     "imgLocation": "",
     "Effects": [
       {
-        "EffectType": "Negate",
+        "EffectType": "Remove",
         "EffectTarget": "None",
         "EffectMagnitude": "None"
       }
@@ -668,7 +648,7 @@
         "EffectMagnitude": "1"
       },
       {
-        "EffectType": "Negate",
+        "EffectType": "Remove",
         "EffectTarget": "None",
         "EffectMagnitude": "None"
       }
@@ -703,13 +683,7 @@
     "FlavourText": "Update software in order to get newer and faster ways to break encryption.",
     "Description": "Draw 2 cards.",
     "imgLocation": "images/UpdateSoftware.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "7f1b3ffd-a7fa-4db6-9689-f5444e15190f"
   },
   {
@@ -740,13 +714,7 @@
     "FlavourText": "Constantly changing and adapting.",
     "Description": "Draw 3 cards and discard 1 of them.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "2ab265ec-8321-470c-991f-ce6658cde79b"
   },
   {
@@ -782,6 +750,11 @@
         "EffectType": "ModifyPoints",
         "EffectTarget": "Network",
         "EffectMagnitude": "-1"
+      },
+      {
+        "EffectType": "ModifyPoints",
+        "EffectTarget": "Financial",
+        "EffectMagnitude": "-1"
       }
     ],
     "GUID": "8b26ff58-bb4d-423b-86c7-02f5e797f48c"
@@ -807,7 +780,7 @@
     "CardsDrawn": 0,
     "CardsRemoved": 0,
     "EffectCount": 0,
-    "PrerequisiteEffect": "None",
+    "PrerequisiteEffect": "Backdoor",
     "Duration": 0,
     "DoomEffect": false,
     "DiceRoll": -1,
@@ -855,6 +828,11 @@
       {
         "EffectType": "ModifyPointsPerTurn",
         "EffectTarget": "Physical",
+        "EffectMagnitude": "-1"
+      },
+      {
+        "EffectType": "ModifyPointsPerTurn",
+        "EffectTarget": "Network",
         "EffectMagnitude": "-1"
       }
     ],
@@ -1043,7 +1021,7 @@
     "imgLocation": "images/SQLInjection(temp).png",
     "Effects": [
       {
-        "EffectType": "Negate",
+        "EffectType": "Remove",
         "EffectTarget": "None",
         "EffectMagnitude": "None"
       }
@@ -1115,13 +1093,7 @@
     "FlavourText": "Hurricanes can cause water damage and destroy things that are critical to your network.",
     "Description": "All sectors roll a die. If a sector rolls under a 4 then all facilities within that sector lose 1 physical point.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "693745e2-a3c6-4a47-bf36-9272a82f7cc1"
   },
   {
@@ -1152,13 +1124,7 @@
     "FlavourText": "Train derailment can cause Financial issues as the movement of cargo is slowed down.",
     "Description": "All sectors roll a die. If a sector rolls under a 2 then the transmission facility within that sector loses 2 Financial points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "f5431397-f532-401a-a00c-ed923ac3597a"
   },
   {
@@ -1189,13 +1155,7 @@
     "FlavourText": "People have to clean up this mess you know?",
     "Description": "Water sector rolls a die. If they roll under a 5 then reduce the amount of black and purple meeples the water sector is able to use by half for 2 turns.",
     "imgLocation": "images/Fatberg.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "03980596-3a9e-4292-b13f-a5f75133944f"
   },
   {
@@ -1226,13 +1186,7 @@
     "FlavourText": "The workers are upset again.",
     "Description": "All sectors roll a die. If a sector rolls under a 3 then they lose 1 meeple of each color for 2 turns.",
     "imgLocation": "images/Strike.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "bf700fc5-9cf9-418c-86dd-36cd917c19bf"
   },
   {
@@ -1263,13 +1217,7 @@
     "FlavourText": "Raw sewage has accidentally gotten into the pipes.",
     "Description": "Water and Health sectors roll a die. If a sector rolls under a 3 then all of their facilities lose 2 physical points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "9ac5edad-017b-4f80-a51c-dbfeca8a2576"
   },
   {
@@ -1300,13 +1248,7 @@
     "FlavourText": "Wind storms can knock down trees; telecom poles; and disrupt energy systems.",
     "Description": "Energy and Communications sectors roll a die. If a sector rolls under a 5 then all of their facilities lose 1 physical points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "e5a6a820-142c-4712-8a91-67cfd9fcab19"
   },
   {
@@ -1337,13 +1279,7 @@
     "FlavourText": "Ice storms can knock down telecom poles and damage important energy sites.",
     "Description": "Energy and Communications sectors roll a die. If a sector rolls under a 4 then all of their facilities lose 2 physical points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "a0b30d13-947a-487e-bc02-7f07cfe9fd2d"
   },
   {
@@ -1374,13 +1310,7 @@
     "FlavourText": "Droughts can cause massive damage to multiple sectors and states.",
     "Description": "Energy; Water; Healthcare; and Agriculture all roll a die. If a sector rolls under a 3 then all of their facilities lose 1 physical and Financial point.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "1d0c89a4-fbd0-4f04-980e-4825343d1aab"
   },
   {
@@ -1411,13 +1341,7 @@
     "FlavourText": "A tornado can cause severe damage to anything in its patch.",
     "Description": "All sectors roll a die for each facility in their sector. If a facility rolls under a 2 then it loses 2 Financial points and all physical points.",
     "imgLocation": "images/Tornado.png",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "6b436056-7b69-4195-acad-4a98a0cc2fa0"
   },
   {
@@ -1448,13 +1372,7 @@
     "FlavourText": "A heat wave is a silent killer.",
     "Description": "Water; Energy; Transport; and Healthcare sectors roll a die. If a sector rolls under a 3 then all of their facilities lose 1 physical points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "2889c035-67bc-487f-837f-f350a279c22b"
   },
   {
@@ -1485,13 +1403,7 @@
     "FlavourText": "Algae blooms can contaminate water systems easily.",
     "Description": "Water and Health sectors roll a die. If a sector rolls under a 5 then all of their facilities lose 1 physical points.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "c918e900-e4a7-44b6-bf73-bd7808ffea75"
   },
   {
@@ -1522,13 +1434,7 @@
     "FlavourText": "The government decided to give relief to its sectors in light of recent attacks.",
     "Description": "All sectors gain 1 meeple of each color.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "d79e9a6c-a664-4a09-9b10-90e0e006de6f"
   },
   {
@@ -1559,13 +1465,7 @@
     "FlavourText": "The government decided to increase the budget of its sectors. You now get to hire more people of your choosing.",
     "Description": "All sectors gain 2 meeple of their choice.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "0555906c-306f-4d1e-b6af-11eb0abc3aaa"
   },
   {
@@ -1596,13 +1496,7 @@
     "FlavourText": "State of emergency requires people to work more.",
     "Description": "All sectors regain 1 overtime charge.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "1cbdc123-26da-4e2b-b22b-611ca044503d"
   },
   {
@@ -1633,13 +1527,7 @@
     "FlavourText": "Sometimes new management is needed to see the issues in a new light.",
     "Description": "All sectors add 5 random cards from their discard pile into their deck.",
     "imgLocation": "",
-    "Effects": [
-      {
-        "EffectType": "None",
-        "EffectTarget": "None",
-        "EffectMagnitude": "None"
-      }
-    ],
+    "Effects": [],
     "GUID": "d24d88ba-d975-4ea8-9b3b-1ba7012630df"
   }
 ]

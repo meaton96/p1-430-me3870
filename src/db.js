@@ -1,17 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 
-const quotesPath = path.resolve(__dirname, 'data/quotes-data.json');
-const jsonString = fs.readFileSync(quotesPath);
+const cardsPath = path.resolve(__dirname, 'data/card-data.json');
+const jsonString = fs.readFileSync(cardsPath);
 const data = JSON.parse(jsonString);
-const { quotes } = data; // object destructuring
+const { cards } = data; // object destructuring
 
 // PUBLIC METHODS
-const getAllQuotes = () => quotes;
-const getQuoteById = (id) => quotes.find((quote) => quote.id === id);
-const getRecentQuote = () => quotes.slice(-1)[0];
-const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
+const getAllCards = () => cards;
+const getCardById = (guid) => cards.find((card) => card.GUID === guid);
+const getRecentCard = () => cards.slice(-1)[0];
+const getRandomCard = () => cards[Math.floor(Math.random() * quotes.length)];
 
 module.exports = {
-  getAllQuotes, getQuoteById, getRecentQuote, getRandomQuote,
+  getAllCards, getCardById, getRecentCard, getRandomCard,
 };
