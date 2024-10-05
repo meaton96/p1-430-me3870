@@ -3,15 +3,27 @@ const path = require('path');
 
 const cardsPath = path.resolve(__dirname, 'data/card-data.json');
 const jsonString = fs.readFileSync(cardsPath);
-const data = JSON.parse(jsonString);
-const { cards } = data; // object destructuring
+const cards = JSON.parse(jsonString);
+
+
 
 // PUBLIC METHODS
-const getAllCards = () => cards;
-const getCardById = (guid) => cards.find((card) => card.GUID === guid);
-const getRecentCard = () => cards.slice(-1)[0];
-const getRandomCard = () => cards[Math.floor(Math.random() * quotes.length)];
+const getAllCards = () => cards.map((card) => ({ ...card }));
+const getCardById = (guid) => {
+	const card = cards.find((card) => card.GUID === guid);
+	return card ? { ...card } : null;
+};
+
+const getRecentCard = () => {
+	const card = cards.slice(-1)[0];
+	return card ? { ...card } : null;
+};
+
+const getRandomCard = () => {
+	const card = cards[Math.floor(Math.random() * cards.length)];
+	return card ? { ...card } : null;
+};
 
 module.exports = {
-  getAllCards, getCardById, getRecentCard, getRandomCard,
+	getAllCards, getCardById, getRecentCard, getRandomCard,
 };

@@ -1,105 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rich Client!</title>
-  <style>
-    .quote-output {
-      margin:auto;
-      margin-top: 1em;
-      padding: 1em;
-      width: 30%;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Rich Client!</title>
+	<style>
+		.quote-output {
+			margin: auto;
+			margin-top: 1em;
+			padding: 1em;
+			width: 30%;
+		}
+	</style>
 </head>
+
 <body>
 
-<h1>"Rich" Client for <i>Simple HTTP Server</i></h1>
-<h2>View the "Hello" Message</h2>
-<p><button id="btn-hello">See contents of <kbd>/helloJSON</kbd></button></p>
-<div id="output-hello">???</div>
+	<h1>"Rich" Client for <i>Simple HTTP Server</i></h1>
+	<h2>View the "Hello" Message</h2>
+	<p><button id="btn-hello">See contents of <kbd>/helloJSON</kbd></button></p>
+	<div id="output-hello">???</div>
 
-<hr>
+	<hr>
 
-<h2>View the "Current Time" Message</h2>
-<p><button id='btn-time'>See current time</button></p>
-<p id="time"></p>
+	<h2>View the "Current Time" Message</h2>
+	<p><button id='btn-time'>See current time</button></p>
+	<p id="time"></p>
 
-<hr>
+	<hr>
 
-<h2>A Dank Meme ...</h2>
+	<h2>A Dank Meme ...</h2>
 
-<img src="/spongegar.png" width="200" />
- 
-<h2>Quotes</h2>
-<h3>Random</h3>
-<p><button id="btn-quotes">Random Quote</button></p>
-<div id="output-quotes" class="quote-output">???</div>
+	<img src="/spongegar.png" width="200" />
 
-<h3>Most Recent</h3>
-<p><button id="btn-quotes-recent">Most Recent Quote</button></p>
-<div id="output-quotes-recent" class="quote-output">???</div>
+	<h2>Quotes</h2>
+	<h3>Random</h3>
+	<p><button id="btn-quotes">Random Quote</button></p>
+	<div id="output-quotes" class="quote-output">???</div>
+
+	<h3>Most Recent</h3>
+	<p><button id="btn-quotes-recent">Most Recent Quote</button></p>
+	<div id="output-quotes-recent" class="quote-output">???</div>
 
 
 </body>
 <script>
-const getJsonFetch = async (url, callback) => {
-  let json;
-  try{
-    const response = await fetch(url,{
-      method: "GET",
-      headers: {
-        "Accept": "application/json"
-      }
-    });
-    json = await response.json();
-  }
-  catch(error){
-    console.log("ERROR:", error);
-    json = {author: `Can't parse data file '${url}'`};
-  }
-  callback(json);
-};
+	const getJsonFetch = async (url, callback) => {
+		let json;
+		try {
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					"Accept": "application/json"
+				}
+			});
+			json = await response.json();
+		}
+		catch (error) {
+			console.log("ERROR:", error);
+			json = { author: `Can't parse data file '${url}'` };
+		}
+		callback(json);
+	};
 
-const btnHello = document.querySelector("#btn-hello");
-const outputHello = document.querySelector("#output-hello");
+	const btnHello = document.querySelector("#btn-hello");
+	const outputHello = document.querySelector("#output-hello");
 
-const timeButton = document.querySelector("#btn-time");
-const timeResults = document.querySelector("#time");
+	const timeButton = document.querySelector("#btn-time");
+	const timeResults = document.querySelector("#time");
 
-const btnQuote = document.querySelector("#btn-quotes");
-const quoteResults = document.querySelector("#output-quotes");
+	const btnQuote = document.querySelector("#btn-quotes");
+	const quoteResults = document.querySelector("#output-quotes");
 
-const btnQuoteRec = document.querySelector("#btn-quotes-recent");
-const quoteResultsRec = document.querySelector("#output-quotes-recent");
+	const btnQuoteRec = document.querySelector("#btn-quotes-recent");
+	const quoteResultsRec = document.querySelector("#output-quotes-recent");
 
-const helloJSONURL = "/api/helloJSON";
-const helloCallback = json => {
-  outputHello.innerHTML = json.message || "No <kbd>.message</kbd> value found!";
-};
-btnHello.onclick = () => getJsonFetch(helloJSONURL, helloCallback);
-timeButton.addEventListener('click', () => {
-    getJsonFetch('/api/timeJSON', json => {
-        timeResults.innerHTML = json.time;
-    });
-});
+	const helloJSONURL = "/api/helloJSON";
+	const helloCallback = json => {
+		outputHello.innerHTML = json.message || "No <kbd>.message</kbd> value found!";
+	};
+	btnHello.onclick = () => getJsonFetch(helloJSONURL, helloCallback);
+	timeButton.addEventListener('click', () => {
+		getJsonFetch('/api/timeJSON', json => {
+			timeResults.innerHTML = json.time;
+		});
+	});
 
-const btnCallback = (element, quote) => {
-  element.innerHTML = `<div>
+	const btnCallback = (element, quote) => {
+		element.innerHTML = `<div>
     <p>${quote.content}</p>
     <p style="float:right;"> -${quote.author}</p>
   </div>`;
-}
+	}
 
-btnQuote.addEventListener('click',  () => {
-  getJsonFetch("/quotes/random", json => btnCallback(quoteResults, json));
-});
+	btnQuote.addEventListener('click', () => {
+		getJsonFetch("/quotes/random", json => btnCallback(quoteResults, json));
+	});
 
-btnQuoteRec.addEventListener('click', () => {
-  getJsonFetch("/quotes/recent", json => btnCallback(quoteResultsRec, json));
-    
-});
+	btnQuoteRec.addEventListener('click', () => {
+		getJsonFetch("/quotes/recent", json => btnCallback(quoteResultsRec, json));
+
+	});
 
 </script>
+
 </html>
