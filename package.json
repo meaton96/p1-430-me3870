@@ -5,8 +5,11 @@
   "scripts": {
     "test": "echo \"Tests Complete!\"",
     "pretest": "eslint ./src --fix",
-    "dev": "nodemon -e js,html,css,json ./src/app.js",
-    "start": "node src/app.js"
+    "dev-server": "nodemon -e js,html,css,json ./src/app.js",   
+    "dev-client": "cd card-editor && vite",                      
+    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"", 
+    "build": "cd card-editor && npm run build",                  
+    "start": "node src/app.js"                                   
   },
   "keywords": [],
   "author": "",
@@ -19,6 +22,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin-js": "^2.9.0",
+    "concurrently": "^9.0.1",
     "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.30.0"
