@@ -13,9 +13,6 @@ router.get('/', (req, res) => {
         res.status(404).sendFile(filePath404Page);
     }
 });
-// router.get('/bye', (req, res) => {
-//   res.send('Goodbye!');
-// });
 router.all('*', (req, res) => {
     res.status(404).sendFile(filePath404Page);
 });
