@@ -5,7 +5,7 @@ import { fetchJsonEndpoint } from './utils/ajax.js';
 
 function CardSimple({ card }) {
 	const [cardImage, setCardImage] = useState(null);
-	const cardImagePath = `/api/assets/${card.imgLocation}`;
+	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace('.png', '.webp')}`;
 
 	// Helper to get team color
 	const getTeamColor = (team) => {

@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const router = express.Router();
 const assetsPath = path.resolve(__dirname, '../../client/assets');
-const cardsPath = path.resolve(assetsPath, 'cards');
+const cardsPath = path.resolve(assetsPath, 'cards/webp');
 
 // gets the asset given the request and response objects
 const getAsset = (req, res, _path) => {
