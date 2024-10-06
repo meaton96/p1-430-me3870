@@ -1,46 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import CardSimple from './CardSimple';
-
+import { fetchJsonEndpoint } from './utils/ajax.js';
 function CardContainer() {
-  const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+	const [cards, setCards] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const response = await fetch('/api/cards/all');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setCards(data);
-      } catch (err) {
-        console.error('Error:', err);
-        setError(`Failed to load card data: ${err.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
+	useEffect(() => {
+		const getAllCards = async () => {
+			try {
+				const data = await fetchJsonEndpoint('/api/cards/all');
+				setCards(data);
+			} catch (err) {
+				console.error('Error:', err);
+				setError(`Failed to load card data: ${err.message}`);
+			} finally {
+				setLoading(false);
+			}
+		};
+		getAllCards();
+	}, []);
 
-    fetchCards();
-  }, []);
 
-  if (loading) {
-    return <div id="loading">Loading card data...</div>;
-  }
+	if (loading) {
+		return <div id="loading">Loading card data...</div>;
+	}
 
-  if (error) {
-    return <div id="error" style={{ color: 'red' }}>{error}</div>;
-  }
+	if (error) {
+		return <div id="error" style={{ color: 'red' }}>{error}</div>;
+	}
 
-  return (
-    <div className="card-container">
-      {cards.map((card, index) => (
-        <CardSimple key={index} card={card} />
-      ))}
-    </div>
-  );
+	return (
+		<div className="card-container">
+			{cards.map((card, index) => (
+				<CardSimple key={index} card={card} />
+			))}
+		</div>
+	);
 }
 
 export default CardContainer;
