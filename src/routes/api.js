@@ -22,6 +22,7 @@ router.get('/all-cards', (req, res) => {
     }
 });
 
+
 //random card
 router.get('/random-card', (req, res) => {
     const card = db.getRandomCard();
