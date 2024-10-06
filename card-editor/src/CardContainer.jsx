@@ -9,7 +9,7 @@ function CardContainer() {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch('/api/all-cards');
+        const response = await fetch('/api/cards/all');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

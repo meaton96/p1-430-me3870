@@ -4,7 +4,7 @@ const path = require('path');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const app = express();
-const apiRouter = require('./routes/api.js');
+const cardApiRouter = require('./routes/api.js');
 
 const indexPage = path.resolve(__dirname, '../client/frontend/index.html');
 const filePath404Page = path.resolve(__dirname, '../client/404.html');
@@ -13,7 +13,7 @@ app.use(express.static('client'));
 app.use(express.static('client/frontend'));
 app.use(express.json());
 
-app.use('/api', apiRouter);
+app.use('/api/cards', cardApiRouter);
 app.get('/', (req, res) => {
     res.sendFile(indexPage);
 });

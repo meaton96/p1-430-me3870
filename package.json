@@ -6,7 +6,7 @@
     "test": "echo \"Tests Complete!\"",
     "pretest": "eslint ./src --fix",
     "dev-server": "nodemon -e js,html,css,json ./src/app.js",   
-    "dev-client": "cd card-editor && vite",                      
+    "dev-client": "cd card-editor && npm run dev",                      
     "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
     "build": "", 
     "start": "node src/app.js"                                   

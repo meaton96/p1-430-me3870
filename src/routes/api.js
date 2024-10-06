@@ -13,7 +13,7 @@ const router = express.Router();
     };
 
     // full list of cards
-    router.get('/all-cards', (req, res) => {
+    router.get('/all', (req, res) => {
         const cards = db.getAllCards();
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
@@ -23,7 +23,7 @@ const router = express.Router();
     });
 
     // random card
-    router.get('/random-card', (req, res) => {
+    router.get('/random', (req, res) => {
         const card = db.getRandomCard();
         if (card) {
             res.status(200).json(card);
@@ -33,7 +33,7 @@ const router = express.Router();
     });
 
     // last card in the list
-    router.get('/recent-card', (req, res) => {
+    router.get('/recent', (req, res) => {
         const card = db.getRecentCard();
         if (card) {
             res.status(200).json(card);
@@ -43,7 +43,7 @@ const router = express.Router();
     });
     // /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
     // (slightly redundant with next endpoint)
-    router.get('/card/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+    router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         const { guid } = req.params;
         const card = db.getCardById(guid);
         if (card) {
