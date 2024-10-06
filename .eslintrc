@@ -1,8 +1,14 @@
-{ 
-  "extends": "airbnb/base",
-  "rules": {
-    "no-underscore-dangle" : "off",
+{
+	"extends": "airbnb/base",
+	"plugins": [
+	  "@stylistic/js"
+	],
+	"rules": {
+	  "indent": ["error", 4],
+	  "@stylistic/js/indent": ["error", 4], // Ensuring consistency
+	  "no-underscore-dangle": "off",
 	  "no-plusplus": "off",
-    "import/extensions": "off"
+	  "import/extensions": "off"
+	}
   }
-}
+  

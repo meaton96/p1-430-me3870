@@ -8,20 +8,20 @@ const cards = JSON.parse(jsonString);
 // PUBLIC METHODS
 const getAllCards = () => cards.map((card) => ({ ...card }));
 const getCardById = (guid) => {
-  const card = cards.find((_card) => _card.GUID === guid);
-  return card ? { ...card } : null;
+    const card = cards.find((_card) => _card.GUID === guid);
+    return card ? { ...card } : null;
 };
 
 const getRecentCard = () => {
-  const card = cards.slice(-1)[0];
-  return card ? { ...card } : null;
+    const card = cards.slice(-1)[0];
+    return card ? { ...card } : null;
 };
 
 const getRandomCard = () => {
-  const card = cards[Math.floor(Math.random() * cards.length)];
-  return card ? { ...card } : null;
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    return card ? { ...card } : null;
 };
 
 module.exports = {
-  getAllCards, getCardById, getRecentCard, getRandomCard,
+    getAllCards, getCardById, getRecentCard, getRandomCard,
 };
