@@ -6,10 +6,12 @@ function CardSimple({ card }) {
 	const [cardImage, setCardImage] = useState(null);
 	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace('.png', '.webp')}`;
 
-	//console.log(`Image endpoint: ${cardImagePath}`);
+	
 
 	const imgPath = card.imgLocation !== '' ? cardImagePath : "https://craftypixels.com/placeholder-image/300.png/";
-
+	// if (card.imgLocation !== '') {
+	// 	console.log(`Image endpoint: ${imgPath}`);
+	// }
 	return (
 		<div className="card cell">
 			<div className="card-header">
