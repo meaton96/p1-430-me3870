@@ -8,16 +8,22 @@ const cardsPath = path.resolve(assetsPath, 'cards/webp');
 
 // gets the asset given the request and response objects
 const getAsset = (req, res, _path) => {
-    const assetParam = req.params.asset;
-    const asset = path.resolve(_path, assetParam);
-    console.log(`Asset requested at ${path.resolve(_path, assetParam)} : ${asset}`);
-    // check if the asset exists and is a file
-    fs.stat(asset, (err, stat) => {
-        if (err || !stat.isFile()) {
+    const assetParam = req.params.asset.toLowerCase();
+    fs.readdir(_path, (err, files) => {
+        if (err) {
+            res.status(500).send({ message: 'Error reading directory' });
+            return;
+        }
+
+        // Find a matching file ignoring case
+        const matchingFile = files.find((file) => file.toLowerCase() === assetParam);
+
+        if (!matchingFile) {
             res.status(404).send({ message: 'Asset not found' });
             return;
         }
 
+        const asset = path.resolve(_path, matchingFile);
         res.sendFile(asset, (errr) => {
             if (errr) {
                 res.status(500).send({ message: 'Error sending asset' });
@@ -25,6 +31,7 @@ const getAsset = (req, res, _path) => {
         });
     });
 };
+
 // GET request to /api/assets/cards to list all file names in the /assets/cards/webp directory
 router.get('/cards', (req, res) => {
     // Read the files in the cards directory
