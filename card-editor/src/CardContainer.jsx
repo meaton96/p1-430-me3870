@@ -31,7 +31,7 @@ function CardContainer() {
 	}
 
 	return (
-		<div className="card-container">
+		<div className="card-container grid is-col-min-12">
 			{cards.map((card, index) => (
 				<CardSimple key={index} card={card} />
 			))}

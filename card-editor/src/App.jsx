@@ -1,9 +1,21 @@
 import './App.css'
 import CardContainer from './CardContainer'
+import Header from './Header'
+import Documentation from './Documentation'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 
 function App() {
 	return (
-		 <CardContainer />
+		<>
+			<Router basename='/'>
+				<Header />
+				<Routes>
+					<Route path='/' element={<CardContainer />} />
+					<Route path='/docs' element={<Documentation />} />
+				</Routes>
+			</Router>
+		</>
 	)
 }
 
