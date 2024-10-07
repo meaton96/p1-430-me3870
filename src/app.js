@@ -8,7 +8,7 @@ const cardApiRouter = require('./routes/api.js');
 const assetRouter = require('./routes/assets.js');
 
 const indexPage = path.resolve(__dirname, '../client/frontend/index.html');
-const filePath404Page = path.resolve(__dirname, '../client/404.html');
+//const filePath404Page = path.resolve(__dirname, '../client/404.html');
 
 app.use(express.static(path.resolve(__dirname, '../client')));
 app.use(express.static(path.resolve(__dirname, '../client/frontend')));
@@ -18,13 +18,14 @@ app.use(express.json());
 
 app.use('/api/cards', cardApiRouter);
 app.use('/api/assets', assetRouter);
-app.get('/', (req, res) => {
-    res.sendFile(indexPage);
+
+app.get('*', (req, res) => {
+    if (req.originalUrl.startsWith('/api')) {
+        res.status(404).send({ message: 'Invalid API endpoint' });
+    } else {
+        res.sendFile(indexPage); // react router handles frontend pages
+    }
 });
-app.all('*', (req, res) => {
-    res.status(404).sendFile(filePath404Page);
-});
-// app.use('/', indexRouter);
 
 app.listen(port, () => {
     console.log(`App running on http://localhost:${port}`);
