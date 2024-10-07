@@ -10,8 +10,10 @@ const assetRouter = require('./routes/assets.js');
 const indexPage = path.resolve(__dirname, '../client/frontend/index.html');
 const filePath404Page = path.resolve(__dirname, '../client/404.html');
 
-app.use(express.static('client'));
-app.use(express.static('client/frontend'));
+app.use(express.static(path.resolve(__dirname, '../client')));
+app.use(express.static(path.resolve(__dirname, '../client/frontend')));
+app.use(express.static(path.resolve(__dirname, '../client/assets')));
+app.use(express.static(path.resolve(__dirname, '../client/assets/cards/webp')));
 app.use(express.json());
 
 app.use('/api/cards', cardApiRouter);
