@@ -21,8 +21,127 @@
                 {
                     "name": "GET /api/cards",
                     "url": "/api/cards",
-                    "description": "This endpoint accepts query parameters to filter cards by any of their properties"
+                    "description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties",
+                    "examples": [
+                        "/api/cards?Team=Blue",
+                        "/api/cards?Method=AddEffect&Target=Facility"
+                    ],
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 400,
+                            "description": "On receiving invalid or no query parameters"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If no cards match the query parameters"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/fields",
+                    "url": "/api/cards/fields",
+                    "description": "Returns a list of valid card properties to filter by such as",
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If the valid field names array is empty"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/all",
+                    "url": "/api/cards/all",
+                    "description": "Returns all of the cards in the database in json format",
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If the cards database is empty"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/random",
+                    "url": "/api/cards/random",
+                    "description": "Returns a random card in the database as a json object",
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If no card is found somehow"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/recent",
+                    "url": "/api/cards/recent",
+                    "description": "Returns the last card in the database as a json object",
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If no card is found somehow"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/:guid",
+                    "url": "/api/cards/:guid",
+                    "description": "Accepts a card guid and returns the card as a json object",
+                    "examples": [
+                        "/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
+                    ],
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If no card is found with the given guid"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/:fieldName/:value",
+                    "url": "/api/cards/:fieldName/:value",
+                    "description": "Accepts a filter field name and a value and returns all cards that match the filter",
+                    "examples": [
+                        "/api/cards/Method/AddEffect"
+                    ],
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If no card is found with the given fieldname and value"
+                        },
+                        {
+                            "code": 400,
+                            "description": "If the field name is not a valid field name"
+                        }
+                    ]
                 }
+                
             ],
             "POST": [
                 {

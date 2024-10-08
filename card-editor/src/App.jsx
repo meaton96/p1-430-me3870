@@ -1,7 +1,7 @@
 import './App.css'
 import CardContainer from './CardContainer'
 import Header from './Header'
-import Documentation from './Documentation'
+import Documentation from './docs/Documentation'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 

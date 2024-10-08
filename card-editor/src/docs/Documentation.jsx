@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bulma/css/bulma.min.css";
-import { fetchJsonEndpoint } from "./utils/ajax";
+import { fetchJsonEndpoint } from "../utils/ajax";
+import DocsRenderer from "./DocsRenderer";
 
 function Documentation() {
     const [loading, setLoading] = useState(true);
@@ -36,14 +37,14 @@ function Documentation() {
         return <div id="error" style={{ color: 'red' }}>{error}</div>;
     }
 
-    // Generate the menu with anchor links
+    // Generate the nav menu
     const menu = (docs) => {
         return Object.keys(docs).map((section) => (
             <React.Fragment key={section}>
                 <p className="menu-label">{section}</p>
                 <ul className="menu-list">
                     {Object.keys(docs[section].endpoints).map((method) => (
-                        <li key={method}>
+                        <li key={`${method}-${section}`}>
                             <a>{method}</a>
                             <ul>
                                 {docs[section].endpoints[method].map((endpoint) => (
@@ -57,41 +58,6 @@ function Documentation() {
                 </ul>
             </React.Fragment>
         ));
-    };
-
-    // Render the documentation with section ids
-    const renderDocs = (docs) => {
-        return Object.keys(docs).map((section) => {
-            const isCollapsed = collapsedSections[section]; // Get collapsed state for the section
-            return (
-                <section key={section} className="section">
-                    <h2
-                        onClick={() => toggleSection(section)}
-                        style={{ cursor: 'pointer' }}
-                        className="title is-4"
-                    >
-                        {section} {isCollapsed ? '▲' : '▼'}
-                    </h2>
-                    {!isCollapsed && (
-                        Object.keys(docs[section].endpoints).map((method) => (
-                            <div key={`${section}-${method}`} className="mb-4">
-                                <h3 className="title is-5">{method}</h3>
-                                <div className="pl-4">
-                                    {docs[section].endpoints[method].map((endpoint) => (
-                                        <div className="block" key={endpoint.url}>
-                                            <h4 id={endpoint.url} className="subtitle is-6">
-                                                {endpoint.name}
-                                            </h4>
-                                            <p className="pl-4">{endpoint.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </section>
-            );
-        });
     };
 
     return (
@@ -111,7 +77,7 @@ function Documentation() {
                             on all available API endpoints.
                         </p>
                     </div>
-                    {renderDocs(docs)}
+                    <DocsRenderer docs={docs} />
                 </section>
             </div>
         </div>

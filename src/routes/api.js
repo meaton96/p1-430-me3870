@@ -12,6 +12,10 @@ const router = express.Router();
         return invalidFields;
     };
 
+    router.get('/fields', (req, res) => {
+        res.status(200).json({ 'valid class properties': db.VALID_FIELD_NAMES });
+    });
+
     // full list of cards
     router.get('/all', (req, res) => {
         const cards = db.getAllCards();
@@ -79,7 +83,7 @@ const router = express.Router();
     // dynamic endpoint that accepts query parameters to find cards
     router.get('/', (req, res) => {
         const filters = req.query;
-        const filterKeys = Object.keys(filters);
+        const filterKeys = Object.keys(filters).map((key) => key.toLowerCase()); // case-insensitive
 
         // if no query parameters, return 400
         if (filterKeys.length === 0) {
