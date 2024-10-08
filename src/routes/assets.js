@@ -4,6 +4,7 @@ const fs = require('fs');
 
 const router = express.Router();
 const assetsPath = path.resolve(__dirname, '../../client/assets');
+
 const cardsPath = path.resolve(assetsPath, 'cards/webp');
 
 // gets the asset given the request and response objects
@@ -33,7 +34,7 @@ const getAsset = (req, res, _path) => {
 };
 
 // GET request to /api/assets/cards to list all file names in the /assets/cards/webp directory
-router.get('/cards', (req, res) => {
+router.get('/card-images', (req, res) => {
     // Read the files in the cards directory
     fs.readdir(cardsPath, (err, files) => {
         if (err) {

@@ -6,9 +6,10 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const app = express();
 const cardApiRouter = require('./routes/api.js');
 const assetRouter = require('./routes/assets.js');
+const docsRouter = require('./routes/docs.js');
 
 const indexPage = path.resolve(__dirname, '../client/frontend/index.html');
-//const filePath404Page = path.resolve(__dirname, '../client/404.html');
+// const filePath404Page = path.resolve(__dirname, '../client/404.html');
 
 app.use(express.static(path.resolve(__dirname, '../client')));
 app.use(express.static(path.resolve(__dirname, '../client/frontend')));
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/api/cards', cardApiRouter);
 app.use('/api/assets', assetRouter);
+app.use('/api/docs', docsRouter);
 
 app.get('*', (req, res) => {
     if (req.originalUrl.startsWith('/api')) {

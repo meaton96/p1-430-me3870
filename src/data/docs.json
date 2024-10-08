@@ -1,0 +1,47 @@
+{
+    "Frontend": {
+        "endpoints": {
+            "GET": [
+                {
+                    "name": "GET /",
+                    "url": "/",
+                    "description": "This route is handled by React Router and currently displays the card viewer page"
+                },
+                {
+                    "name": "GET /docs",
+                    "url": "/docs",
+                    "description": "This route is handled by React Router and displays this page!"
+                }
+            ]
+        }
+    },
+    "Cards API": {
+        "endpoints": {
+            "GET": [
+                {
+                    "name": "GET /api/cards",
+                    "url": "/api/cards",
+                    "description": "This endpoint accepts query parameters to filter cards by any of their properties"
+                }
+            ],
+            "POST": [
+                {
+                    "name": "GET /api/card-edit",
+                    "url": "/api/card-edit",
+                    "description": "This is a placeholder"
+                }
+            ]
+        }
+    },
+    "Assets API": {
+        "endpoints": {
+            "GET": [
+                {
+                    "name": "GET /api/assets/card-images",
+                    "url": "/api/assets/card-images",
+                    "description": "Returns a list of the file names of the card images"
+                }
+            ]
+        }
+    }
+}
