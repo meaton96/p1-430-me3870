@@ -5,7 +5,7 @@
                 {
                     "name": "GET /",
                     "url": "/",
-                    "description": "This route is handled by React Router and currently displays the card viewer page"
+                    "description": "This route is handled by React Router and currently displays the card viewer page which calls both the cards and assets APIs"
                 },
                 {
                     "name": "GET /docs",
