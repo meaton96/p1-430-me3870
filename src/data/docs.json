@@ -1,181 +1,228 @@
 {
-    "Frontend": {
-        "endpoints": {
-            "GET": [
-                {
-                    "name": "GET /",
-                    "url": "/",
-                    "description": "This route is handled by React Router and currently displays the card viewer page which calls both the cards and assets APIs"
-                },
-                {
-                    "name": "GET /docs",
-                    "url": "/docs",
-                    "description": "This route is handled by React Router and displays this page!"
-                }
-            ]
-        }
-    },
-    "Cards API": {
-        "endpoints": {
-            "GET": [
-                {
-                    "name": "GET /api/cards",
-                    "url": "/api/cards",
-                    "description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties",
-                    "examples": [
-                        "/api/cards?Team=Blue",
-                        "/api/cards?Method=AddEffect&Target=Facility"
-                    ],
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 400,
-                            "description": "On receiving invalid or no query parameters"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If no cards match the query parameters"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/fields",
-                    "url": "/api/cards/fields",
-                    "description": "Returns a list of all card properties",
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If the valid field names array is empty"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/filters",
-                    "url": "/api/cards/filters",
-                    "description": "Returns a list of valid card properties to filter cards by",
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If the valid fiter names array is empty"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/all",
-                    "url": "/api/cards/all",
-                    "description": "Returns all of the cards in the database in json format",
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If the cards database is empty"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/random",
-                    "url": "/api/cards/random",
-                    "description": "Returns a random card in the database as a json object",
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If no card is found somehow"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/recent",
-                    "url": "/api/cards/recent",
-                    "description": "Returns the last card in the database as a json object",
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If no card is found somehow"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/:guid",
-                    "url": "/api/cards/:guid",
-                    "description": "Accepts a card guid and returns the card as a json object",
-                    "examples": [
-                        "/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
-                    ],
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If no card is found with the given guid"
-                        }
-                    ]
-                },
-                {
-                    "name": "GET /api/cards/:fieldName/:value",
-                    "url": "/api/cards/:fieldName/:value",
-                    "description": "Accepts a filter field name and a value and returns all cards that match the filter",
-                    "examples": [
-                        "/api/cards/Method/AddEffect"
-                    ],
-                    "statusCodes": [
-                        {
-                            "code": 200,
-                            "description": "On success"
-                        },
-                        {
-                            "code": 404,
-                            "description": "If no card is found with the given fieldname and value"
-                        },
-                        {
-                            "code": 400,
-                            "description": "If the field name is not a valid field name"
-                        }
-                    ]
-                }
-                
-            ],
-            "POST": [
-                {
-                    "name": "GET /api/card-edit",
-                    "url": "/api/card-edit",
-                    "description": "This is a placeholder"
-                }
-            ]
-        }
-    },
-    "Assets API": {
-        "endpoints": {
-            "GET": [
-                {
-                    "name": "GET /api/assets/card-images",
-                    "url": "/api/assets/card-images",
-                    "description": "Returns a list of the file names of the card images"
-                }
-            ]
-        }
-    }
+	"Frontend": {
+		"endpoints": {
+			"GET": [
+				{
+					"name": "GET /",
+					"url": "/",
+					"description": "This route is handled by React Router and currently displays the card viewer page which calls both the cards and assets APIs"
+				},
+				{
+					"name": "GET /docs",
+					"url": "/docs",
+					"description": "This route is handled by React Router and displays this page!"
+				}
+			]
+		}
+	},
+	"Cards API": {
+		"endpoints": {
+			"GET": [
+				{
+					"name": "GET /api/cards",
+					"url": "/api/cards",
+					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties",
+					"examples": [
+						"/api/cards?Team=Blue",
+						"/api/cards?Method=AddEffect&Target=Facility"
+					],
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 400,
+							"description": "On receiving invalid or no query parameters"
+						},
+						{
+							"code": 404,
+							"description": "If no cards match the query parameters"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/fields",
+					"url": "/api/cards/fields",
+					"description": "Returns a list of all card properties",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If the valid field names array is empty"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/filters",
+					"url": "/api/cards/filters",
+					"description": "Returns a list of valid card properties to filter cards by",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If the valid fiter names array is empty"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/all",
+					"url": "/api/cards/all",
+					"description": "Returns all of the cards in the database in json format",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If the cards database is empty"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/random",
+					"url": "/api/cards/random",
+					"description": "Returns a random card in the database as a json object",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found somehow"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/recent",
+					"url": "/api/cards/recent",
+					"description": "Returns the last card in the database as a json object",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found somehow"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/:guid",
+					"url": "/api/cards/:guid",
+					"description": "Accepts a card guid and returns the card as a json object",
+					"examples": [
+						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
+					],
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found with the given guid"
+						}
+					]
+				},
+				{
+					"name": "GET /api/cards/:fieldName/:value",
+					"url": "/api/cards/:fieldName/:value",
+					"description": "Accepts a filter field name and a value and returns all cards that match the filter",
+					"examples": [
+						"/api/cards/Method/AddEffect"
+					],
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found with the given fieldname and value"
+						},
+						{
+							"code": 400,
+							"description": "If the field name is not a valid field name"
+						}
+					]
+				}
+			],
+			"POST": [
+				{
+					"name": "GET /api/card-edit",
+					"url": "/api/card-edit",
+					"description": "This is a placeholder"
+				}
+			]
+		}
+	},
+	"Assets API": {
+		"endpoints": {
+			"GET": [
+				{
+					"name": "GET /api/assets/card-images",
+					"url": "/api/assets/card-images",
+					"description": "Returns a list of the file names of the card images",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 500,
+							"description": "If there is was an error reading the card image directory"
+						}
+					]
+				},
+				{
+					"name": "GET /api/assets/:asset",
+					"url": "/api/assets/:asset",
+					"description": "A dynamic endpoint that accepts an asset name and returns the asset as a file",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 500,
+							"description": "If there was an error reading the image directory or sending the file"
+						},
+						{
+							"code": 404,
+							"description": "If the asset was not found"
+						}
+					]
+				},
+				{
+					"name": "GET /api/assets/cards/:asset",
+					"url": "/api/assets/cards/:asset",
+					"description": "A dynamic endpoint that accepts an asset name, specifically a card image, and returns the asset as a file",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 500,
+							"description": "If there was an error reading the image directory or sending the file"
+						},
+						{
+							"code": 404,
+							"description": "If the asset was not found"
+						}
+					]
+				}
+			]
+		}
+	}
 }
