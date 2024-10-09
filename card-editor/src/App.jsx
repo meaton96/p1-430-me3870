@@ -3,6 +3,7 @@ import CardContainer from './CardContainer'
 import Header from './Header'
 import Documentation from './docs/Documentation'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CardViewer from './CardViewer';
 
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
 			<Router basename='/'>
 				<Header />
 				<Routes>
-					<Route path='/' element={<CardContainer />} />
+					<Route path='/' element={<CardViewer />} />
 					<Route path='/docs' element={<Documentation />} />
 				</Routes>
 			</Router>
