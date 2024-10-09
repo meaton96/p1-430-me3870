@@ -7,6 +7,17 @@ const cards = JSON.parse(jsonString);
 
 // List of valid field names for validation
 const VALID_FIELD_NAMES = Object.keys(cards[0] || {}).map((key) => key.toLowerCase());
+const VALID_FILTER_NAMES = [
+
+    'team',
+    'method',
+    'target',
+    'bluecost',
+    'blackcost',
+    'purplecost',
+    'effectcount',
+    'prerequisiteeffect',
+];
 
 // PUBLIC METHODS
 const getAllCards = () => cards.map((card) => ({ ...card }));
@@ -58,4 +69,5 @@ module.exports = {
     getCardsByField,
     getCardsByFilters,
     VALID_FIELD_NAMES,
+    VALID_FILTER_NAMES,
 };

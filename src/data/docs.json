@@ -44,7 +44,7 @@
                 {
                     "name": "GET /api/cards/fields",
                     "url": "/api/cards/fields",
-                    "description": "Returns a list of valid card properties to filter by such as",
+                    "description": "Returns a list of all card properties",
                     "statusCodes": [
                         {
                             "code": 200,
@@ -53,6 +53,21 @@
                         {
                             "code": 404,
                             "description": "If the valid field names array is empty"
+                        }
+                    ]
+                },
+                {
+                    "name": "GET /api/cards/filters",
+                    "url": "/api/cards/filters",
+                    "description": "Returns a list of valid card properties to filter cards by",
+                    "statusCodes": [
+                        {
+                            "code": 200,
+                            "description": "On success"
+                        },
+                        {
+                            "code": 404,
+                            "description": "If the valid fiter names array is empty"
                         }
                     ]
                 },

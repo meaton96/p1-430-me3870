@@ -4,7 +4,7 @@ const db = require('../db.js');
 const router = express.Router();
 // GET
 {
-// Helper function to validate field names
+    // Helper function to validate field names
     const validateFieldNames = (fieldNames) => {
         const invalidFields = fieldNames.filter(
             (fieldName) => !db.VALID_FIELD_NAMES.includes(fieldName.toLowerCase()),
@@ -13,7 +13,18 @@ const router = express.Router();
     };
 
     router.get('/fields', (req, res) => {
-        res.status(200).json({ 'valid class properties': db.VALID_FIELD_NAMES });
+        if (db.VALID_FIELD_NAMES && db.VALID_FIELD_NAMES.length > 0) {
+            res.status(200).json(db.VALID_FIELD_NAMES);
+        } else {
+            res.status(404).send({ message: 'No field names found' });
+        }
+    });
+    router.get('/filters', (req, res) => {
+        if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
+            res.status(200).json(db.VALID_FILTER_NAMES);
+        } else {
+            res.status(404).send({ message: 'No field names found' });
+        }
     });
 
     // full list of cards
