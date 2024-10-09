@@ -188,6 +188,9 @@
 					"name": "GET /api/assets/:asset",
 					"url": "/api/assets/:asset",
 					"description": "A dynamic endpoint that accepts an asset name and returns the asset as a file",
+					"examples": [
+						"/api/assets/1.png"
+					],
 					"statusCodes": [
 						{
 							"code": 200,
@@ -206,7 +209,11 @@
 				{
 					"name": "GET /api/assets/cards/:asset",
 					"url": "/api/assets/cards/:asset",
-					"description": "A dynamic endpoint that accepts an asset name, specifically a card image, and returns the asset as a file",
+					"description": "A dynamic endpoint that accepts an asset name, specifically a card webp image, and returns the asset as a file",
+					"examples": [
+						"/api/assets/cards/VirtualMeeting.png",
+						"/api/assets/cards/VirtualMeeting.webp"
+					],
 					"statusCodes": [
 						{
 							"code": 200,
