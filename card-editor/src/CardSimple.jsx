@@ -2,18 +2,23 @@ import React from 'react';
 import { useState } from 'react';
 import './CardSimple.css';
 
-function CardSimple({ card }) {
-	const [cardImage, setCardImage] = useState(null);
-	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace('.png', '.webp')}`;
+function CardSimple({ card, onClick }) {
+	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace(
+		'.png',
+		'.webp'
+	)}`;
 
+	const imgPath =
+		card.imgLocation !== ''
+			? cardImagePath
+			: 'https://craftypixels.com/placeholder-image/300.png/';
 
-
-	const imgPath = card.imgLocation !== '' ? cardImagePath : "https://craftypixels.com/placeholder-image/300.png/";
-	// if (card.imgLocation !== '') {
-	// 	console.log(`Image endpoint: ${imgPath}`);
-	// }
 	return (
-		<div className="card cell" style={{ minHeight: "600px" }}>
+		<div
+			className="card cell"
+			style={{ minHeight: '600px', cursor: 'pointer' }}
+			onClick={onClick} // Attach onClick handler
+		>
 			<div className="card-header">
 				<div className="card-title card-header-title">
 					{card.Title || 'Untitled'}
@@ -28,7 +33,10 @@ function CardSimple({ card }) {
 				<img src={imgPath} alt="Card Image" style={{ width: '100%' }} />
 			</div>
 			<div className="card-content">
-				<div className={`description-box ${card.DoomEffect === 'TRUE' ? 'doom-bg' : ''}`}>
+				<div
+					className={`description-box ${card.DoomEffect === 'TRUE' ? 'doom-bg' : ''
+						}`}
+				>
 					{card.Description || 'No description available.'}
 				</div>
 			</div>
@@ -36,7 +44,6 @@ function CardSimple({ card }) {
 				<div className="flavour-text">{card.FlavourText || ''}</div>
 			</div>
 		</div>
-
 	);
 }
 
