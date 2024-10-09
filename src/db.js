@@ -20,6 +20,7 @@ const VALID_FILTER_NAMES = [
 ];
 
 // PUBLIC METHODS
+// GET
 const getAllCards = () => cards.map((card) => ({ ...card }));
 
 // Get a card by GUID
@@ -61,6 +62,16 @@ const getCardsByFilters = (filters) => cards
     }))
     .map((card) => ({ ...card }));
 
+// DELETE
+const deleteCard = (guid) => {
+    const index = cards.findIndex((_card) => _card.GUID === guid);
+    if (index !== -1) {
+        cards.splice(index, 1);
+        return true;
+    }
+    return false;
+};
+
 module.exports = {
     getAllCards,
     getCardById,
@@ -68,6 +79,7 @@ module.exports = {
     getRandomCard,
     getCardsByField,
     getCardsByFilters,
+    deleteCard,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

@@ -5,7 +5,7 @@
 				{
 					"name": "GET /",
 					"url": "/",
-					"description": "This route is handled by React Router and currently displays the card viewer page which calls both the cards and assets APIs"
+					"description": "This route serves the React page currently displays the card viewer page which calls both the cards and assets APIs"
 				},
 				{
 					"name": "GET /docs",
@@ -117,7 +117,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/:guid",
+					"name": "GET /api/cards/:guid([0-9a-zA-Z-]{36})",
 					"url": "/api/cards/:guid",
 					"description": "Accepts a card guid and returns the card as a json object",
 					"examples": [
@@ -159,9 +159,40 @@
 			],
 			"POST": [
 				{
-					"name": "GET /api/card-edit",
+					"name": "POST /api/card-edit",
 					"url": "/api/card-edit",
 					"description": "This is a placeholder"
+				}
+			],
+			"PUT": [
+				{
+					"name": "PUT /api/card-edit",
+					"url": "/api/card-edit",
+					"description": "This is a placeholder"
+				}
+			],
+			"DELETE": [
+				{
+					"name": "DELETE /api/cards/:guid([0-9a-zA-Z-]{36})",
+					"url": "/api/cards/:guid",
+					"description": "Deletes the card by guid",
+					"examples": [
+						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
+					],
+					"statusCodes": [
+						{
+							"code": 204,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found with the given guid"
+						},
+						{
+							"code": 500,
+							"description": "If the database delete operation fails"
+						}
+					]
 				}
 			]
 		}

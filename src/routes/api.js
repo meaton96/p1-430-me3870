@@ -57,7 +57,6 @@ const router = express.Router();
         }
     });
     // /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
-    // (slightly redundant with next endpoint)
     router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         const { guid } = req.params;
         const card = db.getCardById(guid);
@@ -124,6 +123,19 @@ const router = express.Router();
 // // PUT
 // {}
 // // DELETE
-// {}
+
+router.delete('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+    const { guid } = req.params;
+    const card = db.getCardById(guid);
+    if (card) {
+        if (db.deleteCard(guid)) {
+            res.status(204).send();
+        } else {
+            res.status(500).send({ message: 'Failed to delete card' });
+        }
+    } else {
+        res.status(404).send({ message: `Card with GUID ${guid} not found` });
+    }
+});
 
 module.exports = router;
