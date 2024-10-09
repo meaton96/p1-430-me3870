@@ -122,8 +122,8 @@ const router = express.Router();
 // {}
 // // PUT
 // {}
-// // DELETE
 
+// // DELETE
 router.delete('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
     const card = db.getCardById(guid);

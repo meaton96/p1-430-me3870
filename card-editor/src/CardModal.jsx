@@ -14,10 +14,10 @@ function CardModal({ card, onClose }) {
                         onClick={onClose}
                     ></button>
                     <h2 className="title">{card.Title || 'Untitled'}</h2>
-                    <img
+                    <img className='is-flex is-align-items-center is-justify-content-center m-auto mb-3'
                         src={`/api/assets/cards/${card.imgLocation.replace('.png', '.webp')}`}
                         alt="Card Image"
-                        style={{ width: '100%' }}></img>
+                        style={{ width: '70%' }}></img>
                     <p>
                         <strong>Description:</strong>{' '}
                         {card.Description || 'No description available.'}
@@ -79,6 +79,7 @@ function CardModal({ card, onClose }) {
                     <p>
                         <strong>GUID:</strong> {card.GUID}
                     </p>
+                    
                     {card.Effects && card.Effects.length > 0 && (
                         <div>
                             <strong>Effects:</strong>
@@ -95,6 +96,10 @@ function CardModal({ card, onClose }) {
                             </ul>
                         </div>
                     )}
+                    <div className='is-flex is-align-items-center is-justify-content-center'>
+                        <button style={{width:"10rem"}} className="button is-primary m-1" onClick={onClose}>Edit Card</button>
+                        <button style={{width:"10rem"}} className="button is-danger m-1" onClick={onClose}>Delete Card</button>
+                    </div>
                 </div>
             </div>
         </div>
