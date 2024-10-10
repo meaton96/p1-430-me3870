@@ -67,6 +67,7 @@ const deleteCard = (guid) => {
     const index = cards.findIndex((_card) => _card.GUID === guid);
     if (index !== -1) {
         cards.splice(index, 1);
+        // fs.writeFileSync(cardsPath, JSON.stringify(cards, null, 2));
         return true;
     }
     return false;

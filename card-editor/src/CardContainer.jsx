@@ -46,6 +46,12 @@ function CardContainer({ selectedFilters, setSelectedFilters }) {
     });
   };
 
+  // Remove a card from the displayed list when deleted
+  const handleDeleteCard = (guid) => {
+	setCards((prevCards) => prevCards.filter((card) => card.GUID !== guid));
+	
+};
+
   // Display active filters as clickable elements
   const renderActiveFilters = () => {
     const filters = Object.entries(selectedFilters).flatMap(([field, values]) =>
@@ -99,7 +105,10 @@ function CardContainer({ selectedFilters, setSelectedFilters }) {
           </div>
         )}
       </div>
-      <CardModal card={selectedCard} onClose={() => setSelectedCard(null)} />
+      <CardModal 
+	  card={selectedCard} 
+	  onClose={() => setSelectedCard(null)}
+	  onDelete={handleDeleteCard} />
     </div>
   );
 }
