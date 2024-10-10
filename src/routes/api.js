@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../db.js');
 
 const router = express.Router();
-// GET
+// GET/HEAD
 {
     // Helper function to validate field names
     const validateFieldNames = (fieldNames) => {
@@ -11,7 +11,18 @@ const router = express.Router();
         );
         return invalidFields;
     };
-
+    router.head('/fields', (req, res) => {
+        if (db.VALID_FIELD_NAMES && db.VALID_FIELD_NAMES.length > 0) {
+            res.set({
+                'Content-Type': 'application/json',
+                'Content-Length': JSON.stringify(db.VALID_FIELD_NAMES).length,
+                'X-Coder': 'ME',
+            })
+            res.end();
+        } else {
+            res.status(404).end();
+        }
+    });
     router.get('/fields', (req, res) => {
         if (db.VALID_FIELD_NAMES && db.VALID_FIELD_NAMES.length > 0) {
             res.status(200).json(db.VALID_FIELD_NAMES);
@@ -19,6 +30,7 @@ const router = express.Router();
             res.status(404).send({ message: 'No field names found' });
         }
     });
+    
     router.get('/filters', (req, res) => {
         if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
             res.status(200).json(db.VALID_FILTER_NAMES);
@@ -129,7 +141,7 @@ router.delete('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const card = db.getCardById(guid);
     if (card) {
         if (db.deleteCard(guid)) {
-            res.status(204).send();
+            res.status(200).send({ message: `Card with GUID ${guid} deleted` });
         } else {
             res.status(500).send({ message: 'Failed to delete card' });
         }
