@@ -39,12 +39,18 @@ function FilterMenu({ selectedFilters, setSelectedFilters }) {
                         const cardFieldValue = card[field];
                         if (cardFieldValue != null) {
                             //split the values by semicolon
-                            const values = String(cardFieldValue).split(';').map(v => v.trim());
-                            //iterate over each value
-                            values.forEach(value => {
-                                //increment the count of the value
-                                valueCounts[value] = (valueCounts[value] || 0) + 1;
-                            });
+                            //const values = String(cardFieldValue).split(';').map(v => v.trim());
+                            // let stringVal = '';
+                            // if (values.length > 1) {
+
+                            // }
+                           // console.log(cardFieldValue);
+                            valueCounts[cardFieldValue] = (valueCounts[cardFieldValue] || 0) + 1;
+                            // //iterate over each value
+                            // values.forEach(value => {
+                            //     //increment the count of the value
+                            //     valueCounts[value] = (valueCounts[value] || 0) + 1;
+                            // });
                         }
                     }
                     //set the filter values

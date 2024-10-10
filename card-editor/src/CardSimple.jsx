@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import './CardSimple.css';
+import './styles/CardSimple.css';
 
 function CardSimple({ card, onClick }) {
 	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace(
@@ -17,7 +17,7 @@ function CardSimple({ card, onClick }) {
 		<div
 			className="card cell"
 			style={{ minHeight: '600px', cursor: 'pointer' }}
-			onClick={onClick} // Attach onClick handler
+			onClick={onClick} 
 		>
 			<div className="card-header">
 				<div className="card-title card-header-title">

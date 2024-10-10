@@ -1,0 +1,19 @@
+
+.is-wide-modal {
+    width: 80vw !important;
+    max-width: none !important;
+}
+
+@media screen and (max-width: 768px) {
+    .is-wide-modal {
+        width: 90vw !important;
+    }
+}
+
+/* .field.is-horizontal .field-label {
+    align-items: center; 
+} */
+
+.input {
+    width: 100%; 
+}
