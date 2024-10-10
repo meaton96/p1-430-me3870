@@ -56,7 +56,17 @@ const MethodSection = ({ method, endpoints }) => (
 	</div>
 );
 
+const openEndpointLink = (endPointObject) => {
+	if (!endPointObject.examples || endPointObject.examples.length === 0) {
+		window.open(endPointObject.url, '_blank');
+	} else {
+		window.open(endPointObject.examples[0], '_blank');
+	}
+}
+
 const EndpointDetails = ({ endpoint }) => (
+
+
 	<div className="box has-background-black-ter">
 		<h4 id={endpoint.url} className="subtitle is-6">
 			{endpoint.name}
@@ -70,6 +80,12 @@ const EndpointDetails = ({ endpoint }) => (
 		{endpoint.statusCodes && endpoint.statusCodes.length > 0 && (
 			<StatusCodesList statusCodes={endpoint.statusCodes} />
 		)}
+
+		{
+			<div className='has-text-centered m-auto'>
+				<button className='button' onClick={() => openEndpointLink(endpoint)}>Try Me!</button>
+			</div>
+		}
 	</div>
 );
 
