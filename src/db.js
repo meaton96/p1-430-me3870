@@ -68,7 +68,8 @@ const getCardsByFilters = (filters) => cards
         // Handle nested object properties and multiple values
         if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
             return Object.keys(filterValue).every((nestedKey) => {
-                const nestedValues = filterValue[nestedKey]; // could be an array or a single value
+
+                const nestedValues = filterValue[nestedKey]; //this is why we love javascript
                 const nestedFieldValue = card[key]?.[nestedKey];
 
                 if (nestedFieldValue !== undefined && nestedFieldValue !== null) {
@@ -77,7 +78,7 @@ const getCardsByFilters = (filters) => cards
                         ? nestedValues.some(nestedValue => 
                             nestedFieldValue.toString().toLowerCase() === nestedValue.toString().toLowerCase()
                         )
-                        : nestedFieldValue.toString().toLowerCase() === nestedValues.toString().toLowerCase(); // Single value comparison
+                        : nestedFieldValue.toString().toLowerCase() === nestedValues.toString().toLowerCase(); 
                 }
                 return false;
             });
@@ -88,7 +89,7 @@ const getCardsByFilters = (filters) => cards
             // Handle multiple values for non-nested filters (e.g., Action.EffectCount=1,2)
             return Array.isArray(filterValue)
                 ? filterValue.some(val => fieldValue.toString().toLowerCase() === val.toString().toLowerCase())
-                : fieldValue.toString().toLowerCase() === filterValue.toString().toLowerCase(); // Single value comparison
+                : fieldValue.toString().toLowerCase() === filterValue.toString().toLowerCase(); 
         }
         return false;
     }))

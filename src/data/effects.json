@@ -157,7 +157,7 @@
         "EffectID": "modppt-net-1",
         "Effect": {
             "EffectType": "ModifyPointsPerTurn",
-            "EffectPointTarget": "All",
+            "EffectPointTarget": "Network",
             "EffectMagnitude": "-1"
         }
     },
@@ -165,7 +165,7 @@
         "EffectID": "modppt-fin-1",
         "Effect": {
             "EffectType": "ModifyPointsPerTurn",
-            "EffectPointTarget": "All",
+            "EffectPointTarget": "Financial",
             "EffectMagnitude": "-1"
         }
     },
@@ -173,7 +173,7 @@
         "EffectID": "modppt-phys-1",
         "Effect": {
             "EffectType": "ModifyPointsPerTurn",
-            "EffectPointTarget": "All",
+            "EffectPointTarget": "Physical",
             "EffectMagnitude": "-1"
         }
     }

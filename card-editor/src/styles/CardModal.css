@@ -17,30 +17,19 @@
     width: 100%;
 }
 
-/* .effects-list {
-    margin-top: 10px;
-    display: flex;
-} */
-
 .effect-item {
     width: 40%;
     border: 1px solid #ddd;
     border-radius: 4px;
+    
+}
+.effect-item-edit:hover {
+    background-color: #5f5f5f;
 }
 
-.positive-effect {
-    background-color: #e6f7e6;
+.effect-item-edit {
+    width: 40%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
 }
-
-.negative-effect {
-    background-color: #fdd;
-    color: #d9534f;
-}
-
-.effect-target {
-    font-style: italic;
-}
-
-/* .effect-magnitude {
-    font-weight: bold;
-} */

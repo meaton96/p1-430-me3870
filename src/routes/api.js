@@ -78,6 +78,8 @@ const router = express.Router();
             res.status(404).send({ message: `Card with GUID ${guid} not found` });
         }
     });
+    
+    
 
     // dynamic endpoint that accepts a field name and value to find cards
     router.get('/:fieldName/:value', (req, res) => {
@@ -97,7 +99,8 @@ const router = express.Router();
 
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
-        } else {
+        } 
+        else {
             res.status(404).send({ message: `No cards found with ${fieldName} matching ${value}` });
         }
     });
@@ -112,19 +115,21 @@ const router = express.Router();
             return;
         }
 
-        // Support nested keys by splitting on '.' and handle multiple values
+        // Get nested key values by splitting on '.' and handle multiple values
         const normalizedFilters = {};
         Object.keys(filters).forEach((key) => {
             const keyParts = key.split('.');
-            let values = filters[key].split(','); // Split multiple values (like '1,2' -> ['1', '2'])
+            let values = filters[key].split(','); //create an OR condition
 
+            //assign the values to the key if neccessary 
             if (keyParts.length > 1) {
                 normalizedFilters[keyParts[0]] = {
                     ...normalizedFilters[keyParts[0]],
-                    [keyParts[1]]: values, // store as an array
+                    [keyParts[1]]: values,
                 };
-            } else {
-                normalizedFilters[key] = values; // store as an array
+            } 
+            else {
+                normalizedFilters[key] = values;
             }
         });
 
@@ -133,7 +138,8 @@ const router = express.Router();
 
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
-        } else {
+        } 
+        else {
             res.status(404).send({ message: 'No cards found matching the query parameters' });
         }
     });

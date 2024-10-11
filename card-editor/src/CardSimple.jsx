@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './styles/CardSimple.css';
 
 function CardSimple({ card, onClick }) {
+	
 	const cardImagePath = `/api/assets/cards/${card.AssetInfo.imgLocation.replace(
 		'.png',
 		'.webp'

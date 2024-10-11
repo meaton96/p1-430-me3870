@@ -3,7 +3,7 @@ import CardSimple from './CardSimple';
 import CardModal from './CardModal'; // Import the new component
 import { fetchJsonEndpoint } from './utils/ajax.js';
 
-function CardContainer({ selectedFilters, setSelectedFilters }) {
+function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
 	const [cards, setCards] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
@@ -27,6 +27,7 @@ function CardContainer({ selectedFilters, setSelectedFilters }) {
 					? `/api/cards?${queryParams.toString()}`
 					: '/api/cards/all';
 				const data = await fetchJsonEndpoint(url); // Fetch
+				setApiUrl(url); // Set the API URL to display
 				setCards(data);
 			} catch (err) {
 				console.error('Error:', err);
