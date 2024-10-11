@@ -142,7 +142,17 @@ const router = express.Router();
 // // POST
 // {}
 // // PUT
-// {}
+// /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to update card
+router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+    const { guid } = req.params;
+    const card = db.getCardById(guid);
+    //TODO:
+    // if (card) {
+    //     res.status(200).json(card);
+    // } else {
+    //     res.status(404).send({ message: `Card with GUID ${guid} not found` });
+    // }
+});
 
 // // DELETE
 router.delete('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
