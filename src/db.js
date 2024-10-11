@@ -8,8 +8,6 @@ const jsonString = fs.readFileSync(cardsPath);
 const cards = JSON.parse(jsonString);
 const effects = JSON.parse(effectJson);
 
-
-
 // List of valid field names for validation
 const VALID_FIELD_NAMES = Object.keys(cards[0] || {}).map((key) => key.toLowerCase());
 const VALID_FILTER_NAMES = [
@@ -68,17 +66,16 @@ const getCardsByFilters = (filters) => cards
         // Handle nested object properties and multiple values
         if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
             return Object.keys(filterValue).every((nestedKey) => {
-
-                const nestedValues = filterValue[nestedKey]; //this is why we love javascript
+                const nestedValues = filterValue[nestedKey]; // this is why we love javascript
                 const nestedFieldValue = card[key]?.[nestedKey];
 
                 if (nestedFieldValue !== undefined && nestedFieldValue !== null) {
                     // Check if nestedFieldValue matches any of the values in nestedValues
                     return Array.isArray(nestedValues)
-                        ? nestedValues.some(nestedValue => 
-                            nestedFieldValue.toString().toLowerCase() === nestedValue.toString().toLowerCase()
-                        )
-                        : nestedFieldValue.toString().toLowerCase() === nestedValues.toString().toLowerCase(); 
+                        ? nestedValues.some((nestedValue) => nestedFieldValue.toString()
+                            .toLowerCase() === nestedValue.toString().toLowerCase())
+                        : nestedFieldValue.toString().toLowerCase() === nestedValues
+                            .toString().toLowerCase();
                 }
                 return false;
             });
@@ -88,13 +85,14 @@ const getCardsByFilters = (filters) => cards
         if (fieldValue !== undefined && fieldValue !== null) {
             // Handle multiple values for non-nested filters (e.g., Action.EffectCount=1,2)
             return Array.isArray(filterValue)
-                ? filterValue.some(val => fieldValue.toString().toLowerCase() === val.toString().toLowerCase())
-                : fieldValue.toString().toLowerCase() === filterValue.toString().toLowerCase(); 
+                ? filterValue.some((val) => fieldValue.toString().toLowerCase()
+                    === val.toString().toLowerCase())
+                : fieldValue.toString().toLowerCase()
+                === filterValue.toString().toLowerCase();
         }
         return false;
     }))
     .map((card) => ({ ...card }));
-
 
 // DELETE
 const deleteCard = (guid) => {

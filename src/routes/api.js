@@ -78,8 +78,6 @@ const router = express.Router();
             res.status(404).send({ message: `Card with GUID ${guid} not found` });
         }
     });
-    
-    
 
     // dynamic endpoint that accepts a field name and value to find cards
     router.get('/:fieldName/:value', (req, res) => {
@@ -99,8 +97,7 @@ const router = express.Router();
 
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
-        } 
-        else {
+        } else {
             res.status(404).send({ message: `No cards found with ${fieldName} matching ${value}` });
         }
     });
@@ -119,16 +116,15 @@ const router = express.Router();
         const normalizedFilters = {};
         Object.keys(filters).forEach((key) => {
             const keyParts = key.split('.');
-            let values = filters[key].split(','); //create an OR condition
+            const values = filters[key].split(','); // create an OR condition
 
-            //assign the values to the key if neccessary 
+            // assign the values to the key if neccessary
             if (keyParts.length > 1) {
                 normalizedFilters[keyParts[0]] = {
                     ...normalizedFilters[keyParts[0]],
                     [keyParts[1]]: values,
                 };
-            } 
-            else {
+            } else {
                 normalizedFilters[key] = values;
             }
         });
@@ -138,12 +134,10 @@ const router = express.Router();
 
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
-        } 
-        else {
+        } else {
             res.status(404).send({ message: 'No cards found matching the query parameters' });
         }
     });
-
 }
 // // POST
 // {}

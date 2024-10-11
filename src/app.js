@@ -20,9 +20,8 @@ app.use(express.json());
 
 app.use('/api/cards', cardApiRouter);
 app.use('/api/assets', assetRouter);
-app.use('/api/effects', effectsRouter); 
+app.use('/api/effects', effectsRouter);
 app.use('/api/docs', docsRouter);
-
 
 app.get('*', (req, res) => {
     if (req.originalUrl.startsWith('/api')) {
