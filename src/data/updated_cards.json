@@ -21,19 +21,8 @@
         "FlavourText": "You have been attacked! Get everyone on the same page.",
         "Description": "Draw 2 cards.",
         "GUID": "d1a14fe5-f84c-4b74-b8a8-a45c304f9440",
-        "Action": {
-            "Method": "DrawAndDiscardCards",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 2,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_1"
     },
     {
         "Team": "Blue",
@@ -57,19 +46,8 @@
         "FlavourText": "Lets meet to talk about this.",
         "Description": "Draw 3 cards and discard 1 of them.",
         "GUID": "c18af7a3-cb6d-4ad3-8911-e48684daba1a",
-        "Action": {
-            "Method": "DrawAndDiscardCards",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 3,
-            "CardsRemoved": 1,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_2"
     },
     {
         "Team": "Blue",
@@ -93,19 +71,8 @@
         "FlavourText": "Lets talk about it during our weekly meeting.",
         "Description": "Shuffle 1 card from your hand into the deck. Draw 2 cards.",
         "GUID": "d9a4e69f-1cfa-4609-a95d-f004abd90fb4",
-        "Action": {
-            "Method": "ShuffleAndDrawCards",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 2,
-            "CardsRemoved": 1,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_3"
     },
     {
         "Team": "Blue",
@@ -129,19 +96,8 @@
         "FlavourText": "They are breaching our system!",
         "Description": "Add your hand to the deck and shuffle it. Then draw 5 cards.",
         "GUID": "0db6dc5b-473b-4e98-a8d3-743505e3c82e",
-        "Action": {
-            "Method": "ReturnHandToDeckAndDraw",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 5,
-            "CardsRemoved": -1,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_4"
     },
     {
         "Team": "Blue",
@@ -165,19 +121,8 @@
         "FlavourText": "Basic training lets your workers go over the fundamentals and new techniques.",
         "Description": "Use any 2 meeples to target 3 cards in your hand and decrease their meeple cost of a color of your choosing by 1. ",
         "GUID": "2fd0e2eb-8288-4ae0-a46b-28312368fbaf",
-        "Action": {
-            "Method": "ReduceCardCost",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 2,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_5"
     },
     {
         "Team": "Blue",
@@ -201,25 +146,11 @@
         "FlavourText": "Patch and fix your network after an attack.",
         "Description": "Restore 1 Network point to one of your facilities.",
         "GUID": "f6ba352f-c9bd-4704-b18d-d6108cecf6d2",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_6",
+        "effectIDs": [
+            "EFFECT_1"
+        ]
     },
     {
         "Team": "Blue",
@@ -243,25 +174,11 @@
         "FlavourText": "Patch and fix your financial system after an attack.",
         "Description": "Restore 1 Physical point to one of your facilities.",
         "GUID": "2b042530-7aed-483f-9914-1341acedc748",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Physical",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_7",
+        "effectIDs": [
+            "EFFECT_2"
+        ]
     },
     {
         "Team": "Blue",
@@ -285,25 +202,11 @@
         "FlavourText": "Patch and fix your security system after an attack.",
         "Description": "Restore 1 Financial point to one of your facilities.",
         "GUID": "f239b7e0-0be8-43d2-af8c-bd09b9a2abe4",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Financial",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_8",
+        "effectIDs": [
+            "EFFECT_3"
+        ]
     },
     {
         "Team": "Blue",
@@ -327,25 +230,11 @@
         "FlavourText": "Buy new servers and swap out all of their default names and passwords for new ones.",
         "Description": "Restore 1 Physical; Network; and Financial point to your Sector. ",
         "GUID": "5fe881ba-1848-4be6-8cb1-b2f515de6c33",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "All",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_9",
+        "effectIDs": [
+            "EFFECT_4"
+        ]
     },
     {
         "Team": "Blue",
@@ -369,30 +258,12 @@
         "FlavourText": "Patch and fix the encryption of your server after an attack.",
         "Description": "Restore 1 Financial and Network point to one of your facilities. ",
         "GUID": "ae2b87db-5116-479e-94c1-a31e1203e7fc",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Financial",
-                    "EffectMagnitude": "1"
-                },
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_10",
+        "effectIDs": [
+            "EFFECT_3",
+            "EFFECT_1"
+        ]
     },
     {
         "Team": "Blue",
@@ -416,30 +287,12 @@
         "FlavourText": "Review who should have access to what to prevent people from having access to too much.",
         "Description": "Restore 1 Physical and Network point to one of your facilities. ",
         "GUID": "e8d69a34-f0ea-4688-b268-38ca487a4ea2",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Physical",
-                    "EffectMagnitude": "1"
-                },
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_11",
+        "effectIDs": [
+            "EFFECT_2",
+            "EFFECT_1"
+        ]
     },
     {
         "Team": "Blue",
@@ -463,23 +316,11 @@
         "FlavourText": "Create multiple layers of defense to protect against incoming attacks.",
         "Description": "Fortify one of your facilities. ",
         "GUID": "fbcf1db8-ef87-4f52-b0a5-def4cccf06c2",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Fortify"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_12",
+        "effectIDs": [
+            "EFFECT_5"
+        ]
     },
     {
         "Team": "Blue",
@@ -503,28 +344,12 @@
         "FlavourText": "Best to hire a professional in a dire situation.",
         "Description": "Fortify and restore 1 network point on 2 facilities in your sector.",
         "GUID": "1dadc3b4-9fe1-486f-a9a9-3fb475f63e57",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "1"
-                },
-                {
-                    "EffectType": "Fortify"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_13",
+        "effectIDs": [
+            "EFFECT_1",
+            "EFFECT_5"
+        ]
     },
     {
         "Team": "Blue",
@@ -548,23 +373,11 @@
         "FlavourText": "Try connecting isolated attacks in the system to figure out where the backdoor to your system is before it gets worse.",
         "Description": "Choose 2 of your facilities to remove Backdoor from.",
         "GUID": "5f05b919-3184-4ca9-8f1f-1718db97eb4d",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Remove"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_14",
+        "effectIDs": [
+            "EFFECT_6"
+        ]
     },
     {
         "Team": "Blue",
@@ -588,25 +401,11 @@
         "FlavourText": "Come together when needed.",
         "Description": "If the Doom clock is active you can target an allied facility if not then target one of your facilities. Restore 1 Physical; Network; and Financial point on the targeted facility. ",
         "GUID": "e0e1b5cd-b9f7-443f-963e-6980cf9860ac",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "All",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": true
+        "DoomEffect": true,
+        "actionID": "ACTION_15",
+        "effectIDs": [
+            "EFFECT_4"
+        ]
     },
     {
         "Team": "Blue",
@@ -630,23 +429,11 @@
         "FlavourText": "Defend each other to stop a crisis.",
         "Description": "If the Doom clock is active you can add the Fortified effect to an allied facility.  If not then you can add the Fortified effect to one of your facilities.",
         "GUID": "c4bcc013-6ee6-4336-b6b5-684f9629a0f9",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Fortify"
-                }
-            ]
-        },
-        "DoomEffect": true
+        "DoomEffect": true,
+        "actionID": "ACTION_12",
+        "effectIDs": [
+            "EFFECT_5"
+        ]
     },
     {
         "Team": "Blue",
@@ -670,23 +457,11 @@
         "FlavourText": "Find a purge the virus in the system.",
         "Description": "Remove an effect on 1 facility. This card can target an allied facility as well if the Doom clock is active. ",
         "GUID": "37d9810b-a050-4a48-b327-6d8374cc0073",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Remove"
-                }
-            ]
-        },
-        "DoomEffect": true
+        "DoomEffect": true,
+        "actionID": "ACTION_16",
+        "effectIDs": [
+            "EFFECT_6"
+        ]
     },
     {
         "Team": "Blue",
@@ -710,28 +485,12 @@
         "FlavourText": "Sometimes its best to do a complete overhaul to purge any and all threats already in your system.",
         "Description": "Remove all Backdoor effects on your sector and restore 1 Physical; Network; and Financial point to your Sector. ",
         "GUID": "1a1a2dd3-7948-4a74-a1ac-73565aaa7133",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "Remove"
-                },
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "All",
-                    "EffectMagnitude": "1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_17",
+        "effectIDs": [
+            "EFFECT_6",
+            "EFFECT_4"
+        ]
     },
     {
         "Team": "Red",
@@ -755,19 +514,8 @@
         "FlavourText": "Update software in order to get newer and faster ways to break encryption.",
         "Description": "Draw 2 cards.",
         "GUID": "4e4ec584-f4cd-4c10-9844-12d963b16dfc",
-        "Action": {
-            "Method": "DrawAndDiscardCards",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 2,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_1"
     },
     {
         "Team": "Red",
@@ -791,19 +539,8 @@
         "FlavourText": "Constantly changing and adapting.",
         "Description": "Draw 3 cards and discard 1 of them.",
         "GUID": "61721a55-521d-491a-a5b6-e5d017c6aafa",
-        "Action": {
-            "Method": "DrawAndDiscardCards",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 3,
-            "CardsRemoved": 1,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_2"
     },
     {
         "Team": "Red",
@@ -827,30 +564,12 @@
         "FlavourText": "Someone got an email that looked a bit weird and clicked on it.",
         "Description": "Reduce 1 Network and Financial point of a facility.",
         "GUID": "d32e507c-482b-4851-a8b1-7c95f59a2901",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Financial",
-                    "EffectMagnitude": "-1"
-                },
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "-1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_18",
+        "effectIDs": [
+            "EFFECT_7",
+            "EFFECT_8"
+        ]
     },
     {
         "Team": "Red",
@@ -874,25 +593,11 @@
         "FlavourText": "Wreck their servers and prevent them from having any access to it.",
         "Description": "Reduce 2 Network points for each facility with a Backdoor in a Sector.",
         "GUID": "9c914275-a024-41e2-889f-0c3f85cbf222",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "-2"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_19",
+        "effectIDs": [
+            "EFFECT_9"
+        ]
     },
     {
         "Team": "Red",
@@ -916,30 +621,12 @@
         "FlavourText": "Monitor their every keystroke.",
         "Description": "If a facility has a Backdoor; reduce 1 Physical and Network point per turn from the targeted facility.",
         "GUID": "eea1552a-165b-4ef2-b98a-c519911388f8",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPointsPerTurn",
-                    "EffectPointTarget": "Physical",
-                    "EffectMagnitude": "-1"
-                },
-                {
-                    "EffectType": "ModifyPointsPerTurn",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "-1"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_20",
+        "effectIDs": [
+            "EFFECT_10",
+            "EFFECT_11"
+        ]
     },
     {
         "Team": "Red",
@@ -963,28 +650,12 @@
         "FlavourText": "Inject their servers with trojans and other viruses to get their data and passwords.",
         "Description": "Reduce 1 Network point from and add a Backdoor effect for 3 turns from a facility.",
         "GUID": "ef667b3a-c2f0-46d2-badb-1de35873e0f3",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 2,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Network",
-                    "EffectMagnitude": "-1"
-                },
-                {
-                    "EffectType": "Backdoor"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_21",
+        "effectIDs": [
+            "EFFECT_8",
+            "EFFECT_12"
+        ]
     },
     {
         "Team": "Red",
@@ -1008,25 +679,11 @@
         "FlavourText": "Cut their cameras and security system.",
         "Description": "If a facility has a Backdoor; reduce 2 Physical points from the targeted facility.",
         "GUID": "5e33f015-6560-4505-9917-10362bc4ae92",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Physical",
-                    "EffectMagnitude": "-2"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_22",
+        "effectIDs": [
+            "EFFECT_13"
+        ]
     },
     {
         "Team": "Red",
@@ -1050,23 +707,11 @@
         "FlavourText": "Lets go with the good ol' fashion way.",
         "Description": "Add a Backdoor effect to all facilities in a sector. Backdoors last for 3 turns. ",
         "GUID": "ae936cbf-19df-4259-901f-18b68d1e77cb",
-        "Action": {
-            "Method": "SelectFacilitiesAddRemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "None",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Backdoor"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_23",
+        "effectIDs": [
+            "EFFECT_12"
+        ]
     },
     {
         "Team": "Red",
@@ -1090,25 +735,11 @@
         "FlavourText": "They are trying to talk; lets intercept them!",
         "Description": "If a facility has a Backdoor; reduce 2 Financial points from the targeted facility. ",
         "GUID": "bba5395f-7a07-4c48-9df7-babd7226012d",
-        "Action": {
-            "Method": "AddEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "ModifyPoints",
-                    "EffectPointTarget": "Financial",
-                    "EffectMagnitude": "-2"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_24",
+        "effectIDs": [
+            "EFFECT_14"
+        ]
     },
     {
         "Team": "Red",
@@ -1132,23 +763,11 @@
         "FlavourText": "Lets tamper with their security a bit through this code!",
         "Description": "Remove 1 effect from play.",
         "GUID": "4d46a5a4-8d13-47b6-b017-3ce4e3281d48",
-        "Action": {
-            "Method": "RemoveEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Fortify",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Remove"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_25",
+        "effectIDs": [
+            "EFFECT_6"
+        ]
     },
     {
         "Team": "Red",
@@ -1172,23 +791,11 @@
         "FlavourText": "We're in; lets move through the network.",
         "Description": "If a facility has a Backdoor; add Backdoors to all facilities in the connected Sectors. These new Backdoors last for 3 turns. You can only play 1 Lateral movement per turn. ",
         "GUID": "e9cd8efe-c9e2-46fc-ab00-f5d827ab2c1d",
-        "Action": {
-            "Method": "SpreadEffect",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "Backdoor",
-            "Duration": 3,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 1,
-            "Effects": [
-                {
-                    "EffectType": "Backdoor"
-                }
-            ]
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_26",
+        "effectIDs": [
+            "EFFECT_12"
+        ]
     },
     {
         "Team": "White;Negative",
@@ -1212,19 +819,8 @@
         "FlavourText": "Hurricanes can cause water damage and destroy things that are critical to your network.",
         "Description": "All sectors roll a die. If a sector rolls under a 4 then all facilities within that sector lose 1 physical point.",
         "GUID": "8f9d9d7b-14f6-4b95-969f-6aa35a6fff59",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 4,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_27"
     },
     {
         "Team": "White;Negative",
@@ -1248,19 +844,8 @@
         "FlavourText": "Train derailment can cause financial issues as the movement of cargo is slowed down.",
         "Description": "All sectors roll a die. If a sector rolls under a 2 then the transmission facility within that sector loses 2 financial points.",
         "GUID": "fd32ef32-0e52-4ff3-8419-e76e235613dd",
-        "Action": {
-            "Method": "NWChangeFinPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 2,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_28"
     },
     {
         "Team": "White;Negative",
@@ -1284,19 +869,8 @@
         "FlavourText": "People have to clean up this mess you know?",
         "Description": "Water sector rolls a die. If they roll under a 5 then reduce the amount of black and purple meeples the water sector is able to use by half for 2 turns.",
         "GUID": "db4b6088-bd04-4425-bbde-beb4eb1df74c",
-        "Action": {
-            "Method": "NWChangeMeepleAmtDice",
-            "MeeplesChanged": "Black;Purple",
-            "MeepleIChange": 0.5,
-            "PrerequisiteEffect": "0",
-            "Duration": 2,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 5,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_29"
     },
     {
         "Team": "White;Negative",
@@ -1320,19 +894,8 @@
         "FlavourText": "The workers are upset again.",
         "Description": "All sectors roll a die. If a sector rolls under a 3 then they lose 1 meeple of each color for 2 turns.",
         "GUID": "256a6ab0-df8f-4d96-addb-02699cc21147",
-        "Action": {
-            "Method": "NWChangeMeepleAmtDice",
-            "MeeplesChanged": "Blue;Black;Purple",
-            "MeepleIChange": -1,
-            "PrerequisiteEffect": "0",
-            "Duration": 2,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 3,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_30"
     },
     {
         "Team": "White;Negative",
@@ -1356,19 +919,8 @@
         "FlavourText": "Raw sewage has accidentally gotten into the pipes.",
         "Description": "Water and Health sectors roll a die. If a sector rolls under a 3 then all of their facilities lose 2 physical points.",
         "GUID": "2f2092fe-dc86-461d-a649-752d24ec2082",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 3,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_31"
     },
     {
         "Team": "White;Negative",
@@ -1392,19 +944,8 @@
         "FlavourText": "Wind storms can knock down trees; telecom poles; and disrupt energy systems.",
         "Description": "Energy and Communications sectors roll a die. If a sector rolls under a 5 then all of their facilities lose 1 physical points.",
         "GUID": "8c1ad8b7-d4fc-4103-bbec-7235771af2c8",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 5,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_32"
     },
     {
         "Team": "White;Negative",
@@ -1428,19 +969,8 @@
         "FlavourText": "Ice storms can knock down telecom poles and damage important energy sites.",
         "Description": "Energy and Communications sectors roll a die. If a sector rolls under a 4 then all of their facilities lose 2 physical points.",
         "GUID": "af68eb07-3a0c-4e49-8dc3-8f7ee256af6f",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 4,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_27"
     },
     {
         "Team": "White;Negative",
@@ -1464,19 +994,8 @@
         "FlavourText": "Droughts can cause massive damage to multiple sectors and states.",
         "Description": "Energy; Water; Healthcare; and Agriculture all roll a die. If a sector rolls under a 3 then all of their facilities lose 1 physical and financial point.",
         "GUID": "6521ba39-ee1b-4ea0-8f2b-7c27746fb27e",
-        "Action": {
-            "Method": "NWChangePhysPointsDice;NWChangeFinPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 3,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_33"
     },
     {
         "Team": "White;Negative",
@@ -1500,19 +1019,8 @@
         "FlavourText": "A tornado can cause severe damage to anything in its patch.",
         "Description": "All sectors roll a die for each facility in their sector. If a facility rolls under a 2 then it loses 2 financial points and all physical points.",
         "GUID": "f2d60480-2a6f-44ab-ae42-e1d0663c7d57",
-        "Action": {
-            "Method": "NWChangePhysPointsDice;NWChangeFinPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 2,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_34"
     },
     {
         "Team": "White;Negative",
@@ -1536,19 +1044,8 @@
         "FlavourText": "A heat wave is a silent killer.",
         "Description": "Water; Energy; Transport; and Healthcare sectors roll a die. If a sector rolls under a 3 then all of their facilities lose 1 physical points.",
         "GUID": "74475172-fc7b-4f3c-af8a-079e1ae7d2f7",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 3,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_31"
     },
     {
         "Team": "White;Negative",
@@ -1572,19 +1069,8 @@
         "FlavourText": "Algae blooms can contaminate water systems easily.",
         "Description": "Water and Health sectors roll a die. If a sector rolls under a 5 then all of their facilities lose 1 physical points.",
         "GUID": "cd4b24e5-aba2-452d-8a00-08cd4384366c",
-        "Action": {
-            "Method": "NWChangePhysPointsDice",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": 5,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_32"
     },
     {
         "Team": "White;Positive",
@@ -1608,19 +1094,8 @@
         "FlavourText": "The government decided to give relief to its sectors in light of recent attacks.",
         "Description": "All sectors gain 1 meeple of each color.",
         "GUID": "55c50136-1e30-4212-b6ab-515a3775b419",
-        "Action": {
-            "Method": "NWChangeMeepleEach",
-            "MeeplesChanged": "Blue;Black;Purple",
-            "MeepleIChange": 1,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_35"
     },
     {
         "Team": "White;Positive",
@@ -1644,19 +1119,8 @@
         "FlavourText": "The government decided to increase the budget of its sectors. You now get to hire more people of your choosing.",
         "Description": "All sectors gain 2 meeple of their choice.",
         "GUID": "4dcf6c9a-b46a-4c42-91ae-b84c32afd75d",
-        "Action": {
-            "Method": "NWChangeMeepleChoice",
-            "MeeplesChanged": "Any",
-            "MeepleIChange": 2,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_36"
     },
     {
         "Team": "White;Positive",
@@ -1680,19 +1144,8 @@
         "FlavourText": "State of emergency requires people to work more.",
         "Description": "All sectors regain 1 overtime charge.",
         "GUID": "30d8cf3a-16cc-473a-aad4-331750891bba",
-        "Action": {
-            "Method": "NWIncOvertimeAmount",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_37"
     },
     {
         "Team": "White;Positive",
@@ -1716,18 +1169,7 @@
         "FlavourText": "Sometimes new management is needed to see the issues in a new light.",
         "Description": "All sectors add 5 random cards from their discard pile into their deck.",
         "GUID": "519b139a-0f33-4111-b3aa-02a1ef6b74f1",
-        "Action": {
-            "Method": "NWShuffleFromDiscard",
-            "MeeplesChanged": 0,
-            "MeepleIChange": 0,
-            "PrerequisiteEffect": "0",
-            "Duration": 0,
-            "CardsDrawn": 0,
-            "CardsRemoved": 0,
-            "DiceRoll": -1,
-            "EffectCount": 0,
-            "Effects": []
-        },
-        "DoomEffect": false
+        "DoomEffect": false,
+        "actionID": "ACTION_38"
     }
 ]

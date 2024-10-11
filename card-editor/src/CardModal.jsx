@@ -3,7 +3,7 @@ import EditableField from './EditableField';
 import EditableTextArea from './EditableTextArea';
 import './styles/CardModal.css';
 
-function CardModal({ card, onClose, onDelete }) {
+function CardModal({ card, onClose, onDelete, effectList }) {
     if (!card) return null; // Don't render anything if no card is selected
     const [isEditing, setIsEditing] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
@@ -11,11 +11,12 @@ function CardModal({ card, onClose, onDelete }) {
     const [cardDeleted, setCardDeleted] = useState(false);
     const [editedCard, setEditedCard] = useState({ ...card }); // Copy of the card for editing
 
-    //todo add all effects 
-    const predefinedEffects = [
-        { EffectType: 'ModifyPoints', EffectTarget: 'All', EffectMagnitude: '1' },
-        { EffectType: 'ReduceCost', EffectTarget: 'Facility', EffectMagnitude: '2' },
-    ];
+    // Function to the field value from the obj object even if its a nested field
+    const getNestedValue = (obj, field) => field.
+        split('.').
+        reduce((o, key) => (o && o[key] !== undefined) ? o[key] : '', obj);
+
+
 
     //handles pressing the delete button
     const handleDeleteCardClick = () => {
@@ -43,7 +44,7 @@ function CardModal({ card, onClose, onDelete }) {
 
     //handles pressing the save button
     const handleSaveCard = () => {
-        setIsEditing(false);
+        setIsEditing(false); //TODO: remove after implementing endpoint
         return;
         //TODO:
         // Validate the card data if necessary
@@ -68,6 +69,8 @@ function CardModal({ card, onClose, onDelete }) {
                 setError('Failed to save card: ' + error.message);
             });
     };
+
+    //handles changing the input fields
     const handleInputChange = (e, field) => {
         let value;
         if (e.target.type === 'number') {
@@ -77,31 +80,45 @@ function CardModal({ card, onClose, onDelete }) {
         } else {
             value = e.target.value;
         }
-        setEditedCard((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+
+        const fieldParts = field.split('.');
+
+        setEditedCard((prev) => {
+            let updatedCard = { ...prev };
+            let currentField = updatedCard;
+
+
+            for (let i = 0; i < fieldParts.length - 1; i++) {
+                currentField = currentField[fieldParts[i]];
+            }
+
+            currentField[fieldParts[fieldParts.length - 1]] = value;
+
+            return updatedCard;
+        });
     };
+
 
     const handleToggleEdit = () => {
         setIsEditing(!isEditing);
     };
 
     const handleEffectChange = (idx, field, value) => {
-        const updatedEffects = [...editedCard.Effects];
+        const updatedEffects = [...(editedCard.Action?.Effects || [])];
         updatedEffects[idx] = {
             ...updatedEffects[idx],
             [field]: value,
         };
         setEditedCard((prev) => ({
             ...prev,
-            Effects: updatedEffects,
+            Action: { ...prev.Action, Effects: updatedEffects },
         }));
     };
 
+
     const getImageSource = (imgLocation) => {
         if (imgLocation) {
-            return `/api/assets/cards/${card.imgLocation.replace(
+            return `/api/assets/cards/${card.AssetInfo.imgLocation.replace(
                 '.png',
                 '.webp'
             )}`;
@@ -115,12 +132,11 @@ function CardModal({ card, onClose, onDelete }) {
         return (<>
             <h2 className="title">{card.Title || 'Untitled'}</h2>
             <img className='is-flex is-align-items-center is-justify-content-center m-auto mb-3'
-                src={getImageSource(card.imgLocation.replace('.png', '.webp'))}
+                src={getImageSource(card.AssetInfo.imgLocation.replace('.png', '.webp'))}
                 alt="Card Image"
                 style={{ width: '50%' }}></img>
-            <p className='mt-2'>
-                <strong>Description:</strong>{' '}
-                {card.Description || 'No description available.'}
+            <p className="mt-2">
+                <strong>Description:</strong> {card.Description || 'No description available.'}
             </p>
             <p>
                 <strong>Flavour Text:</strong> {card.FlavourText || 'None'}
@@ -132,7 +148,7 @@ function CardModal({ card, onClose, onDelete }) {
                 <strong>Duplication:</strong> {card.Duplication}
             </p>
             <p>
-                <strong>Method:</strong> {card.Method}
+                <strong>Method:</strong> {card.Action?.Method || 'None'}
             </p>
             <p>
                 <strong>Target:</strong> {card.Target}
@@ -144,56 +160,79 @@ function CardModal({ card, onClose, onDelete }) {
                 <strong>Target Amount:</strong> {card.TargetAmount}
             </p>
             <p>
-                <strong>Blue Cost:</strong> {card.BlueCost}
+                <strong>Blue Cost:</strong> {card.Cost?.BlueCost}
             </p>
             <p>
-                <strong>Black Cost:</strong> {card.BlackCost}
+                <strong>Black Cost:</strong> {card.Cost?.BlackCost}
             </p>
             <p>
-                <strong>Purple Cost:</strong> {card.PurpleCost}
+                <strong>Purple Cost:</strong> {card.Cost?.PurpleCost}
             </p>
             <p>
-                <strong>Facility Point:</strong> {card.FacilityPoint}
+                <strong>Facility Point:</strong> {card.Action?.FacilityPoint || 0}
             </p>
             <p>
-                <strong>Cards Drawn:</strong> {card.CardsDrawn}
+                <strong>Cards Drawn:</strong> {card.Action?.CardsDrawn || 0}
             </p>
             <p>
-                <strong>Cards Removed:</strong> {card.CardsRemoved}
+                <strong>Cards Removed:</strong> {card.Action?.CardsRemoved || 0}
             </p>
             <p>
-                <strong>Effect Count:</strong> {card.EffectCount}
+                <strong>Effect Count:</strong> {card.Action?.EffectCount || 0}
             </p>
             <p>
-                <strong>Prerequisite Effect:</strong> {card.PrerequisiteEffect}
+                <strong>Prerequisite Effect:</strong> {card.Action?.PrerequisiteEffect || 'None'}
             </p>
             <p>
-                <strong>Duration:</strong> {card.Duration}
+                <strong>Duration:</strong> {card.Action?.Duration || 0}
             </p>
             <p>
                 <strong>Doom Effect:</strong> {card.DoomEffect ? 'Yes' : 'No'}
             </p>
             <p>
-                <strong>Dice Roll:</strong> {card.DiceRoll}
+                <strong>Dice Roll:</strong> {card.Action?.DiceRoll || 0}
             </p>
             <p>
                 <strong>GUID:</strong> {card.GUID}
             </p>
 
-            {card.Effects && card.Effects.length > 0 && (
+            {card.Action?.Effects && card.Action.Effects.length > 0 && (
                 <div>
                     <strong>Effects:</strong>
-                    <ul>
-                        {card.Effects.map((effect, idx) => (
-                            <li key={idx}>
-                                {Object.entries(effect).map(([key, value]) => (
-                                    <div key={key}>
-                                        <strong>{key}:</strong> {value}
+                    <div className="mt-1 is-flex">
+                        {card.Action.Effects.map((effectID, idx) => {
+                            const effect = effectList.find(e => e.EffectID === effectID);
+
+                            if (!effect) {
+                                return (
+                                    <div key={idx} className="effect-item p-1 my-1 mb-1">
+                                        {`${idx + 1}. Unknown effect: ${effectID}`}
                                     </div>
-                                ))}
-                            </li>
-                        ))}
-                    </ul>
+                                );
+                            }
+
+                            const { EffectType, EffectPointTarget, EffectMagnitude } = effect.Effect;
+                            const isNegative = parseInt(EffectMagnitude, 10) < 0;
+
+                            return (
+                                <div key={idx} className={`effect-item ${isNegative ? 'negative-effect' : 'positive-effect'}`}>
+                                    <strong>{idx + 1}.</strong> {EffectType}
+                                    {EffectPointTarget && (
+                                        <>
+                                            {' on '}
+                                            <span className="effect-target">{EffectPointTarget}</span>
+                                        </>
+                                    )}
+                                    {EffectMagnitude && (
+                                        <>
+                                            {' '}
+                                            <span className="has-font-weight-bold">{EffectMagnitude}</span>
+                                        </>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
             <div className='is-flex is-align-items-center is-justify-content-center'>
@@ -206,45 +245,35 @@ function CardModal({ card, onClose, onDelete }) {
     const renderEditCardData = () => {
         const fieldDefinitions = [
             { label: "Title", field: "Title", type: "text" },
-            // { label: "Flavour Text", field: "FlavourText", type: "text" },
             { label: "Team", field: "Team", type: "text" },
-            { label: "Duplication", field: "Duplication", type: "number" },
-            { label: "Method", field: "Method", type: "text" },
+            { label: "Number in Deck", field: "Duplication", type: "number" },
+            { label: "Method", field: "Action.Method", type: "text" },
             { label: "Target", field: "Target", type: "text" },
             { label: "Sectors Affected", field: "SectorsAffected", type: "text" },
             { label: "Target Amount", field: "TargetAmount", type: "number" },
-            { label: "Blue Cost", field: "BlueCost", type: "number" },
-            { label: "Black Cost", field: "BlackCost", type: "number" },
-            { label: "Purple Cost", field: "PurpleCost", type: "number" },
-            { label: "Facility Point", field: "FacilityPoint", type: "number" },
-            { label: "Cards Drawn", field: "CardsDrawn", type: "number" },
-            { label: "Cards Removed", field: "CardsRemoved", type: "number" },
-            { label: "Effect Count", field: "EffectCount", type: "number" },
-            { label: "Prerequisite Effect", field: "PrerequisiteEffect", type: "text" },
-            { label: "Duration", field: "Duration", type: "number" },
-            { label: "Dice Roll", field: "DiceRoll", type: "number" },
+            { label: "Blue Cost", field: "Cost.BlueCost", type: "number" },
+            { label: "Black Cost", field: "Cost.BlackCost", type: "number" },
+            { label: "Purple Cost", field: "Cost.PurpleCost", type: "number" },
+            { label: "Facility Point", field: "Action.FacilityPoint", type: "number" },
+            { label: "Cards Drawn", field: "Action.CardsDrawn", type: "number" },
+            { label: "Cards Removed", field: "Action.CardsRemoved", type: "number" },
+            { label: "Effect Count", field: "Action.EffectCount", type: "number" },
+            { label: "Prerequisite Effect", field: "Action.PrerequisiteEffect", type: "text" },
+            { label: "Duration", field: "Action.Duration", type: "number" },
+            { label: "Dice Roll", field: "Action.DiceRoll", type: "number" },
             { label: "GUID", field: "GUID", type: "text", readonly: true }
         ];
-
-        const generateNewGUID = () => {
-            const newGUID = crypto.randomUUID(); // Generates a new GUID using the built-in Web API
-            setEditedCard((prev) => ({
-                ...prev,
-                GUID: newGUID,
-            }));
-        };
 
         return (
             <>
                 <h2 className="title">Edit Card</h2>
 
-                {/* Use EditableField for all input fields */}
                 {fieldDefinitions.map(({ label, field, type, readonly }) => (
                     <EditableField
                         key={field}
                         label={label}
                         type={type}
-                        value={editedCard[field] || ''}
+                        value={getNestedValue(editedCard, field)}
                         onChange={(e) => handleInputChange(e, field)}
                         readonly={readonly}
                     />
@@ -283,35 +312,6 @@ function CardModal({ card, onClose, onDelete }) {
                     </div>
                 </div>
 
-                {/* Effects */}
-                {editedCard.Effects && editedCard.Effects.length > 0 && (
-                    <div>
-                        <strong>Effects:</strong>
-                        {editedCard.Effects.map((effect, index) => (
-                            <div key={index} className="box">
-                                <EditableField
-                                    label="Effect Type"
-                                    type="text"
-                                    value={effect.EffectType || ''}
-                                    onChange={(e) => handleEffectChange(index, 'EffectType', e.target.value)}
-                                />
-                                <EditableField
-                                    label="Effect Target"
-                                    type="text"
-                                    value={effect.EffectTarget || ''}
-                                    onChange={(e) => handleEffectChange(index, 'EffectTarget', e.target.value)}
-                                />
-                                <EditableField
-                                    label="Effect Magnitude"
-                                    type="number"
-                                    value={effect.EffectMagnitude || 0}
-                                    onChange={(e) => handleEffectChange(index, 'EffectMagnitude', e.target.value)}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                )}
-
                 {/* Action Buttons */}
                 <div className="is-flex is-align-items-center is-justify-content-center">
                     <button
@@ -332,6 +332,7 @@ function CardModal({ card, onClose, onDelete }) {
             </>
         );
     };
+
 
     // Render the modal content based on the card state
     const renderModalContent = () => {

@@ -1,0 +1,180 @@
+[
+    {
+        "EffectID": "modp-net-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Network",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "modp-phys-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Physical",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "modp-fin-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Financial",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "mod-all-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "fortify",
+        "Effect": {
+            "EffectType": "Fortify"
+        }
+    },
+    {
+        "EffectID": "remove",
+        "Effect": {
+            "EffectType": "Remove"
+        }
+    },
+    {
+        "EffectID": "backdoor",
+        "Effect": {
+            "EffectType": "Backdoor"
+        }
+    },
+    {
+        "EffectID": "modpn-net-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Network",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modpn-phys-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Physical",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modpn-fin-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Financial",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modn-all-1",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modp-net-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Network",
+            "EffectMagnitude": "2"
+        }
+    },
+    {
+        "EffectID": "modp-phys-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Physical",
+            "EffectMagnitude": "2"
+        }
+    },
+    {
+        "EffectID": "modp-fin-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Financial",
+            "EffectMagnitude": "2"
+        }
+    },
+    {
+        "EffectID": "mod-all-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "2"
+        }
+    },
+    {
+        "EffectID": "modpn-net-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Network",
+            "EffectMagnitude": "-2"
+        }
+    },
+    {
+        "EffectID": "modpn-phys-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Physical",
+            "EffectMagnitude": "-2"
+        }
+    },
+    {
+        "EffectID": "modpn-fin-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "Financial",
+            "EffectMagnitude": "-2"
+        }
+    },
+    {
+        "EffectID": "modn-all-2",
+        "Effect": {
+            "EffectType": "ModifyPoints",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-2"
+        }
+    },
+    {
+        "EffectID": "modppt-all-1",
+        "Effect": {
+            "EffectType": "ModifyPointsPerTurn",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modppt-net-1",
+        "Effect": {
+            "EffectType": "ModifyPointsPerTurn",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modppt-fin-1",
+        "Effect": {
+            "EffectType": "ModifyPointsPerTurn",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-1"
+        }
+    },
+    {
+        "EffectID": "modppt-phys-1",
+        "Effect": {
+            "EffectType": "ModifyPointsPerTurn",
+            "EffectPointTarget": "All",
+            "EffectMagnitude": "-1"
+        }
+    }
+]

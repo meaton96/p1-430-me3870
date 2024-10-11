@@ -17,7 +17,7 @@ const router = express.Router();
                 'Content-Type': 'application/json',
                 'Content-Length': JSON.stringify(db.VALID_FIELD_NAMES).length,
                 'X-Coder': 'ME',
-            })
+            });
             res.end();
         } else {
             res.status(404).end();
@@ -30,7 +30,7 @@ const router = express.Router();
             res.status(404).send({ message: 'No field names found' });
         }
     });
-    
+
     router.get('/filters', (req, res) => {
         if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
             res.status(200).json(db.VALID_FILTER_NAMES);
@@ -107,28 +107,37 @@ const router = express.Router();
         const filters = req.query;
         const filterKeys = Object.keys(filters).map((key) => key.toLowerCase()); // case-insensitive
 
-        // if no query parameters, return 400
         if (filterKeys.length === 0) {
             res.status(400).send({ message: 'No query parameters provided' });
             return;
         }
-        // validate field names
-        const invalidFields = validateFieldNames(filterKeys);
-        // if invalid field names, return 400
-        if (invalidFields.length > 0) {
-            res.status(400).send({
-                message: `Invalid field name(s): ${invalidFields.join(', ')}`,
-            });
-            return;
-        }
+
+        // Support nested keys by splitting on '.' and handle multiple values
+        const normalizedFilters = {};
+        Object.keys(filters).forEach((key) => {
+            const keyParts = key.split('.');
+            let values = filters[key].split(','); // Split multiple values (like '1,2' -> ['1', '2'])
+
+            if (keyParts.length > 1) {
+                normalizedFilters[keyParts[0]] = {
+                    ...normalizedFilters[keyParts[0]],
+                    [keyParts[1]]: values, // store as an array
+                };
+            } else {
+                normalizedFilters[key] = values; // store as an array
+            }
+        });
+
         // get cards by query parameters
-        const cards = db.getCardsByFilters(filters);
+        const cards = db.getCardsByFilters(normalizedFilters);
+
         if (cards && cards.length > 0) {
             res.status(200).json(cards);
         } else {
             res.status(404).send({ message: 'No cards found matching the query parameters' });
         }
     });
+
 }
 // // POST
 // {}

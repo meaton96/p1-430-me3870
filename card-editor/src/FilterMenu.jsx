@@ -3,13 +3,13 @@ import { fetchJsonEndpoint } from './utils/ajax.js';
 
 const VALID_FILTER_NAMES = [
     'Team',
-    'Method',
+    'Action.Method',
     'Target',
-    'BlueCost',
-    'BlackCost',
-    'PurpleCost',
-    'EffectCount',
-    'PrerequisiteEffect',
+    'Cost.BlueCost',
+    'Cost.BlackCost',
+    'Cost.PurpleCost',
+    'Action.EffectCount',
+    'Action.PrerequisiteEffect',
 ];
 const FILTER_HEADERS = [
     'Team',
@@ -29,33 +29,35 @@ function FilterMenu({ selectedFilters, setSelectedFilters }) {
         const getFilterData = async () => {
             try {
                 const data = await fetchJsonEndpoint('/api/cards/all');
-                // Extract unique values and counts
                 const filterValues = {};
-                //iterate valid filter names
+                
+                // Iterate over valid filter names
                 for (const field of VALID_FILTER_NAMES) {
                     const valueCounts = {};
-                    //iterate over each card
-                    for (const card of data) {
-                        const cardFieldValue = card[field];
-                        if (cardFieldValue != null) {
-                            //split the values by semicolon
-                            //const values = String(cardFieldValue).split(';').map(v => v.trim());
-                            // let stringVal = '';
-                            // if (values.length > 1) {
 
-                            // }
-                           // console.log(cardFieldValue);
+                    // Iterate over each card
+                    for (const card of data) {
+                        let cardFieldValue;
+
+                        // Handle nested fields using dot notation
+                        const fieldParts = field.split('.');
+                        if (fieldParts.length === 2) {
+                            // For fields like "Action.Method" or "Cost.BlueCost"
+                            cardFieldValue = card[fieldParts[0]]?.[fieldParts[1]];
+                        } else {
+                            // For non-nested fields like "Team" or "Target"
+                            cardFieldValue = card[field];
+                        }
+
+                        if (cardFieldValue != null) {
                             valueCounts[cardFieldValue] = (valueCounts[cardFieldValue] || 0) + 1;
-                            // //iterate over each value
-                            // values.forEach(value => {
-                            //     //increment the count of the value
-                            //     valueCounts[value] = (valueCounts[value] || 0) + 1;
-                            // });
                         }
                     }
-                    //set the filter values
+
+                    // Set the filter values
                     filterValues[field] = valueCounts;
                 }
+
                 setFilterData(filterValues);
             } catch (err) {
                 console.error('Error:', err);
@@ -68,13 +70,11 @@ function FilterMenu({ selectedFilters, setSelectedFilters }) {
     const handleCheckboxChange = (field, value, isChecked) => {
         // Update the selected filters
         setSelectedFilters(prev => {
-            //previous values or empty
             const prevValues = prev[field] || [];
-            //if checked, add the value to the list, otherwise remove it
             const newValues = isChecked
                 ? [...prevValues, value]
                 : prevValues.filter(v => v !== value);
-            return { ...prev, [field]: newValues }; //return the new selected filters to update the state
+            return { ...prev, [field]: newValues };
         });
     };
 

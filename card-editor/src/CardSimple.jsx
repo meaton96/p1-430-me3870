@@ -3,13 +3,13 @@ import { useState } from 'react';
 import './styles/CardSimple.css';
 
 function CardSimple({ card, onClick }) {
-	const cardImagePath = `/api/assets/cards/${card.imgLocation.replace(
+	const cardImagePath = `/api/assets/cards/${card.AssetInfo.imgLocation.replace(
 		'.png',
 		'.webp'
 	)}`;
 
 	const imgPath =
-		card.imgLocation !== ''
+		card.AssetInfo.imgLocation !== ''
 			? cardImagePath
 			: 'https://craftypixels.com/placeholder-image/300.png/';
 
@@ -17,16 +17,16 @@ function CardSimple({ card, onClick }) {
 		<div
 			className="card cell"
 			style={{ minHeight: '600px', cursor: 'pointer' }}
-			onClick={onClick} 
+			onClick={onClick}
 		>
 			<div className="card-header">
 				<div className="card-title card-header-title">
 					{card.Title || 'Untitled'}
 				</div>
 				<div className="cost-container">
-					<div className="circle blueMeeple">{card.BlueCost}</div>
-					<div className="circle blackMeeple">{card.BlackCost}</div>
-					<div className="circle purpleMeeple">{card.PurpleCost}</div>
+					<div className="circle blueMeeple">{card.Cost.BlueCost}</div>
+					<div className="circle blackMeeple">{card.Cost.BlackCost}</div>
+					<div className="circle purpleMeeple">{card.Cost.PurpleCost}</div>
 				</div>
 			</div>
 			<div className="card-image">
@@ -34,8 +34,9 @@ function CardSimple({ card, onClick }) {
 			</div>
 			<div className="card-content">
 				<div
-					className={`description-box ${card.DoomEffect === 'TRUE' ? 'doom-bg' : ''
-						}`}
+					className={`description-box ${
+						card.DoomEffect === 'TRUE' ? 'doom-bg' : ''
+					}`}
 				>
 					{card.Description || 'No description available.'}
 				</div>
