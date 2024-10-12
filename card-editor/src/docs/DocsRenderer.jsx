@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/Docs.css';
 
 const DocsRenderer = ({ docs }) => {
 	const [collapsedSections, setCollapsedSections] = useState({});
@@ -82,7 +83,8 @@ const EndpointDetails = ({ endpoint }) => (
 		)}
 
 		{
-			<div className='has-text-centered m-auto'>
+			endpoint.name.toLowerCase().includes('get') &&
+			<div className='has-text-centered m-auto pt-2'>
 				<button className='button' onClick={() => openEndpointLink(endpoint)}>Try Me!</button>
 			</div>
 		}
@@ -90,17 +92,20 @@ const EndpointDetails = ({ endpoint }) => (
 );
 
 const ExamplesList = ({ examples }) => (
-	<>
-		{examples.map((example) => (
-			<p className="pl-4" key={example}>
-				Ex.
-				<span className="pl-1">
-					<code>{example}</code>
-				</span>
-			</p>
-		))}
-	</>
+    <div className=''>
+        {examples.map((example, index) => (
+            <div className="pl-4" key={index}>
+                <p>Ex.</p>
+                <pre className="pl-3 code-bg">
+                    {example.split('\n').map((line, i) => (
+                        <span key={i}>{line}<br /></span>
+                    ))}
+                </pre>
+            </div>
+        ))}
+    </div>
 );
+
 
 const StatusCodesList = ({ statusCodes }) => (
 	<div className="pt-2">

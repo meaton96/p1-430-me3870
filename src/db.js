@@ -21,45 +21,44 @@ const VALID_FILTER_NAMES = [
     'effectcount',
     'prerequisiteeffect',
 ];
-//helper function to merge objects for PUT operations only the deeply nested json objects
+// helper function to merge objects for PUT operations only the deeply nested json objects
 const deepMerge = (target, source) => {
-    for (const key of Object.keys(source)) {
+    Object.keys(source).forEach((key) => {
         if (source[key] instanceof Object && key in target) {
             Object.assign(source[key], deepMerge(target[key], source[key]));
         }
-    }
+    });
     return { ...target, ...source };
-}
+};
 
 const getCardDeepCopy = (card) => {
-	let cardCopy = {};
-	cardCopy.Team = card.Team;
-	cardCopy.Duplication = card.Duplication;
-	cardCopy.Target = card.Target;
-	cardCopy.SectorsAffected = card.SectorsAffected;
-	cardCopy.TargetAmount = card.TargetAmount;
-	cardCopy.Title = card.Title;
-	cardCopy.FlavourText = card.FlavourText;
-	cardCopy.Description = card.Description;
-	cardCopy.GUID = card.GUID;
-	cardCopy.DoomEffect = card.DoomEffect;
-	cardCopy.AssetInfo = { ...card.AssetInfo };
-	cardCopy.Cost = { ...card.Cost };
-	cardCopy.Action = {
-		Method: card.Action.Method,
-		MeeplesChanged: card.Action.MeeplesChanged,
-		MeepleIChange: card.Action.MeepleIChange,
-		PrerequisiteEffect: card.Action.PrerequisiteEffect,
-		Duration: card.Action.Duration,
-		CardsDrawn: card.Action.CardsDrawn,
-		CardsRemoved: card.Action.CardsRemoved,
-		DiceRoll: card.Action.DiceRoll,
-		EffectCount: card.Action.EffectCount,
-		Effects: card.Action.Effects.map(effect => effect)//just a string
-	}
+    const cardCopy = {};
+    cardCopy.Team = card.Team;
+    cardCopy.Duplication = card.Duplication;
+    cardCopy.Target = card.Target;
+    cardCopy.SectorsAffected = card.SectorsAffected;
+    cardCopy.TargetAmount = card.TargetAmount;
+    cardCopy.Title = card.Title;
+    cardCopy.FlavourText = card.FlavourText;
+    cardCopy.Description = card.Description;
+    cardCopy.GUID = card.GUID;
+    cardCopy.DoomEffect = card.DoomEffect;
+    cardCopy.AssetInfo = { ...card.AssetInfo };
+    cardCopy.Cost = { ...card.Cost };
+    cardCopy.Action = {
+        Method: card.Action.Method,
+        MeeplesChanged: card.Action.MeeplesChanged,
+        MeepleIChange: card.Action.MeepleIChange,
+        PrerequisiteEffect: card.Action.PrerequisiteEffect,
+        Duration: card.Action.Duration,
+        CardsDrawn: card.Action.CardsDrawn,
+        CardsRemoved: card.Action.CardsRemoved,
+        DiceRoll: card.Action.DiceRoll,
+        EffectCount: card.Action.EffectCount,
+        Effects: card.Action.Effects.map((effect) => effect), // just a string
+    };
     return cardCopy;
-}
-
+};
 
 // PUBLIC METHODS
 // GET
@@ -150,14 +149,14 @@ const updateCard = (guid, cardData) => {
         const updatedCard = deepMerge(cards[index], cardData);
         cards[index] = updatedCard;
 
-        if (oCard === updatedCard) { 
+        if (oCard === updatedCard) {
             return null;
         }
         // fs.writeFileSync(cardsPath, JSON.stringify(cards, null, 2));
         return updatedCard;
     }
     return null;
-}
+};
 
 module.exports = {
     getAllCards,

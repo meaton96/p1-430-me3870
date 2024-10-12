@@ -166,9 +166,30 @@
 			],
 			"PUT": [
 				{
-					"name": "PUT /api/card-edit",
-					"url": "/api/card-edit",
-					"description": "This is a placeholder"
+					"name": "PUT /api/cards/:guid([0-9a-zA-Z-]{36})",
+					"url": "/api/:guid",
+					"description": "Takes a card guid and a json object as a body. The body object only contains the updated properties",
+					"examples": [
+						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3\nBody:\n{\n\t\"TargetAmount\": 50,\n\t\"Cost\": {\n\t\t\"BlueCost\": 9\n\t}\n}"
+					],
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found with the given guid"
+						},
+						{
+							"code": 400,
+							"description": "If the body object is empty or does not contain any valid properties"
+						},
+						{
+							"code": 500,
+							"description": "If the database update operation fails"
+						}
+					]
 				}
 			],
 			"DELETE": [
@@ -220,7 +241,7 @@
 					"url": "/api/assets/:asset",
 					"description": "A dynamic endpoint that accepts an asset name and returns the asset as a file",
 					"examples": [
-						"/api/assets/1.png"
+						"/api/assets/sectorDown.png"
 					],
 					"statusCodes": [
 						{
@@ -242,8 +263,8 @@
 					"url": "/api/assets/cards/:asset",
 					"description": "A dynamic endpoint that accepts an asset name, specifically a card webp image, and returns the asset as a file",
 					"examples": [
-						"/api/assets/cards/VirtualMeeting.png",
-						"/api/assets/cards/VirtualMeeting.webp"
+						"/api/assets/cards/VirtualMeeting.webp",
+						"/api/assets/cards/VirtualMeeting.png"
 					],
 					"statusCodes": [
 						{
@@ -262,5 +283,41 @@
 				}
 			]
 		}
+	},
+	"Effects API" : {
+		"endpoints": {
+			"GET": [
+				{
+					"name": "GET /api/effects/all",
+					"url": "/api/effects/all",
+					"description": "Returns a list of all effects in the database",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If the effects database is empty"
+						}
+					]
+				},
+				{
+					"name": "GET /api/effects/:id",
+					"url": "/api/effects/:id",
+					"description": "Returns the effect with the given id",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If the effect wasn't found"
+						}
+					]
+				}
+			]
+		}	
 	}
 }
