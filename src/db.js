@@ -21,16 +21,55 @@ const VALID_FILTER_NAMES = [
     'effectcount',
     'prerequisiteeffect',
 ];
+//helper function to merge objects for PUT operations only the deeply nested json objects
+const deepMerge = (target, source) => {
+    for (const key of Object.keys(source)) {
+        if (source[key] instanceof Object && key in target) {
+            Object.assign(source[key], deepMerge(target[key], source[key]));
+        }
+    }
+    return { ...target, ...source };
+}
+
+const getCardDeepCopy = (card) => {
+	let cardCopy = {};
+	cardCopy.Team = card.Team;
+	cardCopy.Duplication = card.Duplication;
+	cardCopy.Target = card.Target;
+	cardCopy.SectorsAffected = card.SectorsAffected;
+	cardCopy.TargetAmount = card.TargetAmount;
+	cardCopy.Title = card.Title;
+	cardCopy.FlavourText = card.FlavourText;
+	cardCopy.Description = card.Description;
+	cardCopy.GUID = card.GUID;
+	cardCopy.DoomEffect = card.DoomEffect;
+	cardCopy.AssetInfo = { ...card.AssetInfo };
+	cardCopy.Cost = { ...card.Cost };
+	cardCopy.Action = {
+		Method: card.Action.Method,
+		MeeplesChanged: card.Action.MeeplesChanged,
+		MeepleIChange: card.Action.MeepleIChange,
+		PrerequisiteEffect: card.Action.PrerequisiteEffect,
+		Duration: card.Action.Duration,
+		CardsDrawn: card.Action.CardsDrawn,
+		CardsRemoved: card.Action.CardsRemoved,
+		DiceRoll: card.Action.DiceRoll,
+		EffectCount: card.Action.EffectCount,
+		Effects: card.Action.Effects.map(effect => effect)//just a string
+	}
+    return cardCopy;
+}
+
 
 // PUBLIC METHODS
 // GET
-const getAllCards = () => cards.map((card) => ({ ...card }));
+const getAllCards = () => cards.map((card) => getCardDeepCopy(card));
 const getAllEffects = () => effects.map((effect) => ({ ...effect }));
 
 // Get a card by GUID
 const getCardById = (guid) => {
     const card = cards.find((_card) => _card.GUID === guid);
-    return card ? { ...card } : null;
+    return card ? getCardDeepCopy(card) : null;
 };
 const getEffectById = (id) => {
     const effect = effects.find((_effect) => _effect.EffectID === id);
@@ -39,13 +78,13 @@ const getEffectById = (id) => {
 // Get the last card in the list
 const getRecentCard = () => {
     const card = cards.slice(-1)[0];
-    return card ? { ...card } : null;
+    return card ? getCardDeepCopy(card) : null;
 };
 
 // Get a random card
 const getRandomCard = () => {
     const card = cards[Math.floor(Math.random() * cards.length)];
-    return card ? { ...card } : null;
+    return card ? getCardDeepCopy(card) : null;
 };
 // Get cards by a specific field
 const getCardsByField = (fieldName, value) => cards
@@ -56,7 +95,7 @@ const getCardsByField = (fieldName, value) => cards
         }
         return false;
     })
-    .map((card) => ({ ...card }));
+    .map((card) => getCardDeepCopy(card));
 
 // Get cards by multiple filters, a list of field names and values
 const getCardsByFilters = (filters) => cards
@@ -92,7 +131,7 @@ const getCardsByFilters = (filters) => cards
         }
         return false;
     }))
-    .map((card) => ({ ...card }));
+    .map((card) => getCardDeepCopy(card));
 
 // DELETE
 const deleteCard = (guid) => {
@@ -104,6 +143,21 @@ const deleteCard = (guid) => {
     }
     return false;
 };
+const updateCard = (guid, cardData) => {
+    const index = cards.findIndex((_card) => _card.GUID === guid);
+    const oCard = cards[index];
+    if (index !== -1) {
+        const updatedCard = deepMerge(cards[index], cardData);
+        cards[index] = updatedCard;
+
+        if (oCard === updatedCard) { 
+            return null;
+        }
+        // fs.writeFileSync(cardsPath, JSON.stringify(cards, null, 2));
+        return updatedCard;
+    }
+    return null;
+}
 
 module.exports = {
     getAllCards,
@@ -115,6 +169,7 @@ module.exports = {
     deleteCard,
     getAllEffects,
     getEffectById,
+    updateCard,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

@@ -1,29 +1,28 @@
 import { React, useState } from 'react';
 import EditableField from './EditableField';
 import EditableTextArea from './EditableTextArea';
+import ClipLoader from "react-spinners/ClipLoader";
 import './styles/CardModal.css';
+import { getNestedValue, getChangedFields, getCardDeepCopy } from './utils/utils.js';
+import { Checkmark } from 'react-checkmark';
 
-function CardModal({ card, onClose, onDelete, effectList }) {
+function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
     if (!card) return null; // Don't render anything if no card is selected
     const [isEditing, setIsEditing] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
     const [error, setError] = useState('');
     const [cardDeleted, setCardDeleted] = useState(false);
-    const [editedCard, setEditedCard] = useState({ ...card }); // Copy of the card for editing
+    const [editedCard, setEditedCard] = useState(getCardDeepCopy(card)); // Copy of the card for editing
+    const [loading, setLoading] = useState(false);
+    const [saveCompleted, setSaveCompleted] = useState(false);
+    const [_card, setCard] = useState(card);
+
 
     const effectMap = {
         "ModifyPoints": "Modify Points",
-        "ModifyPointsPerTurn" : "Modify Points Per Turn",
-        
+        "ModifyPointsPerTurn": "Modify Points Per Turn",
+
     }
-
-    // Function to the field value from the obj object even if its a nested field
-    const getNestedValue = (obj, field) => field.
-        split('.').
-        reduce((o, key) => (o && o[key] !== undefined) ? o[key] : '', obj);
-
-
-
     //handles pressing the delete button
     const handleDeleteCardClick = () => {
         //create a confirmation dialog
@@ -50,30 +49,41 @@ function CardModal({ card, onClose, onDelete, effectList }) {
 
     //handles pressing the save button
     const handleSaveCard = () => {
-        setIsEditing(false); //TODO: remove after implementing endpoint
-        return;
-        //TODO:
-        // Validate the card data 
+        const changes = getChangedFields(card, editedCard); //create the json object for only the updated properties
+        if (Object.keys(changes).length === 0) {
+            return;
+        }
+
+        setIsEditing(false); // Immediately change card back to non-editing
+        setLoading(true); // Show the loading spinner modal
+
         fetch(`/api/cards/${editedCard.GUID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(editedCard),
+            body: JSON.stringify(changes),
         })
             .then((response) => {
-                if (response.ok) {
-                    // Update was successful
-                    setIsEditing(false);
+                if (response.ok) { // 200
+                    setSaveCompleted(true); // Show checkmark
+                    setTimeout(() => {
+                        setLoading(false); // Hide loading modal
+                        setSaveCompleted(false); // Reset checkmark
+                        setCard(editedCard); //update modal
+                        onCardEdit(editedCard); // Pass the updated card to parent
+                    }, 1750);
                 } else {
-                    // Handle error
                     setError('Failed to save card with status: ' + response.status);
+                    setLoading(false);
                 }
             })
             .catch((error) => {
                 setError('Failed to save card: ' + error.message);
+                setLoading(false);
             });
     };
+
 
     //handles changing the input fields
     const handleInputChange = (e, field) => {
@@ -104,23 +114,6 @@ function CardModal({ card, onClose, onDelete, effectList }) {
     };
 
 
-    const handleToggleEdit = () => {
-        setIsEditing(!isEditing);
-    };
-
-    const handleEffectChange = (index, field, value) => {
-        const updatedEffects = [...(editedCard.Action?.Effects || [])];
-        updatedEffects[index] = {
-            ...updatedEffects[index],
-            [field]: value,
-        };
-        setEditedCard((prev) => ({
-            ...prev,
-            Action: { ...prev.Action, Effects: updatedEffects },
-        }));
-    };
-
-
     const getImageSource = (imgLocation) => {
         if (imgLocation) {
             return `/api/assets/cards/${card.AssetInfo.imgLocation.replace(
@@ -132,80 +125,95 @@ function CardModal({ card, onClose, onDelete, effectList }) {
 
     }
 
+
+    const renderLoadingModal = () => (
+        <div className="loading-modal">
+            <div className="modal-content has-text-centered">
+                <div className="box">
+                    {saveCompleted ? (
+                        <Checkmark size="large" />
+                    ) : (
+                        <ClipLoader size={40} color={"#3498db"} loading={true} />
+                    )}
+                </div>
+            </div>
+        </div>
+    );
     //show the card data as un editable text
     const renderCardData = () => {
         return (<>
-            <h2 className="title">{card.Title || 'Untitled'}</h2>
+            <h2 className="title">{_card.Title || 'Untitled'}</h2>
             <img className='is-flex is-align-items-center is-justify-content-center m-auto mb-3'
-                src={getImageSource(card.AssetInfo.imgLocation.replace('.png', '.webp'))}
+                src={getImageSource(_card.AssetInfo.imgLocation.replace('.png', '.webp'))}
                 alt="Card Image"
                 style={{ width: '50%' }}></img>
             <p className="mt-2">
-                <strong>Description:</strong> {card.Description || 'No description available.'}
+                <strong>Description:</strong> {_card.Description || 'No description available.'}
             </p>
             <p>
-                <strong>Flavour Text:</strong> {card.FlavourText || 'None'}
+                <strong>Flavour Text:</strong> {_card.FlavourText || 'None'}
             </p>
             <p>
-                <strong>Team:</strong> {card.Team}
+                <strong>Team:</strong> {_card.Team}
             </p>
             <p>
-                <strong>Duplication:</strong> {card.Duplication}
+                <strong>Duplication:</strong> {_card.Duplication}
             </p>
             <p>
-                <strong>Method:</strong> {card.Action?.Method || 'None'}
+                <strong>Method:</strong> {_card.Action?.Method || 'None'}
             </p>
             <p>
-                <strong>Target:</strong> {card.Target}
+                <strong>Target:</strong> {_card.Target}
             </p>
             <p>
-                <strong>Sectors Affected:</strong> {card.SectorsAffected}
+                <strong>Sectors Affected:</strong> {_card.SectorsAffected}
             </p>
             <p>
-                <strong>Target Amount:</strong> {card.TargetAmount}
+                <strong>Target Amount:</strong> {_card.TargetAmount}
             </p>
             <p>
-                <strong>Blue Cost:</strong> {card.Cost?.BlueCost}
+                <strong>Blue Cost:</strong> {_card.Cost?.BlueCost}
             </p>
             <p>
-                <strong>Black Cost:</strong> {card.Cost?.BlackCost}
+                <strong>Black Cost:</strong> {_card.Cost?.BlackCost}
             </p>
             <p>
-                <strong>Purple Cost:</strong> {card.Cost?.PurpleCost}
+                <strong>Purple Cost:</strong> {_card.Cost?.PurpleCost}
             </p>
             <p>
-                <strong>Facility Point:</strong> {card.Action?.FacilityPoint || 0}
+                <strong>Facility Point:</strong> {_card.Action?.FacilityPoint || 0}
             </p>
             <p>
-                <strong>Cards Drawn:</strong> {card.Action?.CardsDrawn || 0}
+                <strong>Cards Drawn:</strong> {_card.Action?.CardsDrawn || 0}
             </p>
             <p>
-                <strong>Cards Removed:</strong> {card.Action?.CardsRemoved || 0}
-            </p>
-            <p>
-                <strong>Effect Count:</strong> {card.Action?.EffectCount || 0}
-            </p>
-            <p>
-                <strong>Prerequisite Effect:</strong> {card.Action?.PrerequisiteEffect || 'None'}
-            </p>
-            <p>
-                <strong>Duration:</strong> {card.Action?.Duration || 0}
-            </p>
-            <p>
-                <strong>Doom Effect:</strong> {card.DoomEffect ? 'Yes' : 'No'}
-            </p>
-            <p>
-                <strong>Dice Roll:</strong> {card.Action?.DiceRoll || 0}
-            </p>
-            <p>
-                <strong>GUID:</strong> {card.GUID}
+                <strong>Cards Removed:</strong> {_card.Action?.CardsRemoved || 0}
             </p>
 
-            {card.Action?.Effects && card.Action.Effects.length > 0 && (
+            <p>
+                <strong>Prerequisite Effect:</strong> {_card.Action?.PrerequisiteEffect || 'None'}
+            </p>
+            <p>
+                <strong>Duration:</strong> {_card.Action?.Duration || 0}
+            </p>
+            <p>
+                <strong>Doom Effect:</strong> {_card.DoomEffect ? 'Yes' : 'No'}
+            </p>
+            <p>
+                <strong>Dice Roll:</strong> {_card.Action?.DiceRoll || 0}
+            </p>
+            <p>
+                <strong>GUID:</strong> {_card.GUID}
+            </p>
+            <p>
+                <strong>Effect Count:</strong> {_card.Action?.EffectCount || 0}
+            </p>
+
+            {_card.Action?.Effects && _card.Action.Effects.length > 0 && (
                 <div>
                     <strong>Effects:</strong>
                     <div className="mt-1 is-flex">
-                        {card.Action.Effects.map((effectID, index) => {
+                        {_card.Action.Effects.map((effectID, index) => {
                             const effect = effectList.find(e => e.EffectID === effectID);
 
                             if (!effect) {
@@ -217,12 +225,12 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                             }
 
                             const { EffectType, EffectPointTarget, EffectMagnitude } = effect.Effect;
-                            
+
                             return (
                                 <div key={index} className="effect-item has-text-centered p-1 m-1">
                                     {effectMap[EffectType] || EffectType
                                     }
-                                    
+
                                     {EffectPointTarget && (
                                         <>
                                             ,&nbsp;
@@ -242,7 +250,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                 </div>
             )}
             <div className='is-flex is-align-items-center is-justify-content-center'>
-                <button style={{ width: "10rem" }} className="button is-primary m-1" onClick={handleToggleEdit}>Edit Card</button>
+                <button style={{ width: "10rem" }} className="button is-primary m-1" onClick={() => setIsEditing(!isEditing)}>Edit Card</button>
                 <button style={{ width: "10rem" }} className="button is-danger m-1" onClick={handleDeleteCardClick}>Delete Card</button>
             </div>
         </>);
@@ -263,39 +271,47 @@ function CardModal({ card, onClose, onDelete, effectList }) {
             { label: "Facility Point", field: "Action.FacilityPoint", type: "number" },
             { label: "Cards Drawn", field: "Action.CardsDrawn", type: "number" },
             { label: "Cards Removed", field: "Action.CardsRemoved", type: "number" },
-            { label: "Effect Count", field: "Action.EffectCount", type: "number" },
             { label: "Prerequisite Effect", field: "Action.PrerequisiteEffect", type: "text" },
             { label: "Duration", field: "Action.Duration", type: "number" },
             { label: "Dice Roll", field: "Action.DiceRoll", type: "number" },
             { label: "GUID", field: "GUID", type: "text", readonly: true }
         ];
-        
+
         // Remove an effect from the card when clicking on it
         const handleRemoveEffect = (index) => {
             const updatedEffects = [...editedCard.Action.Effects];
-            updatedEffects.splice(index, 1); 
+            updatedEffects.splice(index, 1); // Remove the effect at the given index
+
             setEditedCard((prev) => ({
                 ...prev,
-                Action: { ...prev.Action, Effects: updatedEffects },
+                Action: {
+                    ...prev.Action,
+                    Effects: updatedEffects,
+                    EffectCount: prev.Action.EffectCount - 1, // Decrease the EffectCount
+                },
             }));
         };
-    
+
+
+        // Add an effect to the card
         const handleAddEffect = (effectID) => {
             if (!editedCard.Action.Effects.includes(effectID)) {
                 setEditedCard((prev) => ({
                     ...prev,
                     Action: {
                         ...prev.Action,
-                        Effects: [...prev.Action.Effects, effectID], // i love the spread operator
+                        Effects: [...prev.Action.Effects, effectID], // Add the new effect
+                        EffectCount: prev.Action.EffectCount + 1, // Increase the EffectCount
                     },
                 }));
             }
         };
-    
+
+
         return (
             <>
                 <h2 className="title">Edit Card</h2>
-    
+
                 {fieldDefinitions.map(({ label, field, type, readonly }) => (
                     <EditableField
                         key={field}
@@ -306,7 +322,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                         readonly={readonly}
                     />
                 ))}
-    
+
                 {/* Description as a TextArea */}
                 <EditableTextArea
                     label="Description"
@@ -318,7 +334,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                     value={editedCard.FlavourText || ''}
                     onChange={(e) => handleInputChange(e, 'FlavourText')}
                 />
-    
+
                 {/* Doom Effect checkbox */}
                 <div className="field is-horizontal">
                     <div className="field-label is-normal">
@@ -339,14 +355,25 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                         </div>
                     </div>
                 </div>
-    
+
+                {/*{ label: "Effect Count", field: "Action.EffectCount", type: "number", readonly: true }*/}
+                <EditableField
+                    key={"Action.EffectCount"}
+                    label={"Effect Count"}
+                    type={"number"}
+                    value={getNestedValue(editedCard, "Action.EffectCount")}
+                    onChange={(e) => handleInputChange(e, "Action.EffectCount")}
+                    readonly={true}
+                />
+
+
                 {/* Current Effects */}
                 <div className="field">
                     <label className="label">Current Effects</label>
                     <div className="mt-1 is-flex">
                         {editedCard.Action?.Effects.map((effectID, index) => {
                             const effect = effectList.find(e => e.EffectID === effectID);
-    
+
                             if (!effect) {
                                 return (
                                     <div
@@ -358,9 +385,9 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                                     </div>
                                 );
                             }
-    
+
                             const { EffectType, EffectPointTarget, EffectMagnitude } = effect.Effect;
-    
+
                             return (
                                 <div
                                     key={index}
@@ -378,7 +405,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                         })}
                     </div>
                 </div>
-    
+
                 {/* Add New Effect */}
                 <div className="field">
                     <label className="label">Add Effect</label>
@@ -395,7 +422,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
                         </div>
                     </div>
                 </div>
-    
+
                 {/* Action Buttons */}
                 <div className="is-flex is-align-items-center is-justify-content-center">
                     <button
@@ -416,7 +443,7 @@ function CardModal({ card, onClose, onDelete, effectList }) {
             </>
         );
     };
-    
+
 
 
     // Render the modal content based on the card state
@@ -450,20 +477,24 @@ function CardModal({ card, onClose, onDelete, effectList }) {
     };
 
     return (
-        <div className="modal is-active">
-            <div className="modal-background" onClick={onClose}></div>
-            <div className={`modal-content`}>
-                <div className="box">
-                    <button
-                        className="modal-close is-large"
-                        aria-label="close"
-                        onClick={onClose}
-                    ></button>
-                    {renderModalContent()}
+        <>
+            {loading && renderLoadingModal()} {/* Show the loading spinner/modal if loading */}
+            <div className="modal is-active">
+                <div className="modal-background" onClick={onClose}></div>
+                <div className={`modal-content`}>
+                    <div className="box">
+                        <button
+                            className="modal-close is-large"
+                            aria-label="close"
+                            onClick={onClose}
+                        ></button>
+                        {renderModalContent()}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
+
 
 export default CardModal;

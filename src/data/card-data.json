@@ -1633,5 +1633,119 @@
             "Effects": []
         },
         "DoomEffect": false
-    }
+    },
+    {
+        "Team": "Blue",
+        "Duplication": 3,
+        "Target": "Facility",
+        "SectorsAffected": "Any",
+        "TargetAmount": 1,
+        "Title": "Set Honey Pot",
+        "AssetInfo": {
+          "imgRow": 7,
+          "imgCol": 0,
+          "bgCol": 0,
+          "bgRow": 0,
+          "imgLocation": ""
+        },
+        "Cost": {
+          "BlueCost": 1,
+          "BlackCost": 1,
+          "PurpleCost": 1
+        },
+        "FlavourText": "Deploy a decoy system to trap attackers.",
+        "Description": "Place a Honey Pot effect on one of your facilities for 3 turns. If the red player plays a card targeting this facility, cancel their effect and they discard a random card.",
+        "GUID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "Action": {
+          "Method": "AddEffect",
+          "MeeplesChanged": 0,
+          "MeepleIChange": 0,
+          "PrerequisiteEffect": "None",
+          "Duration": 3,
+          "CardsDrawn": 0,
+          "CardsRemoved": 0,
+          "DiceRoll": -1,
+          "EffectCount": 1,
+          "Effects": [
+            "honey-pot"
+          ]
+        },
+        "DoomEffect": false
+      },
+      {
+        "Team": "Blue",
+        "Duplication": 3,
+        "Target": "Facility",
+        "SectorsAffected": "Any",
+        "TargetAmount": 1,
+        "Title": "Penetration Testing",
+        "AssetInfo": {
+          "imgRow": 7,
+          "imgCol": 0,
+          "bgCol": 0,
+          "bgRow": 0,
+          "imgLocation": ""
+        },
+        "Cost": {
+          "BlueCost": 1,
+          "BlackCost": 0,
+          "PurpleCost": 1
+        },
+        "FlavourText": "Test for vulnerabilities.",
+        "Description": "Choose a facility to test for vulnerabilties, it gains 1 temporary maximum physical and network point.",
+        "GUID": "a1b233d4-e5f6-7890-abcd-ef1234567890",
+        "Action": {
+          "Method": "AddEffect",
+          "MeeplesChanged": 0,
+          "MeepleIChange": 0,
+          "PrerequisiteEffect": "None",
+          "Duration": 3,
+          "CardsDrawn": 0,
+          "CardsRemoved": 0,
+          "DiceRoll": -1,
+          "EffectCount": 2,
+          "Effects": [
+            "temp-max-phys-1",
+            "temp-max-net-1"
+          ]
+        },
+        "DoomEffect": false
+      },
+      {
+        "Team": "Blue",
+        "Duplication": 3,
+        "Target": "Facility",
+        "SectorsAffected": "Any",
+        "TargetAmount": 1,
+        "Title": "Hire White Hat",
+        "AssetInfo": {
+          "imgRow": 7,
+          "imgCol": 0,
+          "bgCol": 0,
+          "bgRow": 0,
+          "imgLocation": ""
+        },
+        "Cost": {
+          "BlueCost": 1,
+          "BlackCost": 0,
+          "PurpleCost": 1
+        },
+        "FlavourText": "Test for vulnerabilities.",
+        "Description": "Deploy a white hat hacker to your facility. If the facility has a backdoor, reduce the remaining turns by 2",
+        "GUID": "a1b233d4-e5f6-7890-abcd-gf1234567890",
+        "Action": {
+          "Method": "ReduceRemainingTurns",
+          "MeeplesChanged": 0,
+          "MeepleIChange": 0,
+          "PrerequisiteEffect": "None",
+          "Duration": 3,
+          "CardsDrawn": 0,
+          "CardsRemoved": 0,
+          "DiceRoll": -1,
+          "EffectCount": 0,
+          "Effects": [
+          ]
+        },
+        "DoomEffect": false
+      }
 ]

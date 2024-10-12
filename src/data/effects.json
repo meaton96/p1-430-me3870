@@ -176,5 +176,35 @@
             "EffectPointTarget": "Physical",
             "EffectMagnitude": "-1"
         }
+    },
+    {
+        "EffectID": "honey-pot",
+        "Effect": {
+            "EffectType": "HoneyPot"
+        }
+    },
+    {
+        "EffectID": "temp-max-phys-1",
+        "Effect": {
+            "EffectType": "TempMaxPoints",
+            "EffectPointTarget": "Physical",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "temp-max-net-1",
+        "Effect": {
+            "EffectType": "TempMaxPoints",
+            "EffectPointTarget": "Network",
+            "EffectMagnitude": "1"
+        }
+    },
+    {
+        "EffectID": "temp-max-fin-1",
+        "Effect": {
+            "EffectType": "TempMaxPoints",
+            "EffectPointTarget": "Financial",
+            "EffectMagnitude": "1"
+        }
     }
 ]

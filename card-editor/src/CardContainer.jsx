@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardSimple from './CardSimple';
-import CardModal from './CardModal'; // Import the new component
+import CardModal from './CardModal'; 
 import { fetchJsonEndpoint } from './utils/ajax.js';
 
 function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
@@ -26,7 +26,7 @@ function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
 				const url = queryParams.toString()
 					? `/api/cards?${queryParams.toString()}`
 					: '/api/cards/all';
-				const data = await fetchJsonEndpoint(url); // Fetch
+				const data = await fetchJsonEndpoint(url); 
 				setApiUrl(url); // Set the API URL to display
 				setCards(data);
 			} catch (err) {
@@ -70,6 +70,14 @@ function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
 	const handleDeleteCard = (guid) => {
 		setCards((prevCards) => prevCards.filter((card) => card.GUID !== guid));
 
+	};
+	//update the card viewer when a card is edited
+	const handleCardEdit = (updatedCard) => {
+		setCards((prevCards) =>
+			prevCards.map((card) =>
+				card.GUID === updatedCard.GUID ? updatedCard : card
+			)
+		);
 	};
 
 	// Display active filters as clickable elements
@@ -129,7 +137,8 @@ function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
 				card={selectedCard}
 				onClose={() => setSelectedCard(null)}
 				onDelete={handleDeleteCard}
-				effectList={effects} />
+				effectList={effects} 
+				onCardEdit={handleCardEdit}/>
 		</div>
 	);
 }
