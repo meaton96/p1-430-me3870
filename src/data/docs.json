@@ -159,9 +159,23 @@
 			],
 			"POST": [
 				{
-					"name": "POST /api/card-edit",
-					"url": "/api/card-edit",
-					"description": "This is a placeholder"
+					"name": "POST /api/cards",
+					"url": "/api/cards",
+					"description": "This endpoint accepts a full card object as a json body and adds it to the database",
+					"statusCodes": [
+						{
+							"code": 201,
+							"description": "On success"
+						},
+						{
+							"code": 400,
+							"description": "If the body object is empty or does not contain any valid properties"
+						},
+						{
+							"code": 500,
+							"description": "If the database insert operation fails"
+						}
+					]
 				}
 			],
 			"PUT": [

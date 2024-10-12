@@ -11,7 +11,6 @@ const effects = JSON.parse(effectJson);
 // List of valid field names for validation
 const VALID_FIELD_NAMES = Object.keys(cards[0] || {}).map((key) => key.toLowerCase());
 const VALID_FILTER_NAMES = [
-
     'team',
     'method',
     'target',
@@ -157,6 +156,18 @@ const updateCard = (guid, cardData) => {
     }
     return null;
 };
+const addCard = (card) => {
+    // console.log(card);
+    const guid = crypto.randomUUID();
+
+    const newCard = getCardDeepCopy(card);
+    newCard.GUID = guid;
+    cards.push(newCard);
+
+    // console.log(cards);
+    // fs.writeFileSync(cardsPath, JSON.stringify(cards, null, 2));
+    return getCardById(guid);
+};
 
 module.exports = {
     getAllCards,
@@ -169,6 +180,7 @@ module.exports = {
     getAllEffects,
     getEffectById,
     updateCard,
+    addCard,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

@@ -6,9 +6,9 @@ import './styles/CardModal.css';
 import { getNestedValue, getChangedFields, getCardDeepCopy } from './utils/utils.js';
 import { Checkmark } from 'react-checkmark';
 
-function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
+function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNewCard, setIsAddingNewCard, isEditing, setIsEditing }) {
     if (!card) return null; // Don't render anything if no card is selected
-    const [isEditing, setIsEditing] = useState(false);
+    // const [isEditing, setIsEditing] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
     const [error, setError] = useState('');
     const [cardDeleted, setCardDeleted] = useState(false);
@@ -16,6 +16,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
     const [loading, setLoading] = useState(false);
     const [saveCompleted, setSaveCompleted] = useState(false);
     const [_card, setCard] = useState(card);
+    const [fieldChanged, setFieldChanged] = useState(false);
 
 
     const effectMap = {
@@ -49,28 +50,34 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
 
     //handles pressing the save button
     const handleSaveCard = () => {
-        const changes = getChangedFields(card, editedCard); //create the json object for only the updated properties
-        if (Object.keys(changes).length === 0) {
+        setFieldChanged(false);
+
+        const method = isAddingNewCard ? 'POST' : 'PUT'; // POST if adding a new card, PUT if updating
+        const url = isAddingNewCard ? '/api/cards' : `/api/cards/${editedCard.GUID}`;
+        const changes = getChangedFields(card, editedCard); // create the json object for only the updated properties
+
+        if (Object.keys(changes).length === 0 && !isAddingNewCard) {
+            setIsEditing(false);
             return;
         }
 
-        setIsEditing(false); // Immediately change card back to non-editing
-        setLoading(true); // Show the loading spinner modal
+        setLoading(true); 
 
-        fetch(`/api/cards/${editedCard.GUID}`, {
-            method: 'PUT',
+        fetch(url, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(changes),
+            body: isAddingNewCard ? JSON.stringify(editedCard) : JSON.stringify(changes),
         })
             .then((response) => {
                 if (response.ok) { // 200
                     setSaveCompleted(true); // Show checkmark
                     setTimeout(() => {
+                        setIsAddingNewCard(false); // Reset adding new card state
                         setLoading(false); // Hide loading modal
-                        setSaveCompleted(false); // Reset checkmark
-                        setCard(editedCard); //update modal
+                        setSaveCompleted(false); // Reset checkmark state
+                        setCard(editedCard); // update modal with new card data
                         onCardEdit(editedCard); // Pass the updated card to parent
                     }, 1750);
                 } else {
@@ -81,6 +88,10 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
             .catch((error) => {
                 setError('Failed to save card: ' + error.message);
                 setLoading(false);
+            })
+            .finally(() => {
+                // Set editing state after the request completes
+                setIsEditing(false); 
             });
     };
 
@@ -97,7 +108,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
         }
 
         const fieldParts = field.split('.');
-
+        setFieldChanged(true);
         setEditedCard((prev) => {
             let updatedCard = { ...prev };
             let currentField = updatedCard;
@@ -430,7 +441,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit }) {
                         className="button is-primary m-1"
                         onClick={handleSaveCard}
                     >
-                        Save Card
+                        {fieldChanged ? "Save Changes" : "Exit Edit Mode"}
                     </button>
                     <button
                         style={{ width: '10rem' }}

@@ -3,11 +3,22 @@ import CardSimple from './CardSimple';
 import CardModal from './CardModal'; 
 import { fetchJsonEndpoint } from './utils/ajax.js';
 
-function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
+function CardContainer({ selectedFilters, 
+						setSelectedFilters, 
+						setApiUrl,
+						selectedCard,
+						setSelectedCard,
+						isAddingNewCard,
+						isEditing,
+						setIsEditing,
+						setIsAddingNewCard,
+						searchString, 
+						}) {
 	const [cards, setCards] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
-	const [selectedCard, setSelectedCard] = useState(null); // State for the selected card
+	
+	// const [selectedCard, setSelectedCard] = useState(null); // State for the selected card
 	const [effects, setEffectList] = useState([]); // State for the list of effects
 
 	// Fetch the cards based on the selected filters
@@ -135,10 +146,19 @@ function CardContainer({ selectedFilters, setSelectedFilters, setApiUrl }) {
 			</div>
 			<CardModal
 				card={selectedCard}
-				onClose={() => setSelectedCard(null)}
+				onClose={() => {
+					setSelectedCard(null);
+					setIsEditing(false);
+					setIsAddingNewCard(false);
+				}}
 				onDelete={handleDeleteCard}
 				effectList={effects} 
-				onCardEdit={handleCardEdit}/>
+				onCardEdit={handleCardEdit}
+				isAddingNewCard={isAddingNewCard}
+				isEditing={isEditing}
+				setIsEditing={setIsEditing}
+				setIsAddingNewCard={setIsAddingNewCard}
+				/>
 		</div>
 	);
 }

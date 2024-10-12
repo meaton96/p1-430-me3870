@@ -141,6 +141,26 @@ router.get('/', (req, res) => {
 });
 
 // // POST
+router.post('/', (req, res) => {
+    const cardData = req.body;
+
+    // validate field names
+    const invalidFields = validateFieldNames(Object.keys(cardData));
+    // if invalid field name, return 400
+    if (invalidFields.length > 0) {
+        res.status(400).send({
+            message: `Invalid field name: ${invalidFields.join(', ')}`,
+        });
+        return;
+    }
+
+    const card = db.addCard(cardData);
+    if (card) {
+        res.status(201).json(card);
+    } else {
+        res.status(500).send({ message: 'Failed to add card' });
+    }
+});
 // {}
 // // PUT
 /// api/cards/GUID accepts 36 characters long alphanumeric GUIDs to update card
