@@ -5,7 +5,7 @@
 				{
 					"name": "GET /",
 					"url": "/",
-					"description": "This route serves the React page currently displays the card viewer page which calls both the cards and assets APIs"
+					"description": "This route serves the React page currently displays the card viewer page which uses almost all of the endpoints"
 				},
 				{
 					"name": "GET /docs",
