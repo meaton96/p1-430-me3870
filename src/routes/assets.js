@@ -16,7 +16,6 @@ const getAsset = (req, res, _path) => {
             return;
         }
 
-        // Find a matching file ignoring case
         const matchingFile = files.find((file) => file.toLowerCase() === assetParam);
 
         if (!matchingFile) {
@@ -25,10 +24,23 @@ const getAsset = (req, res, _path) => {
         }
 
         const asset = path.resolve(_path, matchingFile);
-        res.sendFile(asset, (errr) => {
-            if (errr) {
-                res.status(500).send({ message: 'Error sending asset' });
+
+        fs.stat(asset, (errStat, stats) => {
+            if (errStat) {
+                res.status(500).send({ message: 'Error reading asset stats' });
+                return;
             }
+
+            if (stats.isDirectory()) {
+                res.status(400).send({ message: 'Requested asset is a directory' });
+                return;
+            }
+
+            res.sendFile(asset, (errr) => {
+                if (errr) {
+                    res.status(500).send({ message: 'Error sending asset' });
+                }
+            });
         });
     });
 };

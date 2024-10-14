@@ -3,10 +3,19 @@ import EditableField from './EditableField';
 import EditableTextArea from './EditableTextArea';
 import ClipLoader from "react-spinners/ClipLoader";
 import './styles/CardModal.css';
-import { getNestedValue, getChangedFields, getCardDeepCopy } from './utils/utils.js';
+import { getNestedValue, getChangedFields, getCardDeepCopy, isSameImage } from './utils/utils.js';
 import { Checkmark } from 'react-checkmark';
 
-function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNewCard, setIsAddingNewCard, isEditing, setIsEditing }) {
+function CardModal({ card,
+    onClose,
+    onDelete,
+    effectList,
+    onCardEdit,
+    isAddingNewCard,
+    setIsAddingNewCard,
+    isEditing,
+    setIsEditing,
+    cardAssetNames }) {
     if (!card) return null; // Don't render anything if no card is selected
     // const [isEditing, setIsEditing] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
@@ -61,7 +70,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
             return;
         }
 
-        setLoading(true); 
+        setLoading(true);
 
         fetch(url, {
             method: method,
@@ -91,7 +100,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
             })
             .finally(() => {
                 // Set editing state after the request completes
-                setIsEditing(false); 
+                setIsEditing(false);
             });
     };
 
@@ -126,15 +135,11 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
 
 
     const getImageSource = (imgLocation) => {
-        if (imgLocation) {
-            return `/api/assets/cards/${card.AssetInfo.imgLocation.replace(
-                '.png',
-                '.webp'
-            )}`;
+        if (imgLocation && imgLocation.trim()) {
+            return `/api/assets/cards/${imgLocation.replace('.png', '.webp')}`;
         }
         return 'https://craftypixels.com/placeholder-image/300.png/';
-
-    }
+    };
 
 
     const renderLoadingModal = () => (
@@ -155,7 +160,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
         return (<>
             <h2 className="title">{_card.Title || 'Untitled'}</h2>
             <img className='is-flex is-align-items-center is-justify-content-center m-auto mb-3'
-                src={getImageSource(_card.AssetInfo.imgLocation.replace('.png', '.webp'))}
+                src={getImageSource(editedCard.AssetInfo.imgLocation)}
                 alt="Card Image"
                 style={{ width: '50%' }}></img>
             <p className="mt-2">
@@ -270,7 +275,7 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
     const renderEditCardData = () => {
         const fieldDefinitions = [
             { label: "Title", field: "Title", type: "text" },
-            { label: "Team", field: "Team", type: "text" },
+            // { label: "Team", field: "Team", type: "text" },
             { label: "Number in Deck", field: "Duplication", type: "number" },
             { label: "Method", field: "Action.Method", type: "text" },
             { label: "Target", field: "Target", type: "text" },
@@ -318,6 +323,12 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
             }
         };
 
+        const teams = [
+            { val: 'Blue', textVal: 'Blue' },
+            { val: 'Red', textVal: 'Red' },
+            { val: 'White;Negative', textVal: 'Negative White' },
+            { val: 'White;Positive', textVal: 'Positive White' },];
+
 
         return (
             <>
@@ -333,6 +344,53 @@ function CardModal({ card, onClose, onDelete, effectList, onCardEdit, isAddingNe
                         readonly={readonly}
                     />
                 ))}
+                <div className="field is-flex columns">
+                    <div className="column is-half has-text-centered">
+                        <label className="label">Team: {editedCard.Team}</label>
+                    </div>
+                    <div className='column is-half has-text-centered'>
+                        <div className="control">
+                            <div className="select">
+                                <select onChange={(e) => handleInputChange(e, 'Team')}
+                                    value={editedCard.Team || ""}>
+                                    <option value="" disabled>Select Team</option>
+                                    {teams.map((teamName) => (
+                                        <option key={teamName.val} value={teamName.val}>
+                                            {teamName.textVal}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/*Image*/}
+                <div className="field is-flex columns">
+                    <div className="column is-half has-text-centered">
+                        <label className="label">Image Name: {editedCard.AssetInfo.imgLocation}</label>
+                    </div>
+                    <div className='column is-half has-text-centered'>
+                        <div className="control">
+                            <div className="select">
+                                <select onChange={(e) => handleInputChange(e, 'AssetInfo.imgLocation')}
+                                    value={editedCard.AssetInfo.imgLocation || ""}>
+                                    <option value="" disabled>Select Image</option>
+                                    {cardAssetNames.map((imageName) => {
+                                        const displayName = imageName.split('.')[0]; // Get the name without extension
+                                        const pngImageName = `${displayName}.png`;   
+                                            
+                                        return (
+                                            <option key={displayName} value={pngImageName}>
+                                                {displayName}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 {/* Description as a TextArea */}
                 <EditableTextArea

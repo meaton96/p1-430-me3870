@@ -181,9 +181,11 @@ router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         }
 
         const tempCard = db.updateCard(guid, cardData);
+
         if (tempCard != null) {
             res.status(200).json(tempCard);
         } else {
+            console.log('sending 500');
             res.status(500).send({ message: 'Failed to update card' });
         }
     } else {

@@ -144,6 +144,7 @@ const deleteCard = (guid) => {
 const updateCard = (guid, cardData) => {
     const index = cards.findIndex((_card) => _card.GUID === guid);
     const oCard = cards[index];
+    //
     if (index !== -1) {
         const updatedCard = deepMerge(cards[index], cardData);
         cards[index] = updatedCard;

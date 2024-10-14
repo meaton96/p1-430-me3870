@@ -17,6 +17,7 @@ function CardContainer({ selectedFilters,
 	const [cards, setCards] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
+    const [cardAssetNames, setCardAssetNames] = useState([]);
 	
 	// const [selectedCard, setSelectedCard] = useState(null); // State for the selected card
 	const [effects, setEffectList] = useState([]); // State for the list of effects
@@ -67,6 +68,24 @@ function CardContainer({ selectedFilters,
 		}
 		fetchEffects();
 	}, [])
+	//fetch the list of card image names
+	useEffect(() => {
+		const fetchCardAssetNames = async () => {
+			try {
+				const data = await fetchJsonEndpoint('/api/assets/card-images');
+				if (data) {
+					setCardAssetNames(data.files);
+					
+				}
+				else {
+					console.error('Error: No card asset names found');
+				}
+			} catch (err) {
+				console.error('Error:', err);
+			}
+		}
+		fetchCardAssetNames();
+	}, []);
 
 	// Handle removing a filter by clicking on it
 	const handleRemoveFilter = (field, value) => {
@@ -158,6 +177,7 @@ function CardContainer({ selectedFilters,
 				isEditing={isEditing}
 				setIsEditing={setIsEditing}
 				setIsAddingNewCard={setIsAddingNewCard}
+				cardAssetNames={cardAssetNames}
 				/>
 		</div>
 	);

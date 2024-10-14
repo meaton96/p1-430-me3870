@@ -111,4 +111,9 @@ const getCardDeepCopy = (card) => {
 	return cardCopy;
 }
 
-export { getChangedFields, getNestedValue, getCardDeepCopy };
+const isSameImage = (imgName1, imgName2) => {
+
+	return imgName1.split('.')[0] === imgName2.split('.')[0];
+}
+
+export { getChangedFields, getNestedValue, getCardDeepCopy, isSameImage };
