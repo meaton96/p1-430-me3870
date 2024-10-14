@@ -19,7 +19,7 @@
 		"endpoints": {
 			"GET": [
 				{
-					"name": "GET /api/cards",
+					"name": "GET or HEAD /api/cards",
 					"url": "/api/cards",
 					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties",
 					"examples": [
@@ -42,7 +42,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/fields",
+					"name": "GET or HEAD /api/cards/fields",
 					"url": "/api/cards/fields",
 					"description": "Returns a list of all card properties",
 					"statusCodes": [
@@ -57,7 +57,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/filters",
+					"name": "GET or HEAD /api/cards/filters",
 					"url": "/api/cards/filters",
 					"description": "Returns a list of valid card properties to filter cards by",
 					"statusCodes": [
@@ -72,7 +72,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/all",
+					"name": "GET or HEAD /api/cards/all",
 					"url": "/api/cards/all",
 					"description": "Returns all of the cards in the database in json format",
 					"statusCodes": [
@@ -87,7 +87,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/random",
+					"name": "GET or HEAD /api/cards/random",
 					"url": "/api/cards/random",
 					"description": "Returns a random card in the database as a json object",
 					"statusCodes": [
@@ -102,7 +102,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/recent",
+					"name": "GET or HEAD /api/cards/recent",
 					"url": "/api/cards/recent",
 					"description": "Returns the last card in the database as a json object",
 					"statusCodes": [
@@ -117,7 +117,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/:guid([0-9a-zA-Z-]{36})",
+					"name": "GET or HEAD /api/cards/:guid([0-9a-zA-Z-]{36})",
 					"url": "/api/cards/:guid",
 					"description": "Accepts a card guid and returns the card as a json object",
 					"examples": [
@@ -135,7 +135,7 @@
 					]
 				},
 				{
-					"name": "GET /api/cards/:fieldName/:value",
+					"name": "GET or HEAD /api/cards/:fieldName/:value",
 					"url": "/api/cards/:fieldName/:value",
 					"description": "Accepts a filter field name and a value and returns all cards that match the filter",
 					"examples": [
