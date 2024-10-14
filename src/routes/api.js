@@ -31,12 +31,36 @@ router.get('/fields', (req, res) => {
         res.status(404).send({ message: 'No field names found' });
     }
 });
-
+router.head('/filters', (req, res) => {
+    if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(db.VALID_FILTER_NAMES).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
 router.get('/filters', (req, res) => {
     if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
         res.status(200).json(db.VALID_FILTER_NAMES);
     } else {
         res.status(404).send({ message: 'No field names found' });
+    }
+});
+router.head('/all', (req, res) => {
+    const cards = db.getAllCards();
+    if (cards && cards.length > 0) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(cards).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
     }
 });
 
@@ -49,7 +73,19 @@ router.get('/all', (req, res) => {
         res.status(404).send({ message: 'No cards found' });
     }
 });
-
+router.head('/random', (req, res) => {
+    const card = db.getRandomCard();
+    if (card) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(card).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
 // random card
 router.get('/random', (req, res) => {
     const card = db.getRandomCard();
@@ -59,7 +95,19 @@ router.get('/random', (req, res) => {
         res.status(404).send({ message: 'No card found' });
     }
 });
-
+router.head('/recent', (req, res) => {
+    const card = db.getRecentCard();
+    if (card) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(card).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
 // last card in the list
 router.get('/recent', (req, res) => {
     const card = db.getRecentCard();
@@ -67,6 +115,20 @@ router.get('/recent', (req, res) => {
         res.status(200).json(card);
     } else {
         res.status(404).send({ message: 'No card found' });
+    }
+});
+router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+    const { guid } = req.params;
+    const card = db.getCardById(guid);
+    if (card) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(card).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
     }
 });
 // /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
@@ -79,11 +141,7 @@ router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
 });
-
-// dynamic endpoint that accepts a field name and value to find cards
-router.get('/:fieldName/:value', (req, res) => {
-    const { fieldName, value } = req.params;
-
+const handleFilterEndpoint = (res, fieldName, value) => {
     // validate field name
     const invalidFields = validateFieldNames([fieldName]);
     // if invalid field name, return 400
@@ -91,10 +149,30 @@ router.get('/:fieldName/:value', (req, res) => {
         res.status(400).send({
             message: `Invalid field name: ${invalidFields.join(', ')}`,
         });
-        return;
+        return null;
     }
     // get cards by field name and value
-    const cards = db.getCardsByField(fieldName, value);
+    return db.getCardsByField(fieldName, value);
+};
+router.head('/:fieldName/:value', (req, res) => {
+    const { fieldName, value } = req.params;
+    const cards = handleFilterEndpoint(res, fieldName, value);
+
+    if (cards && cards.length > 0) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(cards).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
+// dynamic endpoint that accepts a field name and value to find cards
+router.get('/:fieldName/:value', (req, res) => {
+    const { fieldName, value } = req.params;
+    const cards = handleFilterEndpoint(res, fieldName, value);
 
     if (cards && cards.length > 0) {
         res.status(200).json(cards);
@@ -103,14 +181,13 @@ router.get('/:fieldName/:value', (req, res) => {
     }
 });
 
-// dynamic endpoint that accepts query parameters to find cards
-router.get('/', (req, res) => {
+const handleFilter = (req, res) => {
     const filters = req.query;
     const filterKeys = Object.keys(filters).map((key) => key.toLowerCase()); // case-insensitive
 
     if (filterKeys.length === 0) {
         res.status(400).send({ message: 'No query parameters provided' });
-        return;
+        return null;
     }
 
     // Get nested key values by splitting on '.' and handle multiple values
@@ -131,7 +208,24 @@ router.get('/', (req, res) => {
     });
 
     // get cards by query parameters
-    const cards = db.getCardsByFilters(normalizedFilters);
+    return db.getCardsByFilters(normalizedFilters);
+};
+router.head('/', (req, res) => {
+    const cards = handleFilter(req, res);
+    if (cards && cards.length > 0) {
+        res.set({
+            'Content-Type': 'application/json',
+            'Content-Length': JSON.stringify(cards).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
+// dynamic endpoint that accepts query parameters to find cards
+router.get('/', (req, res) => {
+    const cards = handleFilter(req, res);
 
     if (cards && cards.length > 0) {
         res.status(200).json(cards);
