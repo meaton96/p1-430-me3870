@@ -21,7 +21,7 @@
 				{
 					"name": "GET or HEAD /api/cards",
 					"url": "/api/cards",
-					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties",
+					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties, Accepts JSON or XML headers",
 					"examples": [
 						"/api/cards?Team=Blue",
 						"/api/cards?Method=AddEffect&Target=Facility"
@@ -74,7 +74,7 @@
 				{
 					"name": "GET or HEAD /api/cards/all",
 					"url": "/api/cards/all",
-					"description": "Returns all of the cards in the database in json format",
+					"description": "Returns all of the cards in the database. Accepts JSON, XML, and CSV headers.",
 					"statusCodes": [
 						{
 							"code": 200,
@@ -89,7 +89,7 @@
 				{
 					"name": "GET or HEAD /api/cards/random",
 					"url": "/api/cards/random",
-					"description": "Returns a random card in the database as a json object",
+					"description": "Returns a random card in the database. Accepts JSON or XML headers.",
 					"statusCodes": [
 						{
 							"code": 200,
@@ -104,7 +104,7 @@
 				{
 					"name": "GET or HEAD /api/cards/recent",
 					"url": "/api/cards/recent",
-					"description": "Returns the last card in the database as a json object",
+					"description": "Returns the last card in the database. Accepts JSON or XML headers.",
 					"statusCodes": [
 						{
 							"code": 200,
@@ -119,7 +119,7 @@
 				{
 					"name": "GET or HEAD /api/cards/:guid([0-9a-zA-Z-]{36})",
 					"url": "/api/cards/:guid",
-					"description": "Accepts a card guid and returns the card as a json object",
+					"description": "Accepts a card guid and returns the card. Accepts JSON or XML headers.",
 					"examples": [
 						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
 					],
@@ -137,7 +137,7 @@
 				{
 					"name": "GET or HEAD /api/cards/:fieldName/:value",
 					"url": "/api/cards/:fieldName/:value",
-					"description": "Accepts a filter field name and a value and returns all cards that match the filter",
+					"description": "Accepts a filter field name and a value and returns all cards that match the filter. Accepts JSON or XML headers.",
 					"examples": [
 						"/api/cards/Method/AddEffect"
 					],
