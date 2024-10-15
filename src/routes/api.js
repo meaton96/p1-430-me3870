@@ -8,6 +8,123 @@ const validateFieldNames = (fieldNames) => {
     );
     return invalidFields;
 };
+// const getDefaultCard = () => ({
+//     Team: 'Blue',
+//     Duplication: 0,
+//     Target: 'None',
+//     SectorsAffected: 'Any',
+//     TargetAmount: 0,
+//     Title: '',
+//     AssetInfo: {
+//         imgRow: 0,
+//         imgCol: 0,
+//         bgRow: 0,
+//         bgCol: 0,
+//         imgLocation: '',
+//     },
+//     Cost: {
+//         BlueCost: 0,
+//         BlackCost: 0,
+//         PurpleCost: 0,
+//     },
+//     FlavourText: '',
+//     Description: '',
+//     GUID: '',
+//     Action: {
+//         Method: 'None',
+//         MeeplesChanged: 0,
+//         MeepleIChange: 0,
+//         PrerequisiteEffect: '',
+//         Duration: 0,
+//         CardsDrawn: 0,
+//         CardsRemoved: 0,
+//         DiceRoll: 0,
+//         EffectCount: 0,
+//         Effects: [],
+//     },
+//     DoomEffect: false,
+// });
+
+const convertCardToCSV = (card) => {
+    // Extract necessary fields from the card object
+    const {
+        Team,
+        Duplication,
+        Target,
+        SectorsAffected,
+        TargetAmount,
+        Title,
+        AssetInfo,
+        Cost,
+        FlavourText,
+        Description,
+        GUID,
+        Action,
+        DoomEffect,
+    } = card;
+
+    // Create CSV line based on the image structure you provided
+    let csvLine = `${Team},${Duplication},${Action.Method},${Target},${SectorsAffected},`;
+    csvLine += `${TargetAmount},${Title},${AssetInfo.imgRow},${AssetInfo.imgCol},${AssetInfo.bgCol},${AssetInfo.bgRow},`;
+    csvLine += `${Cost.BlueCost},${Cost.BlackCost},${Cost.PurpleCost},${Action.MeeplesChanged},${Action.MeepleIChange},`;
+    csvLine += `${Action.PrerequisiteEffect},${Action.Duration},${Action.CardsDrawn},${Action.CardsRemoved},`;
+    csvLine += `${Action.DiceRoll},${Action.EffectCount},${DoomEffect ? 'Yes' : 'No'},`;
+    csvLine += `${Description},${FlavourText},${AssetInfo.imgLocation},${GUID}`;
+
+    return csvLine;
+};
+
+const getXMLCard = (card) => {
+    let xml = '<card>\n';
+    xml += `<Team>${card.Team}</Team>\n`;
+    xml += `<Duplication>${card.Duplication}</Duplication>\n`;
+    xml += `<Target>${card.Target}</Target>\n`;
+    xml += `<SectorsAffected>${card.SectorsAffected}</SectorsAffected>\n`;
+    xml += `<TargetAmount>${card.TargetAmount}</TargetAmount>\n`;
+    xml += `<Title>${card.Title}</Title>\n`;
+
+    xml += '<AssetInfo>\n';
+    xml += `<imgRow>${card.AssetInfo.imgRow}</imgRow>\n`;
+    xml += `<imgCol>${card.AssetInfo.imgCol}</imgCol>\n`;
+    xml += `<bgRow>${card.AssetInfo.bgRow}</bgRow>\n`;
+    xml += `<bgCol>${card.AssetInfo.bgCol}</bgCol>\n`;
+    xml += `<imgLocation>${card.AssetInfo.imgLocation}</imgLocation>\n`;
+    xml += '</AssetInfo>\n';
+
+    xml += '<Cost>\n';
+    xml += `<BlueCost>${card.Cost.BlueCost}</BlueCost>\n`;
+    xml += `<BlackCost>${card.Cost.BlackCost}</BlackCost>\n`;
+    xml += `<PurpleCost>${card.Cost.PurpleCost}</PurpleCost>\n`;
+    xml += '</Cost>\n';
+
+    xml += `<FlavourText>${card.FlavourText}</FlavourText>\n`;
+    xml += `<Description>${card.Description}</Description>\n`;
+    xml += `<GUID>${card.GUID}</GUID>\n`;
+
+    xml += '<Action>\n';
+    xml += `<Method>${card.Action.Method}</Method>\n`;
+    xml += `<MeeplesChanged>${card.Action.MeeplesChanged}</MeeplesChanged>\n`;
+    xml += `<MeepleIChange>${card.Action.MeepleIChange}</MeepleIChange>\n`;
+    xml += `<PrerequisiteEffect>${card.Action.PrerequisiteEffect}</PrerequisiteEffect>\n`;
+    xml += `<Duration>${card.Action.Duration}</Duration>\n`;
+    xml += `<CardsDrawn>${card.Action.CardsDrawn}</CardsDrawn>\n`;
+    xml += `<CardsRemoved>${card.Action.CardsRemoved}</CardsRemoved>\n`;
+    xml += `<DiceRoll>${card.Action.DiceRoll}</DiceRoll>\n`;
+    xml += `<EffectCount>${card.Action.EffectCount}</EffectCount>\n`;
+
+    xml += '<Effects>\n';
+    card.Action.Effects.forEach((effect) => {
+        xml += `<EffectID>${effect.EffectID}</EffectID>\n`;
+    });
+    xml += '</Effects>\n';
+
+    xml += `<DoomEffect>${card.DoomEffect}</DoomEffect>\n`;
+    xml += '</Action>\n';
+
+    xml += '</card>';
+
+    return xml;
+};
 // GET/HEAD
 
 // Helper function to validate field names
@@ -50,12 +167,26 @@ router.get('/filters', (req, res) => {
         res.status(404).send({ message: 'No field names found' });
     }
 });
-router.head('/all', (req, res) => {
+const convertCardsToXML = (cards) => `<cards>\n${cards.map((card) => getXMLCard(card)).join('')}\n</cards>`;
+const handleAllCards = (req) => {
     const cards = db.getAllCards();
-    if (cards && cards.length > 0) {
+    let formattedCards = cards;
+    let contentType = 'application/json';
+    if (req.get('Accept') === 'application/xml') {
+        contentType = 'application/xml';
+        formattedCards = convertCardsToXML(cards);
+    } else if (req.get('Accept') === 'text/csv') {
+        contentType = 'text/csv';
+        formattedCards = cards.map((card) => convertCardToCSV(card)).join('\n');
+    }
+    return { formattedCards, contentType };
+};
+router.head('/all', (req, res) => {
+    const { formattedCards, contentType } = handleAllCards(req);
+    if (formattedCards && formattedCards.length > 0) {
         res.set({
-            'Content-Type': 'application/json',
-            'Content-Length': JSON.stringify(cards).length,
+            'Content-Type': contentType,
+            'Content-Length': JSON.stringify(formattedCards).length,
             'X-Coder': 'ME',
         });
         res.end();
@@ -63,21 +194,30 @@ router.head('/all', (req, res) => {
         res.status(404).end();
     }
 });
-
 // full list of cards
 router.get('/all', (req, res) => {
-    const cards = db.getAllCards();
-    if (cards && cards.length > 0) {
-        res.status(200).json(cards);
+    const { formattedCards } = handleAllCards(req);
+    // res.setHeaders('Content-Type', contentType);
+    if (formattedCards && formattedCards.length > 0) {
+        res.status(200).send(formattedCards);
     } else {
         res.status(404).send({ message: 'No cards found' });
     }
 });
+const handleSingleCard = (req, card) => {
+    let contentType = 'application/json';
+    let newCard = card;
+    if (req.get('Accept') === 'application/xml') {
+        contentType = 'application/xml';
+        newCard = getXMLCard(card);
+    }
+    return { newCard, contentType };
+};
 router.head('/random', (req, res) => {
-    const card = db.getRandomCard();
+    const { card, contentType } = handleSingleCard(req, db.getRandomCard());
     if (card) {
         res.set({
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
             'Content-Length': JSON.stringify(card).length,
             'X-Coder': 'ME',
         });
@@ -88,18 +228,18 @@ router.head('/random', (req, res) => {
 });
 // random card
 router.get('/random', (req, res) => {
-    const card = db.getRandomCard();
+    const { card } = handleSingleCard(req, db.getRandomCard());
     if (card) {
-        res.status(200).json(card);
+        res.status(200).send(card);
     } else {
         res.status(404).send({ message: 'No card found' });
     }
 });
 router.head('/recent', (req, res) => {
-    const card = db.getRecentCard();
+    const { card, contentType } = handleSingleCard(req, db.getRecentCard());
     if (card) {
         res.set({
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
             'Content-Length': JSON.stringify(card).length,
             'X-Coder': 'ME',
         });
@@ -110,19 +250,19 @@ router.head('/recent', (req, res) => {
 });
 // last card in the list
 router.get('/recent', (req, res) => {
-    const card = db.getRecentCard();
+    const { card } = handleSingleCard(req, db.getRecentCard());
     if (card) {
-        res.status(200).json(card);
+        res.status(200).send(card);
     } else {
         res.status(404).send({ message: 'No card found' });
     }
 });
 router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
-    const card = db.getCardById(guid);
+    const { card, contentType } = handleSingleCard(req, db.getCardById(guid));
     if (card) {
         res.set({
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
             'Content-Length': JSON.stringify(card).length,
             'X-Coder': 'ME',
         });
@@ -134,9 +274,9 @@ router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
 // /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
 router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
-    const card = db.getCardById(guid);
+    const { card } = handleSingleCard(req, db.getCardById(guid));
     if (card) {
-        res.status(200).json(card);
+        res.status(200).send(card);
     } else {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
@@ -156,11 +296,15 @@ const handleFilterEndpoint = (res, fieldName, value) => {
 };
 router.head('/:fieldName/:value', (req, res) => {
     const { fieldName, value } = req.params;
-    const cards = handleFilterEndpoint(res, fieldName, value);
-
+    let cards = handleFilterEndpoint(res, fieldName, value);
+    let contentType = 'application/json';
+    if (req.get('Accept') === 'application/xml') {
+        contentType = 'application/xml';
+        cards = convertCardsToXML(cards);
+    }
     if (cards && cards.length > 0) {
         res.set({
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
             'Content-Length': JSON.stringify(cards).length,
             'X-Coder': 'ME',
         });
@@ -173,9 +317,12 @@ router.head('/:fieldName/:value', (req, res) => {
 router.get('/:fieldName/:value', (req, res) => {
     const { fieldName, value } = req.params;
     const cards = handleFilterEndpoint(res, fieldName, value);
-
-    if (cards && cards.length > 0) {
-        res.status(200).json(cards);
+    let formattedCards = cards;
+    if (req.get('Accept') === 'application/xml') {
+        formattedCards = convertCardsToXML(cards);
+    }
+    if (formattedCards && formattedCards.length > 0) {
+        res.status(200).send(formattedCards);
     } else {
         res.status(404).send({ message: `No cards found with ${fieldName} matching ${value}` });
     }
@@ -207,14 +354,21 @@ const handleFilter = (req, res) => {
         }
     });
 
+    if (req.get('Accept') === 'application/xml') {
+        return convertCardsToXML(db.getCardsByFilters(normalizedFilters));
+    }
     // get cards by query parameters
     return db.getCardsByFilters(normalizedFilters);
 };
 router.head('/', (req, res) => {
     const cards = handleFilter(req, res);
+    let contentType = 'application/json';
+    if (req.get('Accept') === 'application/xml') {
+        contentType = 'application/xml';
+    }
     if (cards && cards.length > 0) {
         res.set({
-            'Content-Type': 'application/json',
+            'Content-Type': contentType,
             'Content-Length': JSON.stringify(cards).length,
             'X-Coder': 'ME',
         });
@@ -226,9 +380,8 @@ router.head('/', (req, res) => {
 // dynamic endpoint that accepts query parameters to find cards
 router.get('/', (req, res) => {
     const cards = handleFilter(req, res);
-
     if (cards && cards.length > 0) {
-        res.status(200).json(cards);
+        res.status(200).send(cards);
     } else {
         res.status(404).send({ message: 'No cards found matching the query parameters' });
     }
@@ -277,7 +430,7 @@ router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         const tempCard = db.updateCard(guid, cardData);
 
         if (tempCard != null) {
-            res.status(200).json(tempCard);
+            res.status(200).send(tempCard);
         } else {
             console.log('sending 500');
             res.status(500).send({ message: 'Failed to update card' });
