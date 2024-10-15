@@ -297,7 +297,7 @@ function CardModal({ card,
         const handleRemoveEffect = (index) => {
             const updatedEffects = [...editedCard.Action.Effects];
             updatedEffects.splice(index, 1); // Remove the effect at the given index
-
+            setFieldChanged(true);
             setEditedCard((prev) => ({
                 ...prev,
                 Action: {
@@ -312,6 +312,7 @@ function CardModal({ card,
         // Add an effect to the card
         const handleAddEffect = (effectID) => {
             if (!editedCard.Action.Effects.includes(effectID)) {
+                setFieldChanged(true);
                 setEditedCard((prev) => ({
                     ...prev,
                     Action: {
