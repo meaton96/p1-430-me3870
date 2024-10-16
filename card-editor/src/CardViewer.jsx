@@ -55,9 +55,10 @@ function CardViewer() {
 
 	return (
 		<div className='container'>
+			
 			{/* <h1 className='title has-text-centered py-2'>Card Viewer</h1> */}
-			<div className='columns is flex pt-1'>
-				<span className='column is-one-third mx-1'>{apiUrl}</span>
+			<div className='columns is-flex p-2 m-1'>
+				<span className='column is-one-third mx-1 is-flex is-align-items-center'>{apiUrl}</span>
 				<span className='column is-one-third mx-1 has-text-centered'>
 					<button
 						className='button is-primary'
@@ -65,14 +66,14 @@ function CardViewer() {
 				</span>
 				<span className='column is-one-third mx-1'>
 					<input
-						className='input has-text-right'
+						className='input has-text-right mr-4'
 						type='text'
 						placeholder='Search by title'
 						onChange={(e) => setSearchString(e.target.value)}
 					/>
 				</span>
 			</div>
-			<hr />
+			
 
 			<div className='columns'>
 				<FilterMenu selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />

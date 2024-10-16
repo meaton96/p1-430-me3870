@@ -326,7 +326,7 @@
             "DiceRoll": -1,
             "EffectCount": 1,
             "Effects": [
-                "mod-all-1"
+                "modp-all-1"
             ]
         },
         "DoomEffect": false
@@ -527,7 +527,7 @@
     {
         "Team": "Blue",
         "Duplication": 4,
-        "Target": "Facility",
+        "Target": "Sector",
         "SectorsAffected": "Any",
         "TargetAmount": 1,
         "Title": "Friendly Restore",
@@ -557,7 +557,7 @@
             "DiceRoll": -1,
             "EffectCount": 1,
             "Effects": [
-                "mod-all-1"
+                "modp-all-1"
             ]
         },
         "DoomEffect": true
@@ -672,7 +672,7 @@
             "EffectCount": 2,
             "Effects": [
                 "remove",
-                "mod-all-1"
+                "modp-all-1"
             ]
         },
         "DoomEffect": false
@@ -821,7 +821,7 @@
             "DiceRoll": -1,
             "EffectCount": 1,
             "Effects": [
-                "modpn-fin-2"
+                "modpn-net-2"
             ]
         },
         "DoomEffect": false
@@ -1654,7 +1654,7 @@
           "PurpleCost": 1
         },
         "FlavourText": "Deploy a decoy system to trap attackers.",
-        "Description": "Place a Honey Pot effect on one of your facilities for 3 turns. If the red player plays a card targeting this facility, cancel their effect and they discard a random card.",
+        "Description": "Place a Honey Pot effect on one of your facilities for 3 turns. If the red player plays a card targeting this facility cancel their effect and they discard a random card.",
         "GUID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         "Action": {
           "Method": "AddEffect",
@@ -1667,7 +1667,7 @@
           "DiceRoll": -1,
           "EffectCount": 1,
           "Effects": [
-            "honey-pot"
+            "honeypot"
           ]
         },
         "DoomEffect": false
@@ -1692,7 +1692,7 @@
           "PurpleCost": 1
         },
         "FlavourText": "Test for vulnerabilities.",
-        "Description": "Choose a facility to test for vulnerabilties, it gains 1 temporary maximum physical and network point.",
+        "Description": "Choose a facility to test for vulnerabilties it gains 1 temporary maximum physical and network point.",
         "GUID": "a1b233d4-e5f6-7890-abcd-ef1234567890",
         "Action": {
           "Method": "AddEffect",
@@ -1731,7 +1731,7 @@
           "PurpleCost": 1
         },
         "FlavourText": "Test for vulnerabilities.",
-        "Description": "Deploy a white hat hacker to your facility. If the facility has a backdoor, reduce the remaining turns by 2",
+        "Description": "Deploy a white hat hacker to your facility. If the facility has a backdoor reduce the remaining turns by 2",
         "GUID": "a1b233d4-e5f6-7890-abcd-gf1234567890",
         "Action": {
           "Method": "ReduceRemainingTurns",

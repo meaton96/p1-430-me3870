@@ -46,7 +46,6 @@ const validateFieldNames = (fieldNames) => {
 // });
 
 const convertCardToCSV = (card) => {
-    // Extract necessary fields from the card object
     const {
         Team,
         Duplication,
@@ -63,15 +62,68 @@ const convertCardToCSV = (card) => {
         DoomEffect,
     } = card;
 
+    const convertEffects = (effects) => {
+        if (!Array.isArray(effects)) {
+            return 'None';
+        }
+
+        let effectString = '';
+
+        const effectTypes = [];
+        const effectTargets = [];
+        let mag;
+
+        effects.forEach((effect) => {
+            const effectPieces = effect.split('-');
+            if (effectPieces.length === 1) {
+                effectTypes.push(effectPieces[0].charAt(0).toUpperCase()
+                    + effectPieces[0].slice(1));
+            } else {
+                const [type, target, magnitude] = effectPieces;
+                let typePiece = type;
+                if (type === 'modpn') {
+                    typePiece = type.slice(0, -1);
+                    mag = `-${magnitude}`;
+                } else if (type === 'modppt') {
+                    mag = `-${magnitude}`;
+                } else {
+                    mag = magnitude;
+                }
+                effectTypes.push(typePiece);
+                effectTargets.push(target);
+            }
+        });
+
+        // Remove duplicates from effectTypes
+        const uEffectTypes = [...new Set(effectTypes)];
+
+        effectString += `${uEffectTypes.join('&')};`;
+        if (effectTargets.length > 0) effectString += `${effectTargets.join('&')};${mag}`;
+        else {
+            return effectString.slice(0, -1); // remove trailing semicolon
+        }
+        return effectString;
+    };
+
     // Create CSV line based on the image structure you provided
     let csvLine = `${Team},${Duplication},${Action.Method},${Target},${SectorsAffected},`;
     csvLine += `${TargetAmount},${Title},${AssetInfo.imgRow},${AssetInfo.imgCol},${AssetInfo.bgCol},${AssetInfo.bgRow},`;
-    csvLine += `${Cost.BlueCost},${Cost.BlackCost},${Cost.PurpleCost},${Action.MeeplesChanged},${Action.MeepleIChange},`;
-    csvLine += `${Action.PrerequisiteEffect},${Action.Duration},${Action.CardsDrawn},${Action.CardsRemoved},`;
-    csvLine += `${Action.DiceRoll},${Action.EffectCount},${DoomEffect ? 'Yes' : 'No'},`;
-    csvLine += `${Description},${FlavourText},${AssetInfo.imgLocation},${GUID}`;
+    csvLine += `${Action.MeeplesChanged},${Action.MeepleIChange},`;
+    csvLine += `${Cost.BlueCost},${Cost.BlackCost},${Cost.PurpleCost},0,`;
+    csvLine += `${Action.CardsDrawn},${Action.CardsRemoved},${Action.EffectCount > 0 ? convertEffects(Action.Effects) : 'None'},`;
+    csvLine += `${Action.EffectCount},${Action.PrerequisiteEffect},${Action.Duration},`;
+    csvLine += `${DoomEffect ? 'TRUE' : 'FALSE'},${Action.DiceRoll},${FlavourText},`;
+    csvLine += `${Description},images/${AssetInfo.imgLocation},${GUID}`;
 
     return csvLine;
+};
+const convertAllCardsToCSV = (cards) => {
+    let csvHeaders = 'Team,Duplication,Method,Target,SectorsAffected,TargetAmount,';
+    csvHeaders += 'Title,imgRow,imgCol,bgCol,bgRow,MeeplesChanged,MeepleIChange,';
+    csvHeaders += 'BlueCost,BlackCost,PurpleCost,FacilityPoint,CardsDrawn,';
+    csvHeaders += 'CardsRemoved,Effect,EffectCount,PrerequisiteEffect,Duration,';
+    csvHeaders += 'DoomEffect,DiceRoll,FlavourText,Description,imgLocation,GUID\n';
+    return csvHeaders + cards.map((card) => convertCardToCSV(card)).join('\n');
 };
 
 const getXMLCard = (card) => {
@@ -177,7 +229,7 @@ const handleAllCards = (req) => {
         formattedCards = convertCardsToXML(cards);
     } else if (req.get('Accept') === 'text/csv') {
         contentType = 'text/csv';
-        formattedCards = cards.map((card) => convertCardToCSV(card)).join('\n');
+        formattedCards = convertAllCardsToCSV(cards);
     }
     return { formattedCards, contentType };
 };
@@ -210,8 +262,11 @@ const handleSingleCard = (req, card) => {
     if (req.get('Accept') === 'application/xml') {
         contentType = 'application/xml';
         newCard = getXMLCard(card);
+    } else if (req.get('Accept') === 'text/csv') {
+        contentType = 'text/csv';
+        newCard = convertCardToCSV(card);
     }
-    return { newCard, contentType };
+    return { card: newCard, contentType };
 };
 router.head('/random', (req, res) => {
     const { card, contentType } = handleSingleCard(req, db.getRandomCard());
@@ -260,6 +315,7 @@ router.get('/recent', (req, res) => {
 router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
     const { card, contentType } = handleSingleCard(req, db.getCardById(guid));
+
     if (card) {
         res.set({
             'Content-Type': contentType,
@@ -432,7 +488,6 @@ router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         if (tempCard != null) {
             res.status(200).send(tempCard);
         } else {
-            console.log('sending 500');
             res.status(500).send({ message: 'Failed to update card' });
         }
     } else {
