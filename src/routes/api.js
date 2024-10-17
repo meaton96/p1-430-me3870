@@ -170,6 +170,41 @@ router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
 });
+router.head('/name/:name', (req, res) => {
+    const { name } = req.params;
+    const cards = db.getPartialNameMatches(name);
+    let contentType = 'application/json';
+    if (req.get('Accept') === 'application/xml') {
+        contentType = 'application/xml';
+    } else if (req.get('Accept') === 'text/csv') {
+        contentType = 'text/csv';
+    }
+    if (cards && cards.length > 0) {
+        res.set({
+            'Content-Type': contentType,
+            'Content-Length': JSON.stringify(cards).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+});
+router.get('/name/:name', (req, res) => {
+    const { name } = req.params;
+    const cards = db.getPartialNameMatches(name);
+    let formattedCards = cards;
+    if (req.get('Accept') === 'application/xml') {
+        formattedCards = util.convertCardsToXML(cards);
+    } else if (req.get('Accept') === 'text/csv') {
+        formattedCards = util.convertAllCardsToCSV(cards);
+    }
+    if (formattedCards && formattedCards.length > 0) {
+        res.status(200).send(formattedCards);
+    } else {
+        res.status(404).send({ message: `No cards found with name containing ${name}` });
+    }
+});
 const handleFilterEndpoint = (res, fieldName, value) => {
     // validate field name
     const invalidFields = validateFieldNames([fieldName]);

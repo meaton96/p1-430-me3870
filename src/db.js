@@ -48,7 +48,7 @@ const getRandomCard = () => {
     return card ? util.getCardDeepCopy(card) : null;
 };
 const getPartialNameMatches = (name) => getAllCards()
-        .filter((card) => card.Title.toLowerCase()
+    .filter((card) => card.Title.toLowerCase()
         .includes(name.toLowerCase()));
 
 // Get cards by a specific field
