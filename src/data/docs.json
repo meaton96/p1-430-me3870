@@ -155,6 +155,24 @@
 							"description": "If the field name is not a valid field name"
 						}
 					]
+				},
+				{
+					"name": "GET or HEAD /api/cards/name/:name",
+					"url": "/api/cards/name/:name",
+					"description": "Accepts a card name and returns all partial matches. Accepts JSON or XML headers.",
+					"examples": [
+						"/api/cards/name/meeting"
+					],
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						},
+						{
+							"code": 404,
+							"description": "If no card is found with the given guid"
+						}
+					]
 				}
 			],
 			"POST": [
