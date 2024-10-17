@@ -61,8 +61,13 @@ function CardViewer() {
 				<span className='column is-one-third mx-1 is-flex is-align-items-center'>{apiUrl}</span>
 				<span className='column is-one-third mx-1 has-text-centered'>
 					<button
-						className='button is-primary'
-						onClick={handleAddNewCardClick}>Add New Card</button>
+						className='button is-primary mx-2'
+						onClick={handleAddNewCardClick}>Add New Card
+						</button>
+						<button
+						className='button is-secondary mx-2'
+						onClick={() => setSelectedFilters([])}>Clear Filters
+						</button>
 				</span>
 				<span className='column is-one-third mx-1'>
 					<input
@@ -70,6 +75,7 @@ function CardViewer() {
 						type='text'
 						placeholder='Search by title'
 						onChange={(e) => setSearchString(e.target.value)}
+						
 					/>
 				</span>
 			</div>

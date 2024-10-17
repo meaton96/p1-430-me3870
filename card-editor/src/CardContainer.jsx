@@ -25,21 +25,25 @@ function CardContainer({ selectedFilters,
 	// Fetch the cards based on the selected filters
 	useEffect(() => {
 		const fetchCards = async () => {
-			setLoading(true);
+			setLoading(true); // Set loading state
 			try {
-				// Construct a query URL from the selected filters
-				const queryParams = new URLSearchParams();
-				for (const [field, values] of Object.entries(selectedFilters)) {
-					if (values.length > 0) {
-						queryParams.append(field, values.join(','));
+				let url = '';
+				//use the searchbox > filter
+				if (searchString) {
+					url = `/api/cards/name/${searchString}`;
+				} else {
+					const queryParams = new URLSearchParams();
+					for (const [field, values] of Object.entries(selectedFilters)) {
+						if (values.length > 0) {
+							queryParams.append(field, values.join(','));
+						}
 					}
+					url = queryParams.toString()
+						? `/api/cards?${queryParams.toString()}`
+						: '/api/cards/all';
 				}
-				// Convert query params to URL query string
-				const url = queryParams.toString()
-					? `/api/cards?${queryParams.toString()}`
-					: '/api/cards/all';
-				const data = await fetchJsonEndpoint(url); 
-				setApiUrl(url); // Set the API URL to display
+				const data = await fetchJsonEndpoint(url);
+				setApiUrl(url); 
 				setCards(data);
 			} catch (err) {
 				console.error('Error:', err);
@@ -49,7 +53,7 @@ function CardContainer({ selectedFilters,
 			}
 		};
 		fetchCards();
-	}, [selectedFilters]);
+	}, [selectedFilters, searchString]);
 
 	// Fetch the list of effects
 	useEffect(() => {
