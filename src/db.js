@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const util = require('./utils.js');
 
 const cardsPath = path.resolve(__dirname, 'data/card-data.json');
 const effectPath = path.resolve(__dirname, 'data/effects.json');
@@ -20,54 +21,16 @@ const VALID_FILTER_NAMES = [
     'effectcount',
     'prerequisiteeffect',
 ];
-// helper function to merge objects for PUT operations only the deeply nested json objects
-const deepMerge = (target, source) => {
-    Object.keys(source).forEach((key) => {
-        if (source[key] instanceof Object && key in target) {
-            Object.assign(source[key], deepMerge(target[key], source[key]));
-        }
-    });
-    return { ...target, ...source };
-};
-
-const getCardDeepCopy = (card) => {
-    const cardCopy = {};
-    cardCopy.Team = card.Team;
-    cardCopy.Duplication = card.Duplication;
-    cardCopy.Target = card.Target;
-    cardCopy.SectorsAffected = card.SectorsAffected;
-    cardCopy.TargetAmount = card.TargetAmount;
-    cardCopy.Title = card.Title;
-    cardCopy.FlavourText = card.FlavourText;
-    cardCopy.Description = card.Description;
-    cardCopy.GUID = card.GUID;
-    cardCopy.DoomEffect = card.DoomEffect;
-    cardCopy.AssetInfo = { ...card.AssetInfo };
-    cardCopy.Cost = { ...card.Cost };
-    cardCopy.Action = {
-        Method: card.Action.Method,
-        MeeplesChanged: card.Action.MeeplesChanged,
-        MeepleIChange: card.Action.MeepleIChange,
-        PrerequisiteEffect: card.Action.PrerequisiteEffect,
-        Duration: card.Action.Duration,
-        CardsDrawn: card.Action.CardsDrawn,
-        CardsRemoved: card.Action.CardsRemoved,
-        DiceRoll: card.Action.DiceRoll,
-        EffectCount: card.Action.EffectCount,
-        Effects: card.Action.Effects.map((effect) => effect), // just a string
-    };
-    return cardCopy;
-};
 
 // PUBLIC METHODS
 // GET
-const getAllCards = () => cards.map((card) => getCardDeepCopy(card));
+const getAllCards = () => cards.map((card) => util.getCardDeepCopy(card));
 const getAllEffects = () => effects.map((effect) => ({ ...effect }));
 
 // Get a card by GUID
 const getCardById = (guid) => {
     const card = cards.find((_card) => _card.GUID === guid);
-    return card ? getCardDeepCopy(card) : null;
+    return card ? util.getCardDeepCopy(card) : null;
 };
 const getEffectById = (id) => {
     const effect = effects.find((_effect) => _effect.EffectID === id);
@@ -76,14 +39,18 @@ const getEffectById = (id) => {
 // Get the last card in the list
 const getRecentCard = () => {
     const card = cards.slice(-1)[0];
-    return card ? getCardDeepCopy(card) : null;
+    return card ? util.getCardDeepCopy(card) : null;
 };
 
 // Get a random card
 const getRandomCard = () => {
     const card = cards[Math.floor(Math.random() * cards.length)];
-    return card ? getCardDeepCopy(card) : null;
+    return card ? util.getCardDeepCopy(card) : null;
 };
+const getPartialNameMatches = (name) => getAllCards()
+        .filter((card) => card.Title.toLowerCase()
+        .includes(name.toLowerCase()));
+
 // Get cards by a specific field
 const getCardsByField = (fieldName, value) => cards
     .filter((card) => {
@@ -93,7 +60,7 @@ const getCardsByField = (fieldName, value) => cards
         }
         return false;
     })
-    .map((card) => getCardDeepCopy(card));
+    .map((card) => util.getCardDeepCopy(card));
 
 // Get cards by multiple filters, a list of field names and values
 const getCardsByFilters = (filters) => cards
@@ -129,7 +96,7 @@ const getCardsByFilters = (filters) => cards
         }
         return false;
     }))
-    .map((card) => getCardDeepCopy(card));
+    .map((card) => util.getCardDeepCopy(card));
 
 // DELETE
 const deleteCard = (guid) => {
@@ -146,7 +113,7 @@ const updateCard = (guid, cardData) => {
     const oCard = cards[index];
     //
     if (index !== -1) {
-        const updatedCard = deepMerge(cards[index], cardData);
+        const updatedCard = util.deepMerge(cards[index], cardData);
         cards[index] = updatedCard;
 
         if (oCard === updatedCard) {
@@ -161,7 +128,7 @@ const addCard = (card) => {
     // console.log(card);
     const guid = crypto.randomUUID();
 
-    const newCard = getCardDeepCopy(card);
+    const newCard = util.getCardDeepCopy(card);
     newCard.GUID = guid;
     cards.push(newCard);
 
@@ -182,6 +149,7 @@ module.exports = {
     getEffectById,
     updateCard,
     addCard,
+    getPartialNameMatches,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

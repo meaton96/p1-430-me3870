@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('../db.js');
+const util = require('../utils.js');
 
 const router = express.Router();
 const validateFieldNames = (fieldNames) => {
@@ -8,175 +9,7 @@ const validateFieldNames = (fieldNames) => {
     );
     return invalidFields;
 };
-// const getDefaultCard = () => ({
-//     Team: 'Blue',
-//     Duplication: 0,
-//     Target: 'None',
-//     SectorsAffected: 'Any',
-//     TargetAmount: 0,
-//     Title: '',
-//     AssetInfo: {
-//         imgRow: 0,
-//         imgCol: 0,
-//         bgRow: 0,
-//         bgCol: 0,
-//         imgLocation: '',
-//     },
-//     Cost: {
-//         BlueCost: 0,
-//         BlackCost: 0,
-//         PurpleCost: 0,
-//     },
-//     FlavourText: '',
-//     Description: '',
-//     GUID: '',
-//     Action: {
-//         Method: 'None',
-//         MeeplesChanged: 0,
-//         MeepleIChange: 0,
-//         PrerequisiteEffect: '',
-//         Duration: 0,
-//         CardsDrawn: 0,
-//         CardsRemoved: 0,
-//         DiceRoll: 0,
-//         EffectCount: 0,
-//         Effects: [],
-//     },
-//     DoomEffect: false,
-// });
 
-const convertCardToCSV = (card) => {
-    const {
-        Team,
-        Duplication,
-        Target,
-        SectorsAffected,
-        TargetAmount,
-        Title,
-        AssetInfo,
-        Cost,
-        FlavourText,
-        Description,
-        GUID,
-        Action,
-        DoomEffect,
-    } = card;
-
-    const convertEffects = (effects) => {
-        if (!Array.isArray(effects)) {
-            return 'None';
-        }
-
-        let effectString = '';
-
-        const effectTypes = [];
-        const effectTargets = [];
-        let mag;
-
-        effects.forEach((effect) => {
-            const effectPieces = effect.split('-');
-            if (effectPieces.length === 1) {
-                effectTypes.push(effectPieces[0].charAt(0).toUpperCase()
-                    + effectPieces[0].slice(1));
-            } else {
-                const [type, target, magnitude] = effectPieces;
-                let typePiece = type;
-                if (type === 'modpn') {
-                    typePiece = type.slice(0, -1);
-                    mag = `-${magnitude}`;
-                } else if (type === 'modppt') {
-                    mag = `-${magnitude}`;
-                } else {
-                    mag = magnitude;
-                }
-                effectTypes.push(typePiece);
-                effectTargets.push(target);
-            }
-        });
-
-        // Remove duplicates from effectTypes
-        const uEffectTypes = [...new Set(effectTypes)];
-
-        effectString += `${uEffectTypes.join('&')};`;
-        if (effectTargets.length > 0) effectString += `${effectTargets.join('&')};${mag}`;
-        else {
-            return effectString.slice(0, -1); // remove trailing semicolon
-        }
-        return effectString;
-    };
-
-    // Create CSV line based on the image structure you provided
-    let csvLine = `${Team},${Duplication},${Action.Method},${Target},${SectorsAffected},`;
-    csvLine += `${TargetAmount},${Title},${AssetInfo.imgRow},${AssetInfo.imgCol},${AssetInfo.bgCol},${AssetInfo.bgRow},`;
-    csvLine += `${Action.MeeplesChanged},${Action.MeepleIChange},`;
-    csvLine += `${Cost.BlueCost},${Cost.BlackCost},${Cost.PurpleCost},0,`;
-    csvLine += `${Action.CardsDrawn},${Action.CardsRemoved},${Action.EffectCount > 0 ? convertEffects(Action.Effects) : 'None'},`;
-    csvLine += `${Action.EffectCount},${Action.PrerequisiteEffect},${Action.Duration},`;
-    csvLine += `${DoomEffect ? 'TRUE' : 'FALSE'},${Action.DiceRoll},${FlavourText},`;
-    csvLine += `${Description},images/${AssetInfo.imgLocation},${GUID}`;
-
-    return csvLine;
-};
-const convertAllCardsToCSV = (cards) => {
-    let csvHeaders = 'Team,Duplication,Method,Target,SectorsAffected,TargetAmount,';
-    csvHeaders += 'Title,imgRow,imgCol,bgCol,bgRow,MeeplesChanged,MeepleIChange,';
-    csvHeaders += 'BlueCost,BlackCost,PurpleCost,FacilityPoint,CardsDrawn,';
-    csvHeaders += 'CardsRemoved,Effect,EffectCount,PrerequisiteEffect,Duration,';
-    csvHeaders += 'DoomEffect,DiceRoll,FlavourText,Description,imgLocation,GUID\n';
-    return csvHeaders + cards.map((card) => convertCardToCSV(card)).join('\n');
-};
-
-const getXMLCard = (card) => {
-    let xml = '<card>\n';
-    xml += `<Team>${card.Team}</Team>\n`;
-    xml += `<Duplication>${card.Duplication}</Duplication>\n`;
-    xml += `<Target>${card.Target}</Target>\n`;
-    xml += `<SectorsAffected>${card.SectorsAffected}</SectorsAffected>\n`;
-    xml += `<TargetAmount>${card.TargetAmount}</TargetAmount>\n`;
-    xml += `<Title>${card.Title}</Title>\n`;
-
-    xml += '<AssetInfo>\n';
-    xml += `<imgRow>${card.AssetInfo.imgRow}</imgRow>\n`;
-    xml += `<imgCol>${card.AssetInfo.imgCol}</imgCol>\n`;
-    xml += `<bgRow>${card.AssetInfo.bgRow}</bgRow>\n`;
-    xml += `<bgCol>${card.AssetInfo.bgCol}</bgCol>\n`;
-    xml += `<imgLocation>${card.AssetInfo.imgLocation}</imgLocation>\n`;
-    xml += '</AssetInfo>\n';
-
-    xml += '<Cost>\n';
-    xml += `<BlueCost>${card.Cost.BlueCost}</BlueCost>\n`;
-    xml += `<BlackCost>${card.Cost.BlackCost}</BlackCost>\n`;
-    xml += `<PurpleCost>${card.Cost.PurpleCost}</PurpleCost>\n`;
-    xml += '</Cost>\n';
-
-    xml += `<FlavourText>${card.FlavourText}</FlavourText>\n`;
-    xml += `<Description>${card.Description}</Description>\n`;
-    xml += `<GUID>${card.GUID}</GUID>\n`;
-
-    xml += '<Action>\n';
-    xml += `<Method>${card.Action.Method}</Method>\n`;
-    xml += `<MeeplesChanged>${card.Action.MeeplesChanged}</MeeplesChanged>\n`;
-    xml += `<MeepleIChange>${card.Action.MeepleIChange}</MeepleIChange>\n`;
-    xml += `<PrerequisiteEffect>${card.Action.PrerequisiteEffect}</PrerequisiteEffect>\n`;
-    xml += `<Duration>${card.Action.Duration}</Duration>\n`;
-    xml += `<CardsDrawn>${card.Action.CardsDrawn}</CardsDrawn>\n`;
-    xml += `<CardsRemoved>${card.Action.CardsRemoved}</CardsRemoved>\n`;
-    xml += `<DiceRoll>${card.Action.DiceRoll}</DiceRoll>\n`;
-    xml += `<EffectCount>${card.Action.EffectCount}</EffectCount>\n`;
-
-    xml += '<Effects>\n';
-    card.Action.Effects.forEach((effect) => {
-        xml += `<EffectID>${effect.EffectID}</EffectID>\n`;
-    });
-    xml += '</Effects>\n';
-
-    xml += `<DoomEffect>${card.DoomEffect}</DoomEffect>\n`;
-    xml += '</Action>\n';
-
-    xml += '</card>';
-
-    return xml;
-};
 // GET/HEAD
 
 // Helper function to validate field names
@@ -219,17 +52,17 @@ router.get('/filters', (req, res) => {
         res.status(404).send({ message: 'No field names found' });
     }
 });
-const convertCardsToXML = (cards) => `<cards>\n${cards.map((card) => getXMLCard(card)).join('')}\n</cards>`;
+
 const handleAllCards = (req) => {
     const cards = db.getAllCards();
     let formattedCards = cards;
     let contentType = 'application/json';
     if (req.get('Accept') === 'application/xml') {
         contentType = 'application/xml';
-        formattedCards = convertCardsToXML(cards);
+        formattedCards = util.convertCardsToXML(cards);
     } else if (req.get('Accept') === 'text/csv') {
         contentType = 'text/csv';
-        formattedCards = convertAllCardsToCSV(cards);
+        formattedCards = util.convertAllCardsToCSV(cards);
     }
     return { formattedCards, contentType };
 };
@@ -261,10 +94,10 @@ const handleSingleCard = (req, card) => {
     let newCard = card;
     if (req.get('Accept') === 'application/xml') {
         contentType = 'application/xml';
-        newCard = getXMLCard(card);
+        newCard = util.getXMLCard(card);
     } else if (req.get('Accept') === 'text/csv') {
         contentType = 'text/csv';
-        newCard = convertCardToCSV(card);
+        newCard = util.convertCardToCSV(card);
     }
     return { card: newCard, contentType };
 };
@@ -356,7 +189,7 @@ router.head('/:fieldName/:value', (req, res) => {
     let contentType = 'application/json';
     if (req.get('Accept') === 'application/xml') {
         contentType = 'application/xml';
-        cards = convertCardsToXML(cards);
+        cards = util.convertCardsToXML(cards);
     }
     if (cards && cards.length > 0) {
         res.set({
@@ -375,7 +208,7 @@ router.get('/:fieldName/:value', (req, res) => {
     const cards = handleFilterEndpoint(res, fieldName, value);
     let formattedCards = cards;
     if (req.get('Accept') === 'application/xml') {
-        formattedCards = convertCardsToXML(cards);
+        formattedCards = util.convertCardsToXML(cards);
     }
     if (formattedCards && formattedCards.length > 0) {
         res.status(200).send(formattedCards);
@@ -411,7 +244,7 @@ const handleFilter = (req, res) => {
     });
 
     if (req.get('Accept') === 'application/xml') {
-        return convertCardsToXML(db.getCardsByFilters(normalizedFilters));
+        return util.convertCardsToXML(db.getCardsByFilters(normalizedFilters));
     }
     // get cards by query parameters
     return db.getCardsByFilters(normalizedFilters);
