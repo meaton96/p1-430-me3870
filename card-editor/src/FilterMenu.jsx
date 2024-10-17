@@ -22,6 +22,30 @@ const FILTER_HEADERS = [
     'Prerequisite Effect',
 ]
 
+const PLAIN_TEXT_FIELD_MAP = {
+    "DrawAndDiscardCards": "Draw and Discard Cards",
+    "ShuffleAndDrawCards": "Shuffle and Draw Cards",
+    "ReturnHandToDeckAndDraw": "Return Hand to Deck and Draw",
+    "ReduceCardCost": "Reduce Card Cost",
+    "AddEffect": "Add Effect",
+    "SelectFacilitiesAddRemoveEffect": "Select Facilities",
+    "RemoveEffect": "Remove Effect",
+    "SpreadEffect": "Spread Effect",
+    "NWChangePhysPointsDice": "Change Sector Physical Points",
+    "NWChangeFinPointsDice": "Change Sector Financial Points",
+    "NWChangeMeepleAmtDice": "Change Sector Meeple Amount",
+    "NWChangePhysPointsDice;NWChangeFinPointsDice": "Change Sector Phys/Fin Points",
+    "NWChangeMeepleEach": "Change Single Sector Meeple",
+    "NWChangeMeepleChoice": "Change Sector Meeple Choice",
+    "NWIncOvertimeAmount": "Increase Overtime Amount",
+    "NWShuffleFromDiscard": "Shuffle from Discard",
+    "ReduceRemainingTurns": "Reduce Remaining Turns",
+}
+const PLAIN_TEXT_NAME_MAP = {
+    "White;Negative": "Negative White",
+    "White;Positive": "Positive White",
+}
+
 function FilterMenu({ selectedFilters, setSelectedFilters }) {
     const [filterData, setFilterData] = useState({});
 
@@ -96,7 +120,7 @@ function FilterMenu({ selectedFilters, setSelectedFilters }) {
                                                 handleCheckboxChange(header, value, e.target.checked)
                                             }
                                         />
-                                        <span className='px-1'>{value}</span> ({count})
+                                        <span className='px-1'>{PLAIN_TEXT_FIELD_MAP[value] || PLAIN_TEXT_NAME_MAP[value] || value}</span> ({count})
                                     </label>
                                 </li>
                             ))}

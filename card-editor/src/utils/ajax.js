@@ -9,7 +9,7 @@ const fetchJsonEndpoint = async (endpoint) => {
         });
         return await response.json();
     } catch (err) {
-        console.error('Error:', err);
+        //console.error('Error:', err);
         return { error: `Failed to load card data: ${err.message}` };
     }
 }

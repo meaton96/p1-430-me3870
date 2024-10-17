@@ -42,11 +42,12 @@ function CardContainer({ selectedFilters,
 						? `/api/cards?${queryParams.toString()}`
 						: '/api/cards/all';
 				}
-				const data = await fetchJsonEndpoint(url);
 				setApiUrl(url); 
-				setCards(data);
+				const data = await fetchJsonEndpoint(url);
+				if (data)
+					setCards(data);
 			} catch (err) {
-				console.error('Error:', err);
+				//console.error('Error:', err);
 				setError(`Failed to load card data: ${err.message}`);
 			} finally {
 				setLoading(false);
