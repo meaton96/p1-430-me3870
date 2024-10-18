@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import '../styles/Docs.css';
 
 const DocsRenderer = ({ docs }) => {
-	const [collapsedSections, setCollapsedSections] = useState({});
+		const [collapsedSections, setCollapsedSections] = useState({});
 
-	const toggleSection = (sectionName) => {
-		setCollapsedSections((prevState) => ({
-			...prevState,
-			[sectionName]: !prevState[sectionName],
-		}));
-	};
+		const toggleSection = (sectionName) => {
+			setCollapsedSections((prevState) => ({
+				...prevState,
+				[sectionName]: !prevState[sectionName],
+			}));
+		};
 
 	return (
 		<>

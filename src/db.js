@@ -47,9 +47,9 @@ const getRandomCard = () => {
     const card = cards[Math.floor(Math.random() * cards.length)];
     return card ? util.getCardDeepCopy(card) : null;
 };
-const getPartialNameMatches = (name) => getAllCards()
-    .filter((card) => card.Title.toLowerCase()
-        .includes(name.toLowerCase()));
+// const getPartialNameMatches = (name) => getAllCards()
+//     .filter((card) => card.Title.toLowerCase()
+//         .includes(name.toLowerCase()));
 
 // Get cards by a specific field
 const getCardsByField = (fieldName, value) => cards
@@ -66,6 +66,14 @@ const getCardsByField = (fieldName, value) => cards
 const getCardsByFilters = (filters) => cards
     .filter((card) => Object.keys(filters).every((key) => {
         const filterValue = filters[key];
+        // Handle partial matches for the card title
+        // console.log(filterValue, typeof filterValue);
+        if (key === 'Title') {
+            const cardTitle = card.Title?.toString().toLowerCase();
+            const filterTitle = filterValue[0].toString().toLowerCase();
+            // console.log(cardTitle, filterTitle);
+            return cardTitle && cardTitle.includes(filterTitle);
+        }
 
         // Handle nested object properties and multiple values
         if (typeof filterValue === 'object' && filterValue !== null && !Array.isArray(filterValue)) {
@@ -87,7 +95,7 @@ const getCardsByFilters = (filters) => cards
 
         const fieldValue = card[key];
         if (fieldValue !== undefined && fieldValue !== null) {
-            // Handle multiple values for non-nested filters (e.g., Action.EffectCount=1,2)
+            // Handle multiple values for non-nested filters
             return Array.isArray(filterValue)
                 ? filterValue.some((val) => fieldValue.toString().toLowerCase()
                     === val.toString().toLowerCase())
@@ -149,7 +157,7 @@ module.exports = {
     getEffectById,
     updateCard,
     addCard,
-    getPartialNameMatches,
+    // getPartialNameMatches,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

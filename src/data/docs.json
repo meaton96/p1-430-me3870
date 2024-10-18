@@ -8,9 +8,9 @@
 					"description": "This route serves the React page currently displays the card viewer page which uses almost all of the endpoints"
 				},
 				{
-					"name": "GET /docs",
-					"url": "/docs",
-					"description": "This route is handled by React Router and displays this page!"
+					"name": "GET api/docs",
+					"url": "api/docs",
+					"description": "This returns the JSON data that renders this page"
 				}
 			]
 		}
@@ -21,7 +21,7 @@
 				{
 					"name": "GET or HEAD /api/cards",
 					"url": "/api/cards",
-					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties, Accepts JSON or XML headers",
+					"description": "This is a dynamic endpoint that accepts query parameters to filter cards by any of their properties, Accepts JSON, XML, or CSV headers",
 					"examples": [
 						"/api/cards?Team=Blue",
 						"/api/cards?Method=AddEffect&Target=Facility"
@@ -89,7 +89,7 @@
 				{
 					"name": "GET or HEAD /api/cards/random",
 					"url": "/api/cards/random",
-					"description": "Returns a random card in the database. Accepts JSON or XML headers.",
+					"description": "Returns a random card in the database. Accepts JSON, XML, or CSV headers.",
 					"statusCodes": [
 						{
 							"code": 200,
@@ -104,7 +104,7 @@
 				{
 					"name": "GET or HEAD /api/cards/recent",
 					"url": "/api/cards/recent",
-					"description": "Returns the last card in the database. Accepts JSON or XML headers.",
+					"description": "Returns the last card in the database. Accepts JSON, XML, or CSV headers.",
 					"statusCodes": [
 						{
 							"code": 200,
@@ -119,7 +119,7 @@
 				{
 					"name": "GET or HEAD /api/cards/:guid([0-9a-zA-Z-]{36})",
 					"url": "/api/cards/:guid",
-					"description": "Accepts a card guid and returns the card. Accepts JSON or XML headers.",
+					"description": "Accepts a card guid and returns the card. Accepts JSON, XML, or CSV headers.",
 					"examples": [
 						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3"
 					],
@@ -137,7 +137,7 @@
 				{
 					"name": "GET or HEAD /api/cards/:fieldName/:value",
 					"url": "/api/cards/:fieldName/:value",
-					"description": "Accepts a filter field name and a value and returns all cards that match the filter. Accepts JSON or XML headers.",
+					"description": "Accepts a filter field name and a value and returns all cards that match the filter. Accepts JSON, XML, or CSV headers.",
 					"examples": [
 						"/api/cards/Method/AddEffect"
 					],
@@ -153,24 +153,6 @@
 						{
 							"code": 400,
 							"description": "If the field name is not a valid field name"
-						}
-					]
-				},
-				{
-					"name": "GET or HEAD /api/cards/name/:name",
-					"url": "/api/cards/name/:name",
-					"description": "Accepts a card name and returns all partial matches. Accepts JSON or XML headers.",
-					"examples": [
-						"/api/cards/name/meeting"
-					],
-					"statusCodes": [
-						{
-							"code": 200,
-							"description": "On success"
-						},
-						{
-							"code": 404,
-							"description": "If no card is found with the given guid"
 						}
 					]
 				}
@@ -199,7 +181,7 @@
 			"PUT": [
 				{
 					"name": "PUT /api/cards/:guid([0-9a-zA-Z-]{36})",
-					"url": "/api/:guid",
+					"url": "/api/cards/:guid",
 					"description": "Takes a card guid and a json object as a body. The body object only contains the updated properties",
 					"examples": [
 						"/api/cards/45558506-670b-444f-ac42-3006ae672ff3\nBody:\n{\n\t\"TargetAmount\": 50,\n\t\"Cost\": {\n\t\t\"BlueCost\": 9\n\t}\n}"
@@ -351,5 +333,85 @@
 				}
 			]
 		}	
-	}
+	},
+	"Links" : [
+		{
+			"name": "All Cards",
+			"url": "/api/cards/all"
+		},
+		{
+			"name": "Random Card",
+			"url": "/api/cards/random"
+		},
+		{
+			"name": "Recent",
+			"url": "/api/cards/recent"
+		},
+		{
+			"name": "By ID /api/cards/:guid",
+			"url": "/api/cards/f239b7e0-0be8-43d2-af8c-bd09b9a2abe4"
+		},
+		{
+			"name": "Exact Name /api/cards/:field/:value",
+			"url": "/api/cards/Title/Training"
+		},
+		{
+			"name": "Name partial no-case /api/cards/?Title=meeti",
+			"url": "/api/cards/?Title=meeti"
+		},
+		{
+			"name": "Card Name Not Found",
+			"url": "/api/cards/?Title=potato"
+		},
+		{
+			"name": "Missing query params",
+			"url": "/api/cards"
+		},
+		{
+			"name": "Card Viewer index + admin",
+			"url": "/"
+		},
+		{
+			"name": "No 404 page, all non /api routes redirect to /",
+			"url": "#"
+		}
+	],
+	"FrontendCalls" : [
+		{
+			"name": "GET /api/cards/all",
+			"description": "The default endpoint call of the card viewer, renders the cards using the JSON data."
+		},
+		{
+			"name": "GET /api/cards/?",
+			"description": "This is the endpoint called when using the filter or search menu. It supports multiple filters, partial name match, and OR logc when selecting multiple filters of the same type"
+		},
+		{
+			"name": "GET /api/effects/all",
+			"description": "Grabs the list of pre defined effects to add/remove from the cards."
+		},
+		{
+			"name": "GET /api/assets/card-images",
+			"description": "Gets the list of card image file names to populate the dropdown in the editor."
+		},
+		{
+			"name": "GET /api/assets/:asset",
+			"description": "Gets the file name from the card data and uses it to call the asset endpoint to return the card image."
+		},
+		{
+			"name": "GET /api/docs/",
+			"description": "Returns this page's data"
+		},
+		{
+			"name": "PUT /api/cards/:guid",
+			"description": "Called when clicking the save button in the card editor, sends the updated card data to the server. Only sends the updated fields."
+		},
+		{
+			"name": "POST /api/cards",
+			"description": "Called when clicking the save button after pressing the New Card button in the card viewer."
+		},
+		{
+			"name": "DELETE /api/cards/:guid",
+			"description": "Called when clicking the delete button in the card editor."
+		}
+	]
 }

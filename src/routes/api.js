@@ -12,8 +12,7 @@ const validateFieldNames = (fieldNames) => {
 
 // GET/HEAD
 
-// Helper function to validate field names
-
+// /api/fields returns a list of valid field names
 router.head('/fields', (req, res) => {
     if (db.VALID_FIELD_NAMES && db.VALID_FIELD_NAMES.length > 0) {
         res.set({
@@ -33,6 +32,8 @@ router.get('/fields', (req, res) => {
         res.status(404).send({ message: 'No field names found' });
     }
 });
+// /api/filters returns a list of valid filter names
+// used to render the filter menu on card viwer
 router.head('/filters', (req, res) => {
     if (db.VALID_FILTER_NAMES && db.VALID_FILTER_NAMES.length > 0) {
         res.set({
@@ -52,7 +53,7 @@ router.get('/filters', (req, res) => {
         res.status(404).send({ message: 'No field names found' });
     }
 });
-
+// /api/cards/all returns a list of all cards
 const handleAllCards = (req) => {
     const cards = db.getAllCards();
     let formattedCards = cards;
@@ -82,13 +83,13 @@ router.head('/all', (req, res) => {
 // full list of cards
 router.get('/all', (req, res) => {
     const { formattedCards } = handleAllCards(req);
-    // res.setHeaders('Content-Type', contentType);
     if (formattedCards && formattedCards.length > 0) {
         res.status(200).send(formattedCards);
     } else {
         res.status(404).send({ message: 'No cards found' });
     }
 });
+// helper function to get a single card in the proper format based on req
 const handleSingleCard = (req, card) => {
     let contentType = 'application/json';
     let newCard = card;
@@ -101,6 +102,7 @@ const handleSingleCard = (req, card) => {
     }
     return { card: newCard, contentType };
 };
+// /api/cards/random returns a random card
 router.head('/random', (req, res) => {
     const { card, contentType } = handleSingleCard(req, db.getRandomCard());
     if (card) {
@@ -114,7 +116,6 @@ router.head('/random', (req, res) => {
         res.status(404).end();
     }
 });
-// random card
 router.get('/random', (req, res) => {
     const { card } = handleSingleCard(req, db.getRandomCard());
     if (card) {
@@ -123,6 +124,7 @@ router.get('/random', (req, res) => {
         res.status(404).send({ message: 'No card found' });
     }
 });
+// /api/cards/recent returns the last card in the list
 router.head('/recent', (req, res) => {
     const { card, contentType } = handleSingleCard(req, db.getRecentCard());
     if (card) {
@@ -136,7 +138,6 @@ router.head('/recent', (req, res) => {
         res.status(404).end();
     }
 });
-// last card in the list
 router.get('/recent', (req, res) => {
     const { card } = handleSingleCard(req, db.getRecentCard());
     if (card) {
@@ -145,6 +146,7 @@ router.get('/recent', (req, res) => {
         res.status(404).send({ message: 'No card found' });
     }
 });
+// /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
 router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
     const { card, contentType } = handleSingleCard(req, db.getCardById(guid));
@@ -160,7 +162,6 @@ router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).end();
     }
 });
-// /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
 router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
     const { guid } = req.params;
     const { card } = handleSingleCard(req, db.getCardById(guid));
@@ -170,41 +171,42 @@ router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
 });
-router.head('/name/:name', (req, res) => {
-    const { name } = req.params;
-    const cards = db.getPartialNameMatches(name);
-    let contentType = 'application/json';
-    if (req.get('Accept') === 'application/xml') {
-        contentType = 'application/xml';
-    } else if (req.get('Accept') === 'text/csv') {
-        contentType = 'text/csv';
-    }
-    if (cards && cards.length > 0) {
-        res.set({
-            'Content-Type': contentType,
-            'Content-Length': JSON.stringify(cards).length,
-            'X-Coder': 'ME',
-        });
-        res.end();
-    } else {
-        res.status(404).end();
-    }
-});
-router.get('/name/:name', (req, res) => {
-    const { name } = req.params;
-    const cards = db.getPartialNameMatches(name);
-    let formattedCards = cards;
-    if (req.get('Accept') === 'application/xml') {
-        formattedCards = util.convertCardsToXML(cards);
-    } else if (req.get('Accept') === 'text/csv') {
-        formattedCards = util.convertAllCardsToCSV(cards);
-    }
-    if (formattedCards && formattedCards.length > 0) {
-        res.status(200).send(formattedCards);
-    } else {
-        res.status(404).send({ message: `No cards found with name containing ${name}` });
-    }
-});
+// router.head('/name/:name', (req, res) => {
+//     const { name } = req.params;
+//     const cards = db.getPartialNameMatches(name);
+//     let contentType = 'application/json';
+//     if (req.get('Accept') === 'application/xml') {
+//         contentType = 'application/xml';
+//     } else if (req.get('Accept') === 'text/csv') {
+//         contentType = 'text/csv';
+//     }
+//     if (cards && cards.length > 0) {
+//         res.set({
+//             'Content-Type': contentType,
+//             'Content-Length': JSON.stringify(cards).length,
+//             'X-Coder': 'ME',
+//         });
+//         res.end();
+//     } else {
+//         res.status(404).end();
+//     }
+// });
+// router.get('/name/:name', (req, res) => {
+//     const { name } = req.params;
+//     const cards = db.getPartialNameMatches(name);
+//     let formattedCards = cards;
+//     if (req.get('Accept') === 'application/xml') {
+//         formattedCards = util.convertCardsToXML(cards);
+//     } else if (req.get('Accept') === 'text/csv') {
+//         formattedCards = util.convertAllCardsToCSV(cards);
+//     }
+//     if (formattedCards && formattedCards.length > 0) {
+//         res.status(200).send(formattedCards);
+//     } else {
+//         res.status(404).send({ message: `No cards found with name containing ${name}` });
+//     }
+// });
+
 const handleFilterEndpoint = (res, fieldName, value) => {
     // validate field name
     const invalidFields = validateFieldNames([fieldName]);

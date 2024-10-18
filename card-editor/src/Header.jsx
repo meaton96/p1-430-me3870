@@ -4,7 +4,7 @@ function Header() {
     const [error, setError] = useState(null);
 
     const downloadCardData = async (format) => {
-        setError(null); 
+        setError(null);
         let acceptHeader;
         let fileExtension;
 
@@ -54,59 +54,60 @@ function Header() {
     };
 
     return (
-        <header>
+        <header className=''>
             <div className='has-text-centered pt-2'>
                 <h1 className='title'>Sector Down Card API</h1>
             </div>
-
-            <div className='container'>
+            <div className='container my-2'>
                 <nav className='navbar'>
-                    <a href="/" className='navbar-item'>Card Viewer</a>
-                    <a href="/docs" className='navbar-item'>Documentation</a>
-                    <div className="navbar-item has-dropdown is-hoverable">
-                        <a className="navbar-link">
-                            Download Card Data
-                        </a>
-                        <div className="navbar-dropdown">
-                            <a
-                                href="#!"
-                                className="navbar-item"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    downloadCardData('json');
-                                }}
-                            >
-                                JSON
+                    <div className='navbar-menu has-text-weight-bold'>
+                        <a href="/" className='navbar-item'>Card Viewer</a>
+                        <a href="/docs" className='navbar-item'>Documentation</a>
+                        <div className="navbar-item has-dropdown is-hoverable">
+                            <a className="navbar-link">
+                                Download Card Data
                             </a>
-                            <a
-                                href="#!"
-                                className="navbar-item"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    downloadCardData('xml');
-                                }}
-                            >
-                                XML
-                            </a>
-                            <a
-                                href="#!"
-                                className="navbar-item"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    downloadCardData('csv');
-                                }}
-                            >
-                                CSV
-                            </a>
+                            <div className="navbar-dropdown">
+                                <a
+                                    href="#!"
+                                    className="navbar-item"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        downloadCardData('json');
+                                    }}
+                                >
+                                    JSON
+                                </a>
+                                <a
+                                    href="#!"
+                                    className="navbar-item"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        downloadCardData('xml');
+                                    }}
+                                >
+                                    XML
+                                </a>
+                                <a
+                                    href="#!"
+                                    className="navbar-item"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        downloadCardData('csv');
+                                    }}
+                                >
+                                    CSV
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </nav>
-                {error && (
-                    <div className="notification is-danger">
-                        {error}
-                    </div>
-                )}
             </div>
+            {error && (
+                <div className="notification is-danger">
+                    {error}
+                </div>
+            )}
         </header>
     );
 }

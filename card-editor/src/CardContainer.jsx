@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import CardSimple from './CardSimple';
-import CardModal from './CardModal'; 
+import CardModal from './CardModal';
 import { fetchJsonEndpoint } from './utils/ajax.js';
 
-function CardContainer({ selectedFilters, 
-						setSelectedFilters, 
-						setApiUrl,
-						selectedCard,
-						setSelectedCard,
-						isAddingNewCard,
-						isEditing,
-						setIsEditing,
-						setIsAddingNewCard,
-						searchString, 
-						}) {
+function CardContainer({ selectedFilters,
+	setSelectedFilters,
+	setApiUrl,
+	selectedCard,
+	setSelectedCard,
+	isAddingNewCard,
+	isEditing,
+	setIsEditing,
+	setIsAddingNewCard,
+	searchString,
+}) {
 	const [cards, setCards] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState('');
-    const [cardAssetNames, setCardAssetNames] = useState([]);
-	
+	const [cardAssetNames, setCardAssetNames] = useState([]);
+
 	// const [selectedCard, setSelectedCard] = useState(null); // State for the selected card
 	const [effects, setEffectList] = useState([]); // State for the list of effects
 
@@ -28,21 +28,21 @@ function CardContainer({ selectedFilters,
 			setLoading(true); // Set loading state
 			try {
 				let url = '';
-				//use the searchbox > filter
-				if (searchString) {
-					url = `/api/cards/name/${searchString}`;
-				} else {
-					const queryParams = new URLSearchParams();
-					for (const [field, values] of Object.entries(selectedFilters)) {
-						if (values.length > 0) {
-							queryParams.append(field, values.join(','));
-						}
+				const queryParams = new URLSearchParams();
+				for (const [field, values] of Object.entries(selectedFilters)) {
+					if (values.length > 0) {
+						queryParams.append(field, values.join(','));
 					}
-					url = queryParams.toString()
-						? `/api/cards?${queryParams.toString()}`
-						: '/api/cards/all';
 				}
-				setApiUrl(url); 
+				if (searchString) {
+					queryParams.append('Title', searchString);
+				}
+
+				url = queryParams.toString()
+					? `/api/cards?${queryParams.toString()}`
+					: '/api/cards/all';
+
+				setApiUrl(url);
 				const data = await fetchJsonEndpoint(url);
 				if (data)
 					setCards(data);
@@ -80,7 +80,7 @@ function CardContainer({ selectedFilters,
 				const data = await fetchJsonEndpoint('/api/assets/card-images');
 				if (data) {
 					setCardAssetNames(data.files);
-					
+
 				}
 				else {
 					console.error('Error: No card asset names found');
@@ -176,14 +176,14 @@ function CardContainer({ selectedFilters,
 					setIsAddingNewCard(false);
 				}}
 				onDelete={handleDeleteCard}
-				effectList={effects} 
+				effectList={effects}
 				onCardEdit={handleCardEdit}
 				isAddingNewCard={isAddingNewCard}
 				isEditing={isEditing}
 				setIsEditing={setIsEditing}
 				setIsAddingNewCard={setIsAddingNewCard}
 				cardAssetNames={cardAssetNames}
-				/>
+			/>
 		</div>
 	);
 }
