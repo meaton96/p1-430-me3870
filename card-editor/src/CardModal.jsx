@@ -17,10 +17,8 @@ function CardModal({ card,
     setIsEditing,
     cardAssetNames }) {
     if (!card) return null; // Don't render anything if no card is selected
-    // const [isEditing, setIsEditing] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
     const [error, setError] = useState('');
-    const [cardDeleted, setCardDeleted] = useState(false);
     const [editedCard, setEditedCard] = useState(getCardDeepCopy(card)); // Copy of the card for editing
     const [loading, setLoading] = useState(false);
     const [saveCompleted, setSaveCompleted] = useState(false);
@@ -35,27 +33,33 @@ function CardModal({ card,
     }
     //handles pressing the delete button
     const handleDeleteCardClick = () => {
-        //create a confirmation dialog
         if (window.confirm('Are you sure you want to delete this card?')) {
-            //send a DELETE request to the server
+            setLoading(true); // Show loading spinner
             fetch(`/api/cards/${card.GUID}`, {
                 method: 'DELETE',
             })
-                .then((response) => {//check if the request was successful
-                    if (response.ok) { //204
-                        setCardDeleted(true);
-                        onDelete(card.GUID); //pass state to parent
+                .then((response) => {
+                    if (response.ok) {
+                        setSaveCompleted(true); // Show checkmark
+                        setTimeout(() => {
+                            setLoading(false);
+                            setSaveCompleted(false);
+                            onDelete(card.GUID); // Inform parent
+                            onClose(); // Close the modal
+                        }, 1750);
                     } else {
                         setDeleteError(true);
                         setError('Failed to delete card with status: ' + response.status);
+                        setLoading(false);
                     }
                 })
                 .catch((error) => {
                     setDeleteError(true);
                     setError('Failed to delete card: ' + error.message);
+                    setLoading(false);
                 });
         }
-    }
+    };
 
     //handles pressing the save button
     const handleSaveCard = () => {
@@ -378,8 +382,8 @@ function CardModal({ card,
                                     <option value="" disabled>Select Image</option>
                                     {cardAssetNames.map((imageName) => {
                                         const displayName = imageName.split('.')[0]; // Get the name without extension
-                                        const pngImageName = `${displayName}.png`;   
-                                            
+                                        const pngImageName = `${displayName}.png`;
+
                                         return (
                                             <option key={displayName} value={pngImageName}>
                                                 {displayName}
@@ -518,19 +522,7 @@ function CardModal({ card,
 
     // Render the modal content based on the card state
     const renderModalContent = () => {
-        if (cardDeleted) {
-            return (
-                <div className="has-text-centered">
-                    <button
-                        className="button is-primary"
-                        style={{ width: '100%' }}
-                        onClick={onClose}
-                    >
-                        Card deleted successfully.
-                    </button>
-                </div>
-            );
-        } else if (deleteError) {
+        if (deleteError) {
             return (
                 <div className="notification is-danger has-text-centered">
                     {error}
