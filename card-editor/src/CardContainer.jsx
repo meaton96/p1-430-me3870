@@ -137,7 +137,7 @@ function CardContainer({ selectedFilters,
 		) : null;
 	};
 
-	if (loading) {
+	if (loading && cards.length === 0) {
 		return <div id="loading">Loading card data...</div>;
 	}
 
