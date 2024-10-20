@@ -12,6 +12,18 @@ const validateFieldNames = (fieldNames) => {
 
 // GET/HEAD
 
+router.head('/default', (req, res) => {
+    res.set({
+        'Content-Type': 'application/json',
+        'Content-Length': JSON.stringify(db.DEFAULT_CARD).length,
+        'X-Coder': 'ME',
+    });
+    res.end();
+});
+router.get('/default', (req, res) => {
+    const _card = db.DEFAULT_CARD;
+    res.status(200).send(util.getCardDeepCopy(_card));
+});
 // /api/fields returns a list of valid field names
 router.head('/fields', (req, res) => {
     if (db.VALID_FIELD_NAMES && db.VALID_FIELD_NAMES.length > 0) {
@@ -171,41 +183,6 @@ router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
 });
-// router.head('/name/:name', (req, res) => {
-//     const { name } = req.params;
-//     const cards = db.getPartialNameMatches(name);
-//     let contentType = 'application/json';
-//     if (req.get('Accept') === 'application/xml') {
-//         contentType = 'application/xml';
-//     } else if (req.get('Accept') === 'text/csv') {
-//         contentType = 'text/csv';
-//     }
-//     if (cards && cards.length > 0) {
-//         res.set({
-//             'Content-Type': contentType,
-//             'Content-Length': JSON.stringify(cards).length,
-//             'X-Coder': 'ME',
-//         });
-//         res.end();
-//     } else {
-//         res.status(404).end();
-//     }
-// });
-// router.get('/name/:name', (req, res) => {
-//     const { name } = req.params;
-//     const cards = db.getPartialNameMatches(name);
-//     let formattedCards = cards;
-//     if (req.get('Accept') === 'application/xml') {
-//         formattedCards = util.convertCardsToXML(cards);
-//     } else if (req.get('Accept') === 'text/csv') {
-//         formattedCards = util.convertAllCardsToCSV(cards);
-//     }
-//     if (formattedCards && formattedCards.length > 0) {
-//         res.status(200).send(formattedCards);
-//     } else {
-//         res.status(404).send({ message: `No cards found with name containing ${name}` });
-//     }
-// });
 
 const handleFilterEndpoint = (res, fieldName, value) => {
     // validate field name
@@ -316,7 +293,15 @@ router.get('/', (req, res) => {
 // // POST
 router.post('/', (req, res) => {
     const cardData = req.body;
-
+    // (req.body);
+    if (!cardData || Object.keys(cardData).length === 0) {
+        res.status(400).send({ message: 'No card data provided' });
+        return;
+    }
+    if (!cardData.Title || cardData.Title === '') {
+        res.status(400).send({ message: 'Title is required' });
+        return;
+    }
     // validate field names
     const invalidFields = validateFieldNames(Object.keys(cardData));
     // if invalid field name, return 400

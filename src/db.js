@@ -8,6 +8,42 @@ const effectJson = fs.readFileSync(effectPath);
 const jsonString = fs.readFileSync(cardsPath);
 const cards = JSON.parse(jsonString);
 const effects = JSON.parse(effectJson);
+const DEFAULT_CARD = {
+    Team: 'Blue',
+    Duplication: 0,
+    Target: 'None',
+    SectorsAffected: 'Any',
+    TargetAmount: 0,
+    Title: '',
+    AssetInfo: {
+        imgRow: 0,
+        imgCol: 0,
+        bgRow: 0,
+        bgCol: 0,
+        imgLocation: '',
+    },
+    Cost: {
+        BlueCost: 0,
+        BlackCost: 0,
+        PurpleCost: 0,
+    },
+    FlavourText: '',
+    Description: '',
+    GUID: crypto.randomUUID(),
+    Action: {
+        Method: 'AddEffect',
+        MeeplesChanged: 0,
+        MeepleIChange: 0,
+        PrerequisiteEffect: '',
+        Duration: 0,
+        CardsDrawn: 0,
+        CardsRemoved: 0,
+        DiceRoll: 0,
+        EffectCount: 0,
+        Effects: [],
+    },
+    DoomEffect: false,
+};
 
 // List of valid field names for validation
 const VALID_FIELD_NAMES = Object.keys(cards[0] || {}).map((key) => key.toLowerCase());
@@ -47,9 +83,6 @@ const getRandomCard = () => {
     const card = cards[Math.floor(Math.random() * cards.length)];
     return card ? util.getCardDeepCopy(card) : null;
 };
-// const getPartialNameMatches = (name) => getAllCards()
-//     .filter((card) => card.Title.toLowerCase()
-//         .includes(name.toLowerCase()));
 
 // Get cards by a specific field
 const getCardsByField = (fieldName, value) => cards
@@ -132,17 +165,25 @@ const updateCard = (guid, cardData) => {
     }
     return null;
 };
-const addCard = (card) => {
+const addCard = (cardData) => {
     // console.log(card);
-    const guid = crypto.randomUUID();
-
+    const newGUID = cardData.GUID || crypto.randomUUID();
+    let card = cardData;
+    if (Object.keys(cardData).length === 0) {
+        return null;
+    }
+    if (Object.keys(cardData).length !== VALID_FIELD_NAMES.length) {
+        // console.log(cardData);
+        card = { ...DEFAULT_CARD, ...cardData };
+        // console.log(card);
+    }
     const newCard = util.getCardDeepCopy(card);
-    newCard.GUID = guid;
+    newCard.GUID = newGUID;
     cards.push(newCard);
 
     // console.log(cards);
     // fs.writeFileSync(cardsPath, JSON.stringify(cards, null, 2));
-    return getCardById(guid);
+    return getCardById(newGUID);
 };
 
 module.exports = {
@@ -157,7 +198,7 @@ module.exports = {
     getEffectById,
     updateCard,
     addCard,
-    // getPartialNameMatches,
+    DEFAULT_CARD,
     VALID_FIELD_NAMES,
     VALID_FILTER_NAMES,
 };

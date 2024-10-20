@@ -132,6 +132,7 @@ const getXMLCard = (card) => {
 };
 // helper function to merge objects for PUT operations only the deeply nested json objects
 const deepMerge = (target, source) => {
+    // console.log(target, source);
     Object.keys(source).forEach((key) => {
         if (source[key] instanceof Object && key in target) {
             Object.assign(source[key], deepMerge(target[key], source[key]));

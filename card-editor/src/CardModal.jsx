@@ -65,6 +65,11 @@ function CardModal({ card,
     const handleSaveCard = () => {
         setFieldChanged(false);
 
+        if (!editedCard.Title || editedCard.Title.trim() === '') {
+            alert('A title is required to save the card.'); 
+            return; 
+        }
+
         const method = isAddingNewCard ? 'POST' : 'PUT'; // POST if adding a new card, PUT if updating
         const url = isAddingNewCard ? '/api/cards' : `/api/cards/${editedCard.GUID}`;
         const changes = getChangedFields(card, editedCard); // create the json object for only the updated properties
@@ -73,6 +78,7 @@ function CardModal({ card,
             setIsEditing(false);
             return;
         }
+        
 
         setLoading(true);
 
@@ -92,6 +98,7 @@ function CardModal({ card,
                         setSaveCompleted(false); // Reset checkmark state
                         setCard(editedCard); // update modal with new card data
                         onCardEdit(editedCard); // Pass the updated card to parent
+                        console.log(editedCard);
                     }, 1750);
                 } else {
                     setError('Failed to save card with status: ' + response.status);

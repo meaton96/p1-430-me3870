@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterMenu from './FilterMenu';
 import CardContainer from './CardContainer';
+import { fetchJsonEndpoint } from './utils/ajax';
 
 function CardViewer() {
 	const [selectedFilters, setSelectedFilters] = useState({});
@@ -9,44 +10,31 @@ function CardViewer() {
 	const [isAddingNewCard, setIsAddingNewCard] = useState(false);
 	const [selectedCard, setSelectedCard] = useState(null);
 	const [isEditing, setIsEditing] = useState(false); // State for editing a card
+	const [defaultCard, setDefaultCard] = useState(null);
+
+	useEffect(() => {
+		const fetchDefault = async () => {
+			try {
+				const data = await fetchJsonEndpoint('/api/cards/default');
+				if (data) {
+					//console.log(data);
+					setDefaultCard(data);
+				}
+				else {
+					console.error('Failed to load default card data');
+				}
+
+			} catch (err) {
+				console.error('Error:', err);
+			}
+			
+		};
+		fetchDefault();
+
+	}, []);
 
 	const handleAddNewCardClick = () => {
-		const defaultCard = {
-			Team: 'Blue',
-			Duplication: 0,
-			Target: 'None',
-			SectorsAffected: 'Any',
-			TargetAmount: 0,
-			Title: '',
-			AssetInfo: {
-				imgRow: 0,
-				imgCol: 0,
-				bgRow: 0,
-				bgCol: 0,
-				imgLocation: ''
-			},
-			Cost: {
-				BlueCost: 0,
-				BlackCost: 0,
-				PurpleCost: 0
-			},
-			FlavourText: '',
-			Description: '',
-			GUID: '',
-			Action: {
-				Method: 'None',
-				MeeplesChanged: 0,
-				MeepleIChange: 0,
-				PrerequisiteEffect: '',
-				Duration: 0,
-				CardsDrawn: 0,
-				CardsRemoved: 0,
-				DiceRoll: 0,
-				EffectCount: 0,
-				Effects: []
-			},
-			DoomEffect: false
-		};
+		//console.log(defaultCard);
 		setSelectedCard(defaultCard); 
 		setIsEditing(true);
 		setIsAddingNewCard(true); 

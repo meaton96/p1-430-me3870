@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import '../styles/Docs.css';
 
 const DocsRenderer = ({ docs }) => {
-		const [collapsedSections, setCollapsedSections] = useState({});
+	const [collapsedSections, setCollapsedSections] = useState({});
 
-		const toggleSection = (sectionName) => {
-			setCollapsedSections((prevState) => ({
-				...prevState,
-				[sectionName]: !prevState[sectionName],
-			}));
-		};
+	const toggleSection = (sectionName) => {
+		setCollapsedSections((prevState) => ({
+			...prevState,
+			[sectionName]: !prevState[sectionName],
+		}));
+	};
 
 	return (
 		<>
@@ -51,7 +51,7 @@ const MethodSection = ({ method, endpoints }) => (
 		<h3 className="title is-5">{method}</h3>
 		<div className="pl-4">
 			{endpoints.map((endpoint) => (
-				<EndpointDetails key={endpoint.url} endpoint={endpoint} />
+				<EndpointDetails key={endpoint.url} endpoint={endpoint} method={method} />
 			))}
 		</div>
 	</div>
@@ -65,11 +65,11 @@ const openEndpointLink = (endPointObject) => {
 	}
 }
 
-const EndpointDetails = ({ endpoint }) => (
+const EndpointDetails = ({ method, endpoint }) => (
 
 
 	<div className="box has-background-black-ter">
-		<h4 id={endpoint.url} className="subtitle is-6">
+		<h4 id={`${method}-${endpoint.url}`} className="subtitle is-6">
 			{endpoint.name}
 		</h4>
 		<p className="pl-4 pt-1 pb-2 is-size-5">{endpoint.description}</p>
@@ -92,18 +92,18 @@ const EndpointDetails = ({ endpoint }) => (
 );
 
 const ExamplesList = ({ examples }) => (
-    <div className=''>
-        {examples.map((example, index) => (
-            <div className="pl-4" key={index}>
-                <p>Ex.</p>
-                <pre className="pl-3 code-bg">
-                    {example.split('\n').map((line, i) => (
-                        <span key={i}>{line}<br /></span>
-                    ))}
-                </pre>
-            </div>
-        ))}
-    </div>
+	<div className=''>
+		{examples.map((example, index) => (
+			<div className="pl-4" key={index}>
+				<p>Ex.</p>
+				<pre className="pl-3 code-bg">
+					{example.split('\n').map((line, i) => (
+						<span key={i}>{line}<br /></span>
+					))}
+				</pre>
+			</div>
+		))}
+	</div>
 );
 
 

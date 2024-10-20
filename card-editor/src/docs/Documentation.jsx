@@ -52,7 +52,7 @@ function Documentation() {
                             <ul>
                                 {docs[section].endpoints[method].map((endpoint) => (
                                     <li key={endpoint.url}>
-                                        <a href={`#${endpoint.url}`}>{endpoint.url}</a>
+                                        <a href={`#${method}-${endpoint.url}`}>{endpoint.url}</a>
                                     </li>
                                 ))}
                             </ul>

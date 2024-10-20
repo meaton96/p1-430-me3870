@@ -42,6 +42,17 @@
 					]
 				},
 				{
+					"name": "GET or HEAD /api/cards/default",
+					"url": "/api/cards/default",
+					"description": "Returns a default card object.",
+					"statusCodes": [
+						{
+							"code": 200,
+							"description": "On success"
+						}
+					]
+				},
+				{
 					"name": "GET or HEAD /api/cards/fields",
 					"url": "/api/cards/fields",
 					"description": "Returns a list of all card properties",
@@ -161,7 +172,10 @@
 				{
 					"name": "POST /api/cards",
 					"url": "/api/cards",
-					"description": "This endpoint accepts a full card object as a json body and adds it to the database",
+					"description": "This endpoint accepts card data as a JSON object in the body and inserts it into the database. Requires at least a Title property.",
+					"examples": [
+						"/api/cards/\nBody:\n{\n\t\"Title\": \"Title\"\n}"
+					],
 					"statusCodes": [
 						{
 							"code": 201,
