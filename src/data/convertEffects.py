@@ -1,4 +1,17 @@
-[
+import json
+import psycopg2
+from psycopg2 import sql
+
+# Database connection details
+conn = psycopg2.connect(
+    dbname="da2or6ps8nv90c",
+    user="u1j5jajvgken6t",
+    password="pc80a3f310d76b14b58c2d699f5507d4d45e7afdcb7275d483d41dba777a2c2e4",
+    host="c6sfjnr30ch74e.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com",
+    port="5432"
+)
+# JSON data
+json_data = [
     {
         "EffectID": "modp-net-1",
         "Effect": {
@@ -24,7 +37,7 @@
         }
     },
     {
-        "EffectID": "modp-all-1",
+        "EffectID": "mod-all-1",
         "Effect": {
             "EffectType": "ModifyPoints",
             "EffectPointTarget": "All",
@@ -178,7 +191,7 @@
         }
     },
     {
-        "EffectID": "honeypot",
+        "EffectID": "honey-pot",
         "Effect": {
             "EffectType": "HoneyPot"
         }
@@ -208,3 +221,39 @@
         }
     }
 ]
+cur = conn.cursor()
+# Process each item in the JSON data
+for item in json_data:
+    effect_id = item.get('EffectID')
+    effect = item.get('Effect', {})
+    effect_type = effect.get('EffectType')
+    effect_point_target = effect.get('EffectPointTarget')
+    effect_magnitude = effect.get('EffectMagnitude')
+
+    # Convert effect_magnitude to integer if it's not None
+    if effect_magnitude is not None:
+        try:
+            effect_magnitude = int(effect_magnitude)
+        except ValueError:
+            print(f"Invalid effect_magnitude '{effect_magnitude}' for effect_id '{effect_id}'")
+            effect_magnitude = None
+
+    # Prepare the SQL INSERT statement with placeholders
+    insert_query = """
+    INSERT INTO effect_type (effect_id, effect_type, effect_point_target, effect_magnitude)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (effect_id) DO NOTHING
+    """
+
+    # Execute the query
+    try:
+        cur.execute(insert_query, (effect_id, effect_type, effect_point_target, effect_magnitude))
+    except Exception as e:
+        print(f"Error inserting effect_id '{effect_id}': {e}")
+
+# Commit the transaction
+conn.commit()
+
+# Close the cursor and connection
+cur.close()
+conn.close()

@@ -54,21 +54,23 @@ router.get('/filters', (req, res) => {
     }
 });
 // /api/cards/all returns a list of all cards
-const handleAllCards = (req) => {
-    const cards = db.getAllCards();
+const handleAllCards = async (req) => {
+    const cards = await db.getAllCards();
+    
     let formattedCards = cards;
     let contentType = 'application/json';
-    if (req.get('Accept') === 'application/xml') {
+    if (req.get('Accept') === 'application/xml') {  
         contentType = 'application/xml';
         formattedCards = util.convertCardsToXML(cards);
     } else if (req.get('Accept') === 'text/csv') {
         contentType = 'text/csv';
         formattedCards = util.convertAllCardsToCSV(cards);
     }
+    
     return { formattedCards, contentType };
 };
-router.head('/all', (req, res) => {
-    const { formattedCards, contentType } = handleAllCards(req);
+router.head('/all', async (req, res) => {
+    const { formattedCards, contentType } = await handleAllCards(req);
     if (formattedCards && formattedCards.length > 0) {
         res.set({
             'Content-Type': contentType,
@@ -81,8 +83,8 @@ router.head('/all', (req, res) => {
     }
 });
 // full list of cards
-router.get('/all', (req, res) => {
-    const { formattedCards } = handleAllCards(req);
+router.get('/all', async (req, res) => {
+    const { formattedCards } = await handleAllCards(req);
     if (formattedCards && formattedCards.length > 0) {
         res.status(200).send(formattedCards);
     } else {
@@ -102,9 +104,12 @@ const handleSingleCard = (req, card) => {
     }
     return { card: newCard, contentType };
 };
+
+
 // /api/cards/random returns a random card
-router.head('/random', (req, res) => {
-    const { card, contentType } = handleSingleCard(req, db.getRandomCard());
+router.head('/random', async (req, res) => {
+
+    const { card, contentType } = handleSingleCard(req, await db.getRandomCard());
     if (card) {
         res.set({
             'Content-Type': contentType,
@@ -116,8 +121,8 @@ router.head('/random', (req, res) => {
         res.status(404).end();
     }
 });
-router.get('/random', (req, res) => {
-    const { card } = handleSingleCard(req, db.getRandomCard());
+router.get('/random', async (req, res) => {
+    const { card } = handleSingleCard(req, await db.getRandomCard());
     if (card) {
         res.status(200).send(card);
     } else {
@@ -125,8 +130,8 @@ router.get('/random', (req, res) => {
     }
 });
 // /api/cards/recent returns the last card in the list
-router.head('/recent', (req, res) => {
-    const { card, contentType } = handleSingleCard(req, db.getRecentCard());
+router.head('/recent', async (req, res) => {
+    const { card, contentType } = handleSingleCard(req, await db.getRecentCard());
     if (card) {
         res.set({
             'Content-Type': contentType,
@@ -138,18 +143,51 @@ router.head('/recent', (req, res) => {
         res.status(404).end();
     }
 });
-router.get('/recent', (req, res) => {
-    const { card } = handleSingleCard(req, db.getRecentCard());
+router.get('/recent', async (req, res) => {
+    const _card = await db.getRecentCard();
+    const { card } = handleSingleCard(req, _card);
     if (card) {
         res.status(200).send(card);
     } else {
         res.status(404).send({ message: 'No card found' });
     }
 });
+const getCardByGUIDDB = async (guid) => {
+    const card = await db.getCardById(guid);
+    return card;
+}
+router.head('/:id([0-9]+)', async (req, res) => {
+    const { id } = req.params;
+    const _card = await db.getCardByDBID(id);
+    const { card, contentType } = handleSingleCard(req, _card);
+    if (card) {
+        res.set({
+            'Content-Type': contentType,
+            'Content-Length': JSON.stringify(card).length,
+            'X-Coder': 'ME',
+        });
+        res.end();
+    } else {
+        res.status(404).end();
+    }
+
+});
+router.get('/:id([0-9]+)', async (req, res) => {
+    const { id } = req.params;
+    const _card = await db.getCardByDBID(id);
+    const { card } = handleSingleCard(req, _card);
+    if (card) {
+        res.status(200).send(card);
+    } else {
+        res.status(404).send({ message: `Card with ID ${id} not found` });
+    }
+});
 // /api/cards/GUID accepts 36 characters long alphanumeric GUIDs to find 1 card
-router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+router.head('/:guid([0-9a-zA-Z-]{36})', async (req, res) => {
     const { guid } = req.params;
-    const { card, contentType } = handleSingleCard(req, db.getCardById(guid));
+    const _card = await getCardByGUIDDB(guid);
+    //console.log(_card);
+    const { card, contentType } = handleSingleCard(req, _card);
 
     if (card) {
         res.set({
@@ -162,50 +200,17 @@ router.head('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
         res.status(404).end();
     }
 });
-router.get('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+router.get('/:guid([0-9a-zA-Z-]{36})', async (req, res) => {
     const { guid } = req.params;
-    const { card } = handleSingleCard(req, db.getCardById(guid));
+    const _card = await getCardByGUIDDB(guid);
+    //console.log(_card);
+    const { card } = handleSingleCard(req, _card);
     if (card) {
         res.status(200).send(card);
     } else {
         res.status(404).send({ message: `Card with GUID ${guid} not found` });
     }
 });
-// router.head('/name/:name', (req, res) => {
-//     const { name } = req.params;
-//     const cards = db.getPartialNameMatches(name);
-//     let contentType = 'application/json';
-//     if (req.get('Accept') === 'application/xml') {
-//         contentType = 'application/xml';
-//     } else if (req.get('Accept') === 'text/csv') {
-//         contentType = 'text/csv';
-//     }
-//     if (cards && cards.length > 0) {
-//         res.set({
-//             'Content-Type': contentType,
-//             'Content-Length': JSON.stringify(cards).length,
-//             'X-Coder': 'ME',
-//         });
-//         res.end();
-//     } else {
-//         res.status(404).end();
-//     }
-// });
-// router.get('/name/:name', (req, res) => {
-//     const { name } = req.params;
-//     const cards = db.getPartialNameMatches(name);
-//     let formattedCards = cards;
-//     if (req.get('Accept') === 'application/xml') {
-//         formattedCards = util.convertCardsToXML(cards);
-//     } else if (req.get('Accept') === 'text/csv') {
-//         formattedCards = util.convertAllCardsToCSV(cards);
-//     }
-//     if (formattedCards && formattedCards.length > 0) {
-//         res.status(200).send(formattedCards);
-//     } else {
-//         res.status(404).send({ message: `No cards found with name containing ${name}` });
-//     }
-// });
 
 const handleFilterEndpoint = (res, fieldName, value) => {
     // validate field name
@@ -220,7 +225,7 @@ const handleFilterEndpoint = (res, fieldName, value) => {
     // get cards by field name and value
     return db.getCardsByField(fieldName, value);
 };
-router.head('/:fieldName/:value', (req, res) => {
+router.head('/:fieldName/:value', async (req, res) => {
     const { fieldName, value } = req.params;
     let cards = handleFilterEndpoint(res, fieldName, value);
     let contentType = 'application/json';
@@ -240,7 +245,7 @@ router.head('/:fieldName/:value', (req, res) => {
     }
 });
 // dynamic endpoint that accepts a field name and value to find cards
-router.get('/:fieldName/:value', (req, res) => {
+router.get('/:fieldName/:value', async (req, res) => {
     const { fieldName, value } = req.params;
     const cards = handleFilterEndpoint(res, fieldName, value);
     let formattedCards = cards;
@@ -286,7 +291,7 @@ const handleFilter = (req, res) => {
     // get cards by query parameters
     return db.getCardsByFilters(normalizedFilters);
 };
-router.head('/', (req, res) => {
+router.head('/', async (req, res) => {
     const cards = handleFilter(req, res);
     let contentType = 'application/json';
     if (req.get('Accept') === 'application/xml') {
@@ -304,7 +309,7 @@ router.head('/', (req, res) => {
     }
 });
 // dynamic endpoint that accepts query parameters to find cards
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const cards = handleFilter(req, res);
     if (cards && cards.length > 0) {
         res.status(200).send(cards);
@@ -314,7 +319,7 @@ router.get('/', (req, res) => {
 });
 
 // // POST
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const cardData = req.body;
 
     // validate field names
@@ -337,7 +342,7 @@ router.post('/', (req, res) => {
 // {}
 // // PUT
 /// api/cards/GUID accepts 36 characters long alphanumeric GUIDs to update card
-router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+router.put('/:guid([0-9a-zA-Z-]{36})', async (req, res) => {
     const { guid } = req.params;
     const card = db.getCardById(guid);
     if (card) {
@@ -366,7 +371,7 @@ router.put('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
 });
 
 // // DELETE
-router.delete('/:guid([0-9a-zA-Z-]{36})', (req, res) => {
+router.delete('/:guid([0-9a-zA-Z-]{36})', async (req, res) => {
     const { guid } = req.params;
     const card = db.getCardById(guid);
     if (card) {
